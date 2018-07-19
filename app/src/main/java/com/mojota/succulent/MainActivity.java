@@ -1,42 +1,97 @@
 package com.mojota.succulent;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import com.mojota.succulent.fragment.EncyclopediaFragment;
+import com.mojota.succulent.fragment.MyGardenFragment;
+import com.mojota.succulent.fragment.NeighbourFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements NavigationView
+        .OnNavigationItemSelectedListener {
+
+    private Toolbar mToolbar;
+    private ViewPager mVpMain;
+    private DrawerLayout mDrawer;
+    private NavigationView mNavigationView;
+    private ArrayList<Fragment> mFragmentList;
+    private ViewPagerAdapter mPagerAdapter;
+    private BottomNavigationView mBottomNavigation;
+    private MenuItem mMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mBottomNavigation = (BottomNavigationView) findViewById(R.id
+                .bottom_navigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(mOnBottomNaviItemSelectedListener);
+
+        mVpMain = (ViewPager) findViewById(R.id.vp_main);
+        initFragment();
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragmentList);
+        mVpMain.setAdapter(mPagerAdapter);
+        mVpMain.setOffscreenPageLimit(3);
+        mVpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (mMenuItem != null) {
+                    mMenuItem.setChecked(false);
+                } else {
+                    mBottomNavigation.getMenu().getItem(0).setChecked(false);
+                }
+                mMenuItem = mBottomNavigation.getMenu().getItem(position);
+                mMenuItem.setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string
+                .navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -49,27 +104,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener
+            mOnBottomNaviItemSelectedListener = new BottomNavigationView
+            .OnNavigationItemSelectedListener() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mVpMain.setCurrentItem(0);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mVpMain.setCurrentItem(1);
+                    return true;
+                case R.id.navigation_notifications:
+                    mVpMain.setCurrentItem(2);
+                    return true;
+            }
+            return false;
         }
-
-        return super.onOptionsItemSelected(item);
-    }
+    };
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -94,5 +148,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void initFragment() {
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(MyGardenFragment.newInstance("", ""));
+        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
+        mFragmentList.add(NeighbourFragment.newInstance("", ""));
+    }
+
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        private List<Fragment> fragmentList;
+
+        public ViewPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+            super(fm);
+            fragmentList = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
     }
 }
