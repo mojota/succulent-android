@@ -2,18 +2,15 @@ package com.mojota.succulent;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mojota.succulent.fragment.EncyclopediaFragment;
@@ -26,24 +23,20 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NavigationView
         .OnNavigationItemSelectedListener {
 
-    private Toolbar mToolbar;
     private ViewPager mVpMain;
+    private BottomNavigationView mBottomNavigation;
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
     private ArrayList<Fragment> mFragmentList;
     private ViewPagerAdapter mPagerAdapter;
-    private BottomNavigationView mBottomNavigation;
     private MenuItem mMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
 
-        mBottomNavigation = (BottomNavigationView) findViewById(R.id
-                .bottom_navigation);
+        mBottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         mBottomNavigation.setOnNavigationItemSelectedListener(mOnBottomNaviItemSelectedListener);
 
         mVpMain = (ViewPager) findViewById(R.id.vp_main);
@@ -53,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         mVpMain.setOffscreenPageLimit(3);
         mVpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onPageScrolled(int position, float positionOffset, int
+                    positionOffsetPixels) {
             }
 
             @Override
@@ -74,24 +67,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView
             }
         });
 
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string
-                .navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
-
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, null, R
+                .string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
     @Override
@@ -125,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         }
     };
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.

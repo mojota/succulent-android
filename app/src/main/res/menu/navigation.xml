@@ -3,17 +3,19 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@mipmap/ic_local_florist_white_48dp"
+        android:title="@string/title_my_garden"/>
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard"/>
+        android:icon="@mipmap/ic_extension_white_48dp"
+        android:title="@string/title_encyclopedia"/>
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications"/>
+        android:icon="@mipmap/ic_toys_white_48dp"
+        android:title="@string/title_neighbour"/>
 
 </menu>
