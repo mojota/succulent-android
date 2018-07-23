@@ -2,20 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/nav_my"
         android:icon="@mipmap/ic_local_florist_white_48dp"
         android:title="@string/title_my_garden"/>
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/nav_encyclopedia"
         android:icon="@mipmap/ic_extension_white_48dp"
         android:title="@string/title_encyclopedia"/>
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@mipmap/ic_toys_white_48dp"
+        android:id="@+id/nav_neighbour"
+        android:icon="@mipmap/ic_bubble_chart_white_48dp"
         android:title="@string/title_neighbour"/>
 
 </menu>

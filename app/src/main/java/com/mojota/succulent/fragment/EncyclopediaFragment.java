@@ -11,8 +11,9 @@ import android.view.ViewGroup;
 import com.mojota.succulent.R;
 
 /**
- *
- */
+ * 多肉百科
+ * Created by wangjing on 18-7-23
+*/
 public class EncyclopediaFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";

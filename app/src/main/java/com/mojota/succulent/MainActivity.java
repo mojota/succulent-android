@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,13 +11,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.mojota.succulent.adapter.ViewPagerAdapter;
 import com.mojota.succulent.fragment.EncyclopediaFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
 import com.mojota.succulent.fragment.NeighbourFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Created by wangjing on 18-7-23
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView
         .OnNavigationItemSelectedListener {
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
 
         mVpMain = (ViewPager) findViewById(R.id.vp_main);
         initFragment();
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragmentList);
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragmentList, null);
         mVpMain.setAdapter(mPagerAdapter);
         mVpMain.setOffscreenPageLimit(3);
         mVpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -71,11 +72,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         mNavigationView.setNavigationItemSelectedListener(this);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, null, R
-                .string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, null, R.string
+                .navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
     }
+
+    private void initFragment() {
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(MyGardenFragment.newInstance("", ""));
+        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
+        mFragmentList.add(NeighbourFragment.newInstance("", ""));
+    }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener
+            mOnBottomNaviItemSelectedListener = new BottomNavigationView
+            .OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.nav_my:
+                    mVpMain.setCurrentItem(0);
+                    return true;
+                case R.id.nav_encyclopedia:
+                    mVpMain.setCurrentItem(1);
+                    return true;
+                case R.id.nav_neighbour:
+                    mVpMain.setCurrentItem(2);
+                    return true;
+            }
+            return false;
+        }
+    };
+
 
     @Override
     public void onBackPressed() {
@@ -86,27 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener
-            mOnBottomNaviItemSelectedListener = new BottomNavigationView
-            .OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mVpMain.setCurrentItem(0);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mVpMain.setCurrentItem(1);
-                    return true;
-                case R.id.navigation_notifications:
-                    mVpMain.setCurrentItem(2);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -132,31 +142,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
-
-    private void initFragment() {
-        mFragmentList = new ArrayList<>();
-        mFragmentList.add(MyGardenFragment.newInstance("", ""));
-        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
-        mFragmentList.add(NeighbourFragment.newInstance("", ""));
-    }
-
-    class ViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        private List<Fragment> fragmentList;
-
-        public ViewPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
-            super(fm);
-            fragmentList = fragments;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-    }
 }
