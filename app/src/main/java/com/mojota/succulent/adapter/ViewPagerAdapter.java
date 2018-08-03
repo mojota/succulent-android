@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * Created by wangjing on 18-7-23.
+ * Created by mojota on 18-7-23.
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 

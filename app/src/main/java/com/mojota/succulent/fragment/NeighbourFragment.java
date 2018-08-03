@@ -12,7 +12,7 @@ import com.mojota.succulent.R;
 
 /**
  * 邻家肉园
- * Created by wangjing on 18-7-23
+ * Created by mojota on 18-7-23
 */
 public class NeighbourFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

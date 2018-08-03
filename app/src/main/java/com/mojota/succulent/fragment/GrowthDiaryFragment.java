@@ -1,41 +1,52 @@
 package com.mojota.succulent.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.mojota.succulent.DiaryAddActivity;
 import com.mojota.succulent.R;
+import com.mojota.succulent.TestUtil;
+import com.mojota.succulent.adapter.GrowthDiaryAdapter;
+import com.mojota.succulent.model.GrowthDiary;
+import com.mojota.succulent.model.GrowthDiaryResponseInfo;
+import com.mojota.succulent.utils.CodeConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 多肉成长记
- * Created by wangjing on 18-7-23
-*/
-public class GrowthDiaryFragment extends Fragment implements View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+ * Created by mojota on 18-7-23
+ */
+public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private SwipeRefreshLayout mSwipeRefresh;
+    private RecyclerView mRvDiary;
     private FloatingActionButton mFabAdd;
+    private GrowthDiaryAdapter mDiaryAdapter;
+    private List<GrowthDiary> mList = new ArrayList<GrowthDiary>();
 
 
     public GrowthDiaryFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     */
-    // TODO: Rename and change types and number of parameters
     public static GrowthDiaryFragment newInstance(String param1, String param2) {
         GrowthDiaryFragment fragment = new GrowthDiaryFragment();
         Bundle args = new Bundle();
@@ -55,21 +66,66 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_growth_diary, container, false);
+
+        mSwipeRefresh = view.findViewById(R.id.swipe_refresh);
+        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
+        mSwipeRefresh.setOnRefreshListener(this);
+        mRvDiary = view.findViewById(R.id.rv_my_diary);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mRvDiary.setLayoutManager(llm);
+        mRvDiary.setItemAnimator(new DefaultItemAnimator());
+        mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
+        mRvDiary.setAdapter(mDiaryAdapter);
         mFabAdd = view.findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(this);
+
+        getData();
         return view;
     }
 
+    private void getData() {
+
+        mSwipeRefresh.setRefreshing(false);
+        GrowthDiaryResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(),
+                GrowthDiaryResponseInfo.class);
+        mList = resInfo.getList();
+
+        setDataToView();
+    }
+
+
+    private void setDataToView() {
+        mDiaryAdapter.setList(mList);
+        mDiaryAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_add_my:
+                Intent intent = new Intent(getActivity(), DiaryAddActivity.class);
+                startActivityForResult(intent, CodeConstants.REQUEST_ADD);
                 break;
         }
     }
 
+    @Override
+    public void onRefresh() {
+        getData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CodeConstants.REQUEST_ADD:
+                if (resultCode == CodeConstants.RESULT_ADD){
+                    getData();
+                }
+        }
+    }
 }

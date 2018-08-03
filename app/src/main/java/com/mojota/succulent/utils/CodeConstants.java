@@ -1,0 +1,13 @@
+package com.mojota.succulent.utils;
+
+/**
+ * Created by wangjing on 18-8-2.
+ */
+public class CodeConstants {
+
+    public static final int REQUEST_ADD = 100;
+    public static final int RESULT_ADD = 500;
+
+    public static final int REQUEST_TAKE_PHOTO = 101;
+    public static final int REQUEST_CHOOSE_PHOTO = 102;
+}

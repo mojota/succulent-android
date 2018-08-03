@@ -1,6 +1,5 @@
 package com.mojota.succulent.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,7 @@ import java.util.List;
 
 /**
  * 我的花园
- * Created by wangjing on 18-7-23
+ * Created by mojota on 18-7-23
  */
 public class MyGardenFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

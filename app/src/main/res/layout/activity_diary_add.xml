@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="450dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/bt_close"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@mipmap/ic_close"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_gravity="right"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/ti_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/str_hint_title"
+                android:maxLength="15"
+                android:textSize="20dp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/ti_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/et_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/str_hint_body"
+                android:maxLines="3"
+                android:textSize="15dp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/ibt_pic1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_add_white_48dp"
+                android:scaleType="fitXY"
+                android:layout_margin="8dp"/>
+
+            <ImageButton
+                android:id="@+id/ibt_pic2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_add_white_48dp"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:textSize="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="@string/str_commit"/>
+
+    </LinearLayout>
+</ScrollView>

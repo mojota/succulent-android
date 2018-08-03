@@ -1,9 +1,13 @@
 package com.mojota.succulent;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +23,7 @@ import com.mojota.succulent.fragment.NeighbourFragment;
 import java.util.ArrayList;
 
 /**
- * Created by wangjing on 18-7-23
+ * Created by mojota on 18-7-23
  */
 public class MainActivity extends AppCompatActivity implements NavigationView
         .OnNavigationItemSelectedListener {
@@ -76,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                 .navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE}, 100);
+        }
+
     }
 
     private void initFragment() {
