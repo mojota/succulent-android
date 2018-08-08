@@ -11,9 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.mojota.succulent.LandscapingAddActivity;
 import com.mojota.succulent.R;
+import com.mojota.succulent.TestUtil;
+import com.mojota.succulent.adapter.LandscapingAdapter;
+import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.utils.CodeConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 造景后花园
@@ -33,6 +41,8 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRvLandscaping;
     private FloatingActionButton mFabAddLandscaping;
+    private LandscapingAdapter mLandscapingAdapter;
+    private List<NoteInfo> mList = new ArrayList<NoteInfo>();
 
 
     public LandscapingFragment() {
@@ -69,9 +79,8 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mRvLandscaping = view.findViewById(R.id.rv_landscaping);
         GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
         mRvLandscaping.setLayoutManager(glm);
-
-//        mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
-//        mRvDiary.setAdapter(mDiaryAdapter);
+        mLandscapingAdapter = new LandscapingAdapter(getActivity(), mList);
+        mRvLandscaping.setAdapter(mLandscapingAdapter);
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
         mFabAddLandscaping.setOnClickListener(this);
 
@@ -81,8 +90,18 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     private void getData() {
 
+        mSwipeRefresh.setRefreshing(false);
+        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getLandscapingList(),
+                NoteResponseInfo.class);
+        mList = resInfo.getList();
+
+        setDataToView();
     }
 
+    private void setDataToView() {
+        mLandscapingAdapter.setList(mList);
+        mLandscapingAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onClick(View v) {
@@ -97,6 +116,6 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRefresh() {
-
+        getData();
     }
 }

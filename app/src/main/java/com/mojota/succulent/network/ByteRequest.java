@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 考虑到写文件应该在线程中处理，
  * 故只返回byte[]原始数据,后续根据自己需要写入文件或者转换其它类型
- * Created by wangjing on 18-1-26.
+ * Created by mojota on 18-1-26.
  */
 public class ByteRequest extends Request<byte[]> {
     private static final String TAG = "ByteRequest";

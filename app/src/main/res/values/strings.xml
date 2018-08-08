@@ -14,5 +14,6 @@
     <string name="str_hint_title">在此写下笔记标题</string>
     <string name="str_hint_body">在此写下成长笔记</string>
     <string name="str_commit">提交</string>
+    <string name="str_hint_pic_title">说点什么</string>
 
 </resources>

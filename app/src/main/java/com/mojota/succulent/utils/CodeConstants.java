@@ -1,7 +1,7 @@
 package com.mojota.succulent.utils;
 
 /**
- * Created by wangjing on 18-8-2.
+ * Created by mojota on 18-8-2.
  */
 public class CodeConstants {
 

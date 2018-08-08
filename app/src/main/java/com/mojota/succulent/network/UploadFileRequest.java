@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * 上传文件
- * Created by wangjing on 18-1-26.
+ * Created by mojota on 18-1-26.
  */
 public class UploadFileRequest extends Request<String> {
     private static final String TAG = "UploadFileRequest";

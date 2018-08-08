@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by wangjing on 18-8-3.
+ * Created by mojota on 18-8-3.
  */
 public class FileUtil {
 

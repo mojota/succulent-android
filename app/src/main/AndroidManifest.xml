@@ -40,8 +40,11 @@
             android:name=".DiaryAddActivity"
             android:theme="@style/AddDataDialog">
         </activity>
-        <activity android:name=".LandscapingAddActivity"
-                  android:theme="@style/AddDataDialog">
+        <activity
+            android:name=".LandscapingAddActivity"
+            android:theme="@style/AddDataDialog">
+        </activity>
+        <activity android:name=".BaseActivity">
         </activity>
     </application>
 

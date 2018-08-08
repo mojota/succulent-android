@@ -2,7 +2,6 @@ package com.mojota.succulent.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
-import com.mojota.succulent.model.GrowthDiary;
+import com.mojota.succulent.model.NoteInfo;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
 public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<GrowthDiary> mList;
+    private List<NoteInfo> mList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView ivPic;
@@ -43,12 +42,12 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
         }
     }
 
-    public GrowthDiaryAdapter(Context context, List<GrowthDiary> list) {
+    public GrowthDiaryAdapter(Context context, List<NoteInfo> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<GrowthDiary> list) {
+    public void setList(List<NoteInfo> list) {
         mList = list;
     }
 
@@ -71,7 +70,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final GrowthDiary diary = mList.get(position);
+        final NoteInfo diary = mList.get(position);
         if (diary != null) {
             holder.tvTitle.setText(diary.getTitle());
             holder.tvTime.setText(diary.getUpdateTime());
@@ -108,8 +107,10 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
             RequestOptions requestOptions = new RequestOptions().error(R.mipmap
                     .ic_default_pic).dontAnimate().centerCrop();
-            Glide.with(mContext).load(diary.getPicUrl()).apply(requestOptions).into(holder
-                    .ivPic);
+            if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
+                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(requestOptions)
+                        .into(holder.ivPic);
+            }
         }
 
     }

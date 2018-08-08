@@ -8,7 +8,7 @@ import com.mojota.succulent.utils.AppLog;
 
 /**
  * 网络请求失败统一处理
- * Created by wangjing on 17-5-5.
+ * Created by mojota on 17-5-5.
  */
 
 public class VolleyErrorListener implements Response.ErrorListener {

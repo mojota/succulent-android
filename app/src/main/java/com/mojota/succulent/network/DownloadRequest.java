@@ -14,7 +14,7 @@ import java.net.URL;
 /**
  * 支持带进度的下载文件
  * 大文件的下载请使用此类
- * Created by wangjing on 18-2-9.
+ * Created by mojota on 18-2-9.
  */
 
 public class DownloadRequest {

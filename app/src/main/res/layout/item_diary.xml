@@ -56,40 +56,9 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/gray_light"/>
 
-            <ToggleButton
-                android:id="@+id/tb_like"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@android:color/transparent"
-                android:drawableLeft="@drawable/ic_like_selector"
-                android:drawablePadding="4dp"
-                android:gravity="left|center_vertical"
-                android:maxLines="1"
-                android:drawableTint="@color/colorAccent"
-                android:textSize="12dp"
-                android:textColor="@color/gray"
-                android:textOff=""
-                android:textOn=""/>
 
-            <ToggleButton
-                android:id="@+id/tb_permission"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_alignBottom="@id/tb_like"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/tb_like"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:checked="false"
-                android:gravity="right"
-                android:textColor="@color/col_permission_selector"
-                android:textOff="@string/str_self"
-                android:textOn="@string/str_public"/>
+            <include layout="@layout/layout_note_bar"/>
+
 
         </RelativeLayout>
 

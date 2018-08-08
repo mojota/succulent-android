@@ -17,8 +17,8 @@ import com.mojota.succulent.DiaryAddActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.GrowthDiaryAdapter;
-import com.mojota.succulent.model.GrowthDiary;
-import com.mojota.succulent.model.GrowthDiaryResponseInfo;
+import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.utils.CodeConstants;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private RecyclerView mRvDiary;
     private FloatingActionButton mFabAdd;
     private GrowthDiaryAdapter mDiaryAdapter;
-    private List<GrowthDiary> mList = new ArrayList<GrowthDiary>();
+    private List<NoteInfo> mList = new ArrayList<NoteInfo>();
 
 
     public GrowthDiaryFragment() {
@@ -90,8 +90,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private void getData() {
 
         mSwipeRefresh.setRefreshing(false);
-        GrowthDiaryResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(),
-                GrowthDiaryResponseInfo.class);
+        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(),
+                NoteResponseInfo.class);
         mList = resInfo.getList();
 
         setDataToView();

@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by wangjing on 17-11-20.
+ * Created by mojota on 17-11-20.
  */
 
 public class GsonForJsonObjectRequest<T> extends JsonObjectRequest {

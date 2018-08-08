@@ -1,7 +1,7 @@
 package com.mojota.succulent.network;
 
 /**
- * Created by wangjing on 17-2-28.
+ * Created by mojota on 17-2-28.
  */
 
 import com.android.volley.AuthFailureError;

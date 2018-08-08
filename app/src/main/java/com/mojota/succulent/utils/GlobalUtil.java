@@ -92,7 +92,7 @@ public class GlobalUtil {
     }
 
     /**
-     * snackbar提示框 by wangjing
+     * snackbar提示框
      */
     public static void makeSnackbar(View view, int tips, int color) {
         if (view == null) {
