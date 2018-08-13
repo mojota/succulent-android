@@ -14,13 +14,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.utils.GlobalUtil;
 
 import java.util.List;
 
 /**
  * Created by mojota on 18-7-24.
  */
-public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.ViewHolder> {
+public class GrowthDiaryAdapter extends RecyclerView
+        .Adapter<GrowthDiaryAdapter.ViewHolder> {
 
     private Context mContext;
     private List<NoteInfo> mList;
@@ -63,8 +65,8 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R
-                .layout.item_diary, parent, false));
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext)
+                .inflate(R.layout.item_diary, parent, false));
         return viewHolder;
     }
 
@@ -87,14 +89,17 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             holder.tbLike.setOnCheckedChangeListener(new CompoundButton
                     .OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onCheckedChanged(CompoundButton buttonView,
+                                             boolean isChecked) {
                     int likeCount = diary.getLikeCount();
                     if (isChecked) {
                         diary.setLikeCount(likeCount + 1);
-                        holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
+                        holder.tbLike.setTextOn(String.valueOf(diary
+                                .getLikeCount()));
                     } else {
                         diary.setLikeCount(likeCount - 1);
-                        holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
+                        holder.tbLike.setTextOff(String.valueOf(diary
+                                .getLikeCount()));
                     }
                 }
             });
@@ -105,11 +110,11 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
                 holder.tbPermission.setChecked(false);
             }
 
-            RequestOptions requestOptions = new RequestOptions().error(R.mipmap
-                    .ic_default_pic).dontAnimate().centerCrop();
+            RequestOptions requestOptions = GlobalUtil
+                    .getDefaultRequestOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(requestOptions)
-                        .into(holder.ivPic);
+                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply
+                        (requestOptions).into(holder.ivPic);
             }
         }
 

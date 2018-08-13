@@ -1,7 +1,6 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +14,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.utils.GlobalUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mojota on 18-8-3.
  */
-public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
-        .BaseViewHolder> {
+public class LandscapingAdapter extends RecyclerView
+        .Adapter<LandscapingAdapter.BaseViewHolder> {
     public static final int TYPE_PIC_ONE = 1;
     public static final int TYPE_PIC_TWO = 2;
     public static final int TYPE_PIC_THREE = 3;
@@ -30,6 +31,18 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
 
     private final Context mContext;
     private List<NoteInfo> mList;
+    private OnImageClickListener mOnImageClickListener;
+
+    private OneViewHolder mOneViewHolder;
+    private TwoViewHolder mTwoViewHolder;
+    private ThreeViewHolder mThreeViewHolder;
+    private FourViewHolder mFourViewHolder;
+
+    public interface OnImageClickListener {
+
+        void onImageClick(ImageView view, String title, ArrayList<String>
+                picUrls, int picPos);
+    }
 
     public class BaseViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
@@ -101,6 +114,9 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
         mList = list;
     }
 
+    public void setOnImageClickListener(OnImageClickListener listener) {
+        mOnImageClickListener = listener;
+    }
 
     @Override
     public int getItemCount() {
@@ -129,28 +145,34 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
         return TYPE_PIC_ONE;
     }
 
+
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        OneViewHolder oneViewHolder = new OneViewHolder(LayoutInflater.from(mContext)
+        mOneViewHolder = new OneViewHolder(LayoutInflater.from(mContext)
                 .inflate(R.layout.item_landscaping_one, parent, false));
         if (viewType == TYPE_PIC_ONE) {
-            return oneViewHolder;
+            return mOneViewHolder;
         } else if (viewType == TYPE_PIC_TWO) {
-            return new TwoViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                    .item_landscaping_two, parent, false));
+            return mTwoViewHolder = new TwoViewHolder(LayoutInflater.from
+                    (mContext).inflate(R.layout.item_landscaping_two, parent,
+                    false));
         } else if (viewType == TYPE_PIC_THREE) {
-            return new ThreeViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                    .item_landscaping_three, parent, false));
+            return mThreeViewHolder = new ThreeViewHolder(LayoutInflater.from
+                    (mContext).inflate(R.layout.item_landscaping_three,
+                    parent, false));
         } else if (viewType == TYPE_PIC_FOUR) {
-            return new FourViewHolder(LayoutInflater.from(mContext).inflate(R.layout
-                    .item_landscaping_four, parent, false));
+            mFourViewHolder = new FourViewHolder(LayoutInflater.from
+                    (mContext).inflate(R.layout.item_landscaping_four,
+                    parent, false));
+            return mFourViewHolder;
         }
-        return oneViewHolder;
+        return mOneViewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+    public void onBindViewHolder(final BaseViewHolder holder, final int
+            position) {
         final NoteInfo note = mList.get(position);
         if (note != null) {
             holder.tvTitle.setText(note.getTitle());
@@ -167,14 +189,17 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
             holder.tbLike.setOnCheckedChangeListener(new CompoundButton
                     .OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onCheckedChanged(CompoundButton buttonView,
+                                             boolean isChecked) {
                     int likeCount = note.getLikeCount();
                     if (isChecked) {
                         note.setLikeCount(likeCount + 1);
-                        holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
+                        holder.tbLike.setTextOn(String.valueOf(note
+                                .getLikeCount()));
                     } else {
                         note.setLikeCount(likeCount - 1);
-                        holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
+                        holder.tbLike.setTextOff(String.valueOf(note
+                                .getLikeCount()));
                     }
                 }
             });
@@ -185,33 +210,158 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
                 holder.tbPermission.setChecked(false);
             }
 
-            RequestOptions requestOptions = new RequestOptions().error(R.mipmap
-                    .ic_default_pic).dontAnimate().centerCrop();
+            RequestOptions requestOptions = GlobalUtil
+                    .getDefaultRequestOptions().centerCrop();
             if (note.getPicUrls() != null) {
                 if (holder instanceof TwoViewHolder) {
                     Glide.with(mContext).load(note.getPicUrls().get(0)).apply
-                            (requestOptions).into(((TwoViewHolder) holder).ivPicOne);
+                            (requestOptions).into(((TwoViewHolder) holder)
+                            .ivPicOne);
                     Glide.with(mContext).load(note.getPicUrls().get(1)).apply
-                            (requestOptions).into(((TwoViewHolder) holder).ivPicTwo);
+                            (requestOptions).into(((TwoViewHolder) holder)
+                            .ivPicTwo);
+                    ((TwoViewHolder) holder).ivPicOne.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (TwoViewHolder) holder).ivPicOne,
+                                        note.getTitle(), note.getPicUrls(), 0);
+                            }
+                        }
+                    });
+                    ((TwoViewHolder) holder).ivPicTwo.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (TwoViewHolder) holder).ivPicTwo,
+                                        note.getTitle(), note.getPicUrls(), 1);
+                            }
+                        }
+                    });
                 } else if (holder instanceof ThreeViewHolder) {
                     Glide.with(mContext).load(note.getPicUrls().get(0)).apply
-                            (requestOptions).into(((ThreeViewHolder) holder).ivPicOne);
+                            (requestOptions).into(((ThreeViewHolder) holder)
+                            .ivPicOne);
                     Glide.with(mContext).load(note.getPicUrls().get(1)).apply
-                            (requestOptions).into(((ThreeViewHolder) holder).ivPicTwo);
+                            (requestOptions).into(((ThreeViewHolder) holder)
+                            .ivPicTwo);
                     Glide.with(mContext).load(note.getPicUrls().get(2)).apply
-                            (requestOptions).into(((ThreeViewHolder) holder).ivPicThree);
+                            (requestOptions).into(((ThreeViewHolder) holder)
+                            .ivPicThree);
+                    ((ThreeViewHolder) holder).ivPicOne.setOnClickListener
+                            (new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (ThreeViewHolder) holder).ivPicOne,
+                                        note.getTitle(), note.getPicUrls(), 0);
+                            }
+                        }
+                    });
+                    ((ThreeViewHolder) holder).ivPicTwo.setOnClickListener
+                            (new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (ThreeViewHolder) holder).ivPicTwo,
+                                        note.getTitle(), note.getPicUrls(), 1);
+                            }
+                        }
+                    });
+                    ((ThreeViewHolder) holder).ivPicThree.setOnClickListener
+                            (new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (ThreeViewHolder) holder).ivPicThree,
+                                        note.getTitle(), note.getPicUrls(), 2);
+                            }
+                        }
+                    });
+
+
                 } else if (holder instanceof FourViewHolder) {
                     Glide.with(mContext).load(note.getPicUrls().get(0)).apply
-                            (requestOptions).into(((FourViewHolder) holder).ivPicOne);
+                            (requestOptions).into(((FourViewHolder) holder)
+                            .ivPicOne);
                     Glide.with(mContext).load(note.getPicUrls().get(1)).apply
-                            (requestOptions).into(((FourViewHolder) holder).ivPicTwo);
+                            (requestOptions).into(((FourViewHolder) holder)
+                            .ivPicTwo);
                     Glide.with(mContext).load(note.getPicUrls().get(2)).apply
-                            (requestOptions).into(((FourViewHolder) holder).ivPicThree);
+                            (requestOptions).into(((FourViewHolder) holder)
+                            .ivPicThree);
                     Glide.with(mContext).load(note.getPicUrls().get(3)).apply
-                            (requestOptions).into(((FourViewHolder) holder).ivPicFour);
+                            (requestOptions).into(((FourViewHolder) holder)
+                            .ivPicFour);
+                    ((FourViewHolder) holder).ivPicOne.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (FourViewHolder) holder).ivPicOne,
+                                        note.getTitle(), note.getPicUrls(), 0);
+                            }
+                        }
+                    });
+                    ((FourViewHolder) holder).ivPicTwo.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (FourViewHolder) holder).ivPicTwo,
+                                        note.getTitle(), note.getPicUrls(), 1);
+                            }
+                        }
+                    });
+                    ((FourViewHolder) holder).ivPicThree.setOnClickListener
+                            (new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (FourViewHolder) holder).ivPicThree,
+                                        note.getTitle(), note.getPicUrls(), 2);
+                            }
+                        }
+                    });
+
+                    ((FourViewHolder) holder).ivPicFour.setOnClickListener
+                            (new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (FourViewHolder) holder).ivPicFour,
+                                        note.getTitle(), note.getPicUrls(), 3);
+                            }
+                        }
+                    });
                 } else {
                     Glide.with(mContext).load(note.getPicUrls().get(0)).apply
-                            (requestOptions).into(((OneViewHolder) holder).ivPicOne);
+                            (requestOptions).into(((OneViewHolder) holder)
+                            .ivPicOne);
+                    ((OneViewHolder) holder).ivPicOne.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnImageClickListener != null) {
+                                mOnImageClickListener.onImageClick((
+                                        (OneViewHolder) holder).ivPicOne,
+                                        note.getTitle(), note.getPicUrls(), 0);
+                            }
+                        }
+                    });
                 }
             }
         }

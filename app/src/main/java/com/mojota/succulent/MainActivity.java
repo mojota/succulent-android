@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.mojota.succulent.adapter.ViewPagerAdapter;
+import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 import com.mojota.succulent.fragment.EncyclopediaFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
 import com.mojota.succulent.fragment.NeighbourFragment;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
     private ArrayList<Fragment> mFragmentList;
-    private ViewPagerAdapter mPagerAdapter;
+    private FragmentViewPagerAdapter mPagerAdapter;
     private MenuItem mMenuItem;
 
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
 
         mVpMain = (ViewPager) findViewById(R.id.vp_main);
         initFragment();
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragmentList, null);
+        mPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), mFragmentList, null);
         mVpMain.setAdapter(mPagerAdapter);
         mVpMain.setOffscreenPageLimit(3);
         mVpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

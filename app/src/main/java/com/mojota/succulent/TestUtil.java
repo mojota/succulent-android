@@ -88,6 +88,19 @@ public class TestUtil {
                 ".baidu.com/timg?image&quality=80&size=b9999_10000&sec=1534314743&di" +
                 "=ed0cd3abe36faa4dc824472907afc359&imgtype=jpg&er=1&src=http%3A%2F" +
                 "%2Fimg5.duitang.com%2Fuploads%2Fblog%2F201308%2F17%2F20130817161051_Hxz5F" +
+                ".thumb.700_0.jpeg\"]},{\"title\":\"摆个盘盘\",\"updateTime\":\"2018-08-01 " +
+                "08:05\",\"permission\":\"0\",\"likeCount\":\"100\",\"hasLike\":\"1\"," +
+                "\"picUrls\":[\"https://timgsa.baidu" +
+                ".com/timg?image&quality=80&size=b9999_10000&sec=1533718877525&di" +
+                "=ee003770244efbdd71303032f92f20e6&imgtype=0&src=http%3A%2F%2Fs10.sinaimg" +
+                ".cn%2Fmw690%2F0024bWVagy6QsYZD5cl29%26690\",\"https://timgsa.baidu" +
+                ".com/timg?image&quality=80&size=b9999_10000&sec=1534313664&di" +
+                "=b905eb785671c948864121131edf66f3&imgtype=jpg&er=1&src=http%3A%2F%2Fimg4q" +
+                ".duitang.com%2Fuploads%2Fitem%2F201505%2F03%2F20150503185151_GZQyT.jpeg\"," +
+                "\"\",\"https://timgsa.baidu" +
+                ".com/timg?image&quality=80&size=b9999_10000&sec=1534314743&di" +
+                "=ed0cd3abe36faa4dc824472907afc359&imgtype=jpg&er=1&src=http%3A%2F" +
+                "%2Fimg5.duitang.com%2Fuploads%2Fblog%2F201308%2F17%2F20130817161051_Hxz5F" +
                 ".thumb.700_0.jpeg\"]}]}";
     }
 }

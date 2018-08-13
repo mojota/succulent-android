@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mojota.succulent.R;
-import com.mojota.succulent.adapter.ViewPagerAdapter;
+import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,7 +66,7 @@ public class MyGardenFragment extends Fragment {
         mTabMy = view.findViewById(R.id.tab_my);
         mVpMy = view.findViewById(R.id.vp_my);
         initFragment();
-        mVpMy.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mFragments, mTitles));
+        mVpMy.setAdapter(new FragmentViewPagerAdapter(getChildFragmentManager(), mFragments, mTitles));
         mTabMy.setupWithViewPager(mVpMy);
         return view;
     }

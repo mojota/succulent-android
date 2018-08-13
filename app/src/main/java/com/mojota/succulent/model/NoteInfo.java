@@ -1,5 +1,6 @@
 package com.mojota.succulent.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class NoteInfo extends BaseBean {
     int permission; // 0保密 1公开
     int likeCount; // 赞数
     int hasLike; // 0未赞 1已赞
-    List<String> picUrls; // 图片地址们
+    ArrayList<String> picUrls; // 图片地址们
 
     public String getDiaryId() {
         return diaryId;
@@ -66,11 +67,11 @@ public class NoteInfo extends BaseBean {
         this.hasLike = hasLike;
     }
 
-    public List<String> getPicUrls() {
+    public ArrayList<String> getPicUrls() {
         return picUrls;
     }
 
-    public void setPicUrls(List<String> picUrls) {
+    public void setPicUrls(ArrayList<String> picUrls) {
         this.picUrls = picUrls;
     }
 }

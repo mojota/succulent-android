@@ -16,4 +16,8 @@
     <string name="str_commit">提交</string>
     <string name="str_hint_pic_title">说点什么</string>
 
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="str_save_success">保存成功</string>
+    <string name="str_save_failed">保存失败</string>
+
 </resources>

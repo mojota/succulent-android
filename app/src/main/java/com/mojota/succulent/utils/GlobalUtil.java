@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.SucculentApplication;
 
@@ -31,8 +32,9 @@ public class GlobalUtil {
     private static String mVersioinName;
 
     public static String getDeviceId() {
-        String ANDROID_ID = Settings.System.getString(SucculentApplication.getInstance()
-                .getContentResolver(), Settings.Secure.ANDROID_ID);
+        String ANDROID_ID = Settings.System.getString(SucculentApplication
+                .getInstance().getContentResolver(), Settings.Secure
+                .ANDROID_ID);
         return ANDROID_ID;
     }
 
@@ -78,14 +80,14 @@ public class GlobalUtil {
         if (snackbarView != null) {
             if (color != 0) {
                 try {
-                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
-                            (color);
+                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)
+                    ).setTextColor(color);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
-                        (Color.parseColor("#46A6FF"));
+                ((TextView) snackbarView.findViewById(R.id.snackbar_text))
+                        .setTextColor(Color.parseColor("#689f38"));
             }
         }
         snackbar.show();
@@ -103,14 +105,14 @@ public class GlobalUtil {
         if (snackbarView != null) {
             if (color != 0) {
                 try {
-                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
-                            (color);
+                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)
+                    ).setTextColor(color);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
-                        (Color.parseColor("#46A6FF"));
+                ((TextView) snackbarView.findViewById(R.id.snackbar_text))
+                        .setTextColor(Color.parseColor("#689f38"));
             }
         }
         snackbar.show();
@@ -120,8 +122,8 @@ public class GlobalUtil {
      * 检测网络是否存在 true：存在 false ：不存在网络
      */
     public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService
-                (Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
         if (activeNetInfo != null && activeNetInfo.isConnected()) {
             if (activeNetInfo.getState() == NetworkInfo.State.CONNECTED) {
@@ -133,8 +135,10 @@ public class GlobalUtil {
 
     public static String getVersionName() {
         if (mVersioinName == null || TextUtils.isEmpty(mVersioinName)) {
-            PackageManager pm = SucculentApplication.getInstance().getPackageManager();
-            String pkgName = SucculentApplication.getInstance().getPackageName();
+            PackageManager pm = SucculentApplication.getInstance()
+                    .getPackageManager();
+            String pkgName = SucculentApplication.getInstance()
+                    .getPackageName();
             try {
                 PackageInfo pkgInfo = pm.getPackageInfo(pkgName, 0);
                 mVersioinName = pkgInfo.versionName;
@@ -155,7 +159,7 @@ public class GlobalUtil {
         return sdf.format(date);
     }
 
-    public static String formatCurrentTime(){
+    public static String formatCurrentTime() {
         return formatTime(System.currentTimeMillis(), "yyyyMMddHHmmSS");
     }
 
@@ -163,4 +167,8 @@ public class GlobalUtil {
         return formatTime(milliseconds, "yyyy-MM-dd HH:mm:SS");
     }
 
+    public static RequestOptions getDefaultRequestOptions() {
+        return new RequestOptions().error(R.mipmap.ic_default_pic)
+                .dontAnimate();
+    }
 }
