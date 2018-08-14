@@ -1,4 +1,4 @@
-package com.mojota.succulent;
+package com.mojota.succulent.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.mojota.succulent.R;
 import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 import com.mojota.succulent.fragment.EncyclopediaFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;

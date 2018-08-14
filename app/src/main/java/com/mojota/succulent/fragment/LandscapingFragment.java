@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.mojota.succulent.ImageBrowserActivity;
-import com.mojota.succulent.LandscapingAddActivity;
+import com.mojota.succulent.activity.ImageBrowserActivity;
+import com.mojota.succulent.activity.LandscapingAddActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.LandscapingAdapter;

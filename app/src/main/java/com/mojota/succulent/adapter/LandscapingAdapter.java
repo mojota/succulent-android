@@ -175,7 +175,7 @@ public class LandscapingAdapter extends RecyclerView
             position) {
         final NoteInfo note = mList.get(position);
         if (note != null) {
-            holder.tvTitle.setText(note.getTitle());
+            holder.tvTitle.setText(note.getNoteTitle());
 
             if (note.getHasLike() == 1) {
                 holder.tbLike.setChecked(true);
@@ -227,7 +227,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (TwoViewHolder) holder).ivPicOne,
-                                        note.getTitle(), note.getPicUrls(), 0);
+                                        note.getNoteTitle(), note.getPicUrls(), 0);
                             }
                         }
                     });
@@ -238,7 +238,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (TwoViewHolder) holder).ivPicTwo,
-                                        note.getTitle(), note.getPicUrls(), 1);
+                                        note.getNoteTitle(), note.getPicUrls(), 1);
                             }
                         }
                     });
@@ -259,7 +259,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (ThreeViewHolder) holder).ivPicOne,
-                                        note.getTitle(), note.getPicUrls(), 0);
+                                        note.getNoteTitle(), note.getPicUrls(), 0);
                             }
                         }
                     });
@@ -270,7 +270,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (ThreeViewHolder) holder).ivPicTwo,
-                                        note.getTitle(), note.getPicUrls(), 1);
+                                        note.getNoteTitle(), note.getPicUrls(), 1);
                             }
                         }
                     });
@@ -281,7 +281,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (ThreeViewHolder) holder).ivPicThree,
-                                        note.getTitle(), note.getPicUrls(), 2);
+                                        note.getNoteTitle(), note.getPicUrls(), 2);
                             }
                         }
                     });
@@ -307,7 +307,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (FourViewHolder) holder).ivPicOne,
-                                        note.getTitle(), note.getPicUrls(), 0);
+                                        note.getNoteTitle(), note.getPicUrls(), 0);
                             }
                         }
                     });
@@ -318,7 +318,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (FourViewHolder) holder).ivPicTwo,
-                                        note.getTitle(), note.getPicUrls(), 1);
+                                        note.getNoteTitle(), note.getPicUrls(), 1);
                             }
                         }
                     });
@@ -330,7 +330,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (FourViewHolder) holder).ivPicThree,
-                                        note.getTitle(), note.getPicUrls(), 2);
+                                        note.getNoteTitle(), note.getPicUrls(), 2);
                             }
                         }
                     });
@@ -343,7 +343,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (FourViewHolder) holder).ivPicFour,
-                                        note.getTitle(), note.getPicUrls(), 3);
+                                        note.getNoteTitle(), note.getPicUrls(), 3);
                             }
                         }
                     });
@@ -358,7 +358,7 @@ public class LandscapingAdapter extends RecyclerView
                             if (mOnImageClickListener != null) {
                                 mOnImageClickListener.onImageClick((
                                         (OneViewHolder) holder).ivPicOne,
-                                        note.getTitle(), note.getPicUrls(), 0);
+                                        note.getNoteTitle(), note.getPicUrls(), 0);
                             }
                         }
                     });

@@ -1,4 +1,4 @@
-package com.mojota.succulent;
+package com.mojota.succulent.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -8,13 +8,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.mojota.succulent.R;
 import com.mojota.succulent.utils.CodeConstants;
 
 /**
- * 添加造
- * Created by mojota on 18-8-3
+ * 添加造景后花园
+ * created by mojota on 18-8-3
  */
-public class LandscapingAddActivity extends BaseActivity implements View.OnClickListener {
+public class LandscapingAddActivity extends PhotoChooseSupportActivity implements View
+        .OnClickListener {
     private Button mBtClose;
     private TextInputLayout mTiTitle;
     private EditText mEtTitle;

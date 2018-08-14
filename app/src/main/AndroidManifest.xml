@@ -27,28 +27,25 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/NoActionBarTheme">
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".DiaryAddActivity"
+            android:name=".activity.DiaryAddActivity"
             android:theme="@style/AddDataDialog">
         </activity>
         <activity
-            android:name=".LandscapingAddActivity"
+            android:name=".activity.LandscapingAddActivity"
             android:theme="@style/AddDataDialog">
         </activity>
-        <activity android:name=".BaseActivity">
-        </activity>
         <activity
-            android:name=".ImageBrowserActivity"
-            android:theme="@style/NoActionBarTheme">
+            android:name=".activity.ImageBrowserActivity">
+        </activity>
+        <activity android:name=".activity.DiaryDetailActivity">
         </activity>
     </application>
 

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.mojota.succulent.DiaryAddActivity;
+import com.mojota.succulent.activity.DiaryAddActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.GrowthDiaryAdapter;

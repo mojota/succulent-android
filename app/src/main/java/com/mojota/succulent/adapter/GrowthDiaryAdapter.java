@@ -1,6 +1,8 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.GlobalUtil;
@@ -21,8 +24,7 @@ import java.util.List;
 /**
  * Created by mojota on 18-7-24.
  */
-public class GrowthDiaryAdapter extends RecyclerView
-        .Adapter<GrowthDiaryAdapter.ViewHolder> {
+public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.ViewHolder> {
 
     private Context mContext;
     private List<NoteInfo> mList;
@@ -33,9 +35,11 @@ public class GrowthDiaryAdapter extends RecyclerView
         private final TextView tvTime;
         private final ToggleButton tbLike;
         private final ToggleButton tbPermission;
+        private final CardView cvItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            cvItem = itemView.findViewById(R.id.cv_item);
             ivPic = itemView.findViewById(R.id.iv_pic);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvTime = itemView.findViewById(R.id.tv_time);
@@ -65,8 +69,8 @@ public class GrowthDiaryAdapter extends RecyclerView
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext)
-                .inflate(R.layout.item_diary, parent, false));
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R
+                .layout.item_diary, parent, false));
         return viewHolder;
     }
 
@@ -74,7 +78,7 @@ public class GrowthDiaryAdapter extends RecyclerView
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final NoteInfo diary = mList.get(position);
         if (diary != null) {
-            holder.tvTitle.setText(diary.getTitle());
+            holder.tvTitle.setText(diary.getNoteTitle());
             holder.tvTime.setText(diary.getUpdateTime());
 
             if (diary.getHasLike() == 1) {
@@ -89,17 +93,14 @@ public class GrowthDiaryAdapter extends RecyclerView
             holder.tbLike.setOnCheckedChangeListener(new CompoundButton
                     .OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView,
-                                             boolean isChecked) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     int likeCount = diary.getLikeCount();
                     if (isChecked) {
                         diary.setLikeCount(likeCount + 1);
-                        holder.tbLike.setTextOn(String.valueOf(diary
-                                .getLikeCount()));
+                        holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
                     } else {
                         diary.setLikeCount(likeCount - 1);
-                        holder.tbLike.setTextOff(String.valueOf(diary
-                                .getLikeCount()));
+                        holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
                     }
                 }
             });
@@ -110,13 +111,20 @@ public class GrowthDiaryAdapter extends RecyclerView
                 holder.tbPermission.setChecked(false);
             }
 
-            RequestOptions requestOptions = GlobalUtil
-                    .getDefaultRequestOptions().centerCrop();
+            RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply
-                        (requestOptions).into(holder.ivPic);
+                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(requestOptions)
+                        .into(holder.ivPic);
             }
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DiaryDetailActivity.class);
+                intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

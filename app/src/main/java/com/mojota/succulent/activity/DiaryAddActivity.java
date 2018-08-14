@@ -1,4 +1,4 @@
-package com.mojota.succulent;
+package com.mojota.succulent.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -8,13 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.mojota.succulent.R;
 import com.mojota.succulent.utils.CodeConstants;
 
 /**
  * 添加笔记
  * Created by mojota on 18-8-2
  */
-public class DiaryAddActivity extends BaseActivity implements View.OnClickListener {
+public class DiaryAddActivity extends PhotoChooseSupportActivity implements View.OnClickListener {
 
     private Button mBtClose;
     private TextInputLayout mTiTitle;

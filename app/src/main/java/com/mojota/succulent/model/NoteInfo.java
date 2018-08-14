@@ -11,28 +11,28 @@ public class NoteInfo extends BaseBean {
 
     private static final long serialVersionUID = 1L;
 
-    String diaryId;//id
-    String title;// 标题
+    String noteId;//id
+    String noteTitle;// 标题
     String updateTime;// 更新时间
     int permission; // 0保密 1公开
     int likeCount; // 赞数
     int hasLike; // 0未赞 1已赞
-    ArrayList<String> picUrls; // 图片地址们
+    ArrayList<String> picUrls; // 封面图片地址们
 
-    public String getDiaryId() {
-        return diaryId;
+    public String getNoteId() {
+        return noteId;
     }
 
-    public void setDiaryId(String diaryId) {
-        this.diaryId = diaryId;
+    public void setNoteId(String noteId) {
+        this.noteId = noteId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNoteTitle() {
+        return noteTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
     }
 
     public String getUpdateTime() {

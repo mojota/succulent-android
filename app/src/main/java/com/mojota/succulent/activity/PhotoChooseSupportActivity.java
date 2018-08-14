@@ -1,4 +1,4 @@
-package com.mojota.succulent;
+package com.mojota.succulent.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
+import com.mojota.succulent.BuildConfig;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.FileUtil;
 import com.mojota.succulent.utils.GlobalUtil;
@@ -21,7 +21,7 @@ import java.io.File;
  * 基类activity,支持打开选择图片对话框
  * Created by mojota on 18-8-6
  */
-public class BaseActivity extends AppCompatActivity {
+public class PhotoChooseSupportActivity extends BaseActivity {
 
     private Uri mUploadUri = null;
     private ImageButton mUploadIbt;

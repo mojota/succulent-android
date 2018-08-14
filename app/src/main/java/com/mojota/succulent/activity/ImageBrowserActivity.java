@@ -1,12 +1,12 @@
-package com.mojota.succulent;
+package com.mojota.succulent.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.mojota.succulent.R;
 import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 import com.mojota.succulent.fragment.ImageFragment;
 import com.mojota.succulent.view.PageIndicatorView;
@@ -14,7 +14,7 @@ import com.mojota.succulent.view.PageIndicatorView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageBrowserActivity extends AppCompatActivity {
+public class ImageBrowserActivity extends BaseActivity {
 
     public static final String KEY_TITLE = "TITLE";
     public static final String KEY_PIC_URLS = "PIC_URLS";
