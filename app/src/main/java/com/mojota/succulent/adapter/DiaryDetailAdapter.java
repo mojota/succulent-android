@@ -1,6 +1,7 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.DiaryDetail;
@@ -25,15 +27,17 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     private List<DiaryDetail> mList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView ivPic;
-        private final TextView tvTitle;
+        private final TextView tvContent;
         private final TextView tvTime;
+        private final ImageView ivPic0;
+        private final ImageView ivPic1;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ivPic = itemView.findViewById(R.id.iv_pic);
-            tvTitle = itemView.findViewById(R.id.tv_title);
             tvTime = itemView.findViewById(R.id.tv_time);
+            tvContent = itemView.findViewById(R.id.tv_content);
+            ivPic0 = itemView.findViewById(R.id.iv_pic0);
+            ivPic1 = itemView.findViewById(R.id.iv_pic1);
         }
     }
 
@@ -67,13 +71,20 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final DiaryDetail diary = mList.get(position);
         if (diary != null) {
-            holder.tvTitle.setText(diary.getContent());
+            holder.tvContent.setText(diary.getContent());
             holder.tvTime.setText(diary.getCreateTime());
 
             RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(requestOptions)
-                        .into(holder.ivPic);
+                for (int i = 0; i < diary.getPicUrls().size(); i++) {
+                    RequestBuilder<Drawable> rb = Glide.with(mContext).load(diary.getPicUrls
+                            ().get(i)).apply(requestOptions);
+                    if (i == 0) {
+                        rb.into(holder.ivPic0);
+                    } else {
+                        rb.into(holder.ivPic1);
+                    }
+                }
             }
         }
     }

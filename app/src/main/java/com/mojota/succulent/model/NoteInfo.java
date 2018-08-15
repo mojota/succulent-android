@@ -48,7 +48,7 @@ public class NoteInfo extends BaseBean {
     }
 
     public void setPermission(int permission) {
-        permission = permission;
+        this.permission = permission;
     }
 
     public int getLikeCount() {

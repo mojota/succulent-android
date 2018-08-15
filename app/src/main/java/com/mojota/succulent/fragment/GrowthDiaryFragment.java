@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.mojota.succulent.activity.DiaryAddActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
+import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.GrowthDiaryAdapter;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by mojota on 18-7-23
  */
 public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -79,6 +80,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mRvDiary.setLayoutManager(llm);
         mRvDiary.setItemAnimator(new DefaultItemAnimator());
         mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
+        mDiaryAdapter.setmOnItemClickListener(this);
         mRvDiary.setAdapter(mDiaryAdapter);
         mFabAdd = view.findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(this);
@@ -123,9 +125,23 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CodeConstants.REQUEST_ADD:
-                if (resultCode == CodeConstants.RESULT_ADD){
+                if (resultCode == CodeConstants.RESULT_ADD) {
                     getData();
                 }
+                break;
+            case CodeConstants.REQUEST_DETAIL:
+                if (resultCode == CodeConstants.RESULT_DETAIL) {
+                    getData();
+                }
+                break;
+
         }
+    }
+
+    @Override
+    public void onItemClick(NoteInfo diary, int position) {
+        Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
+        intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
+        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL);
     }
 }

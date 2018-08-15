@@ -28,6 +28,12 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     private Context mContext;
     private List<NoteInfo> mList;
+    private OnItemClickListener mOnItemClickListener;
+
+    public interface OnItemClickListener{
+
+        void onItemClick(NoteInfo diary, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView ivPic;
@@ -58,6 +64,10 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     }
 
 
+    public void setmOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
     @Override
     public int getItemCount() {
         if (mList != null && mList.size() > 0) {
@@ -75,7 +85,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final NoteInfo diary = mList.get(position);
         if (diary != null) {
             holder.tvTitle.setText(diary.getNoteTitle());
@@ -110,6 +120,18 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             } else {
                 holder.tbPermission.setChecked(false);
             }
+            holder.tbPermission.setOnCheckedChangeListener(new CompoundButton
+                    .OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        diary.setPermission(1);
+                    } else {
+                        diary.setPermission(0);
+                    }
+                }
+            });
 
             RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
@@ -120,9 +142,9 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, DiaryDetailActivity.class);
-                intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
-                mContext.startActivity(intent);
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(diary,position);
+                }
             }
         });
 

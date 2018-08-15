@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="4dp"
+        android:background="@color/white"
         android:paddingTop="4dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -30,9 +31,11 @@
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/default_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:srcCompat="@mipmap/ic_add_white_48dp"/>
+        android:src="@mipmap/ic_add_white_48dp"
+        app:layout_anchor="@id/rv_diarys"
+        app:layout_anchorGravity="right|bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

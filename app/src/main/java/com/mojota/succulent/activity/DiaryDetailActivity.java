@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -36,6 +37,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private DiaryDetailAdapter mDetailAdapter;
     private List<DiaryDetail> mList = new ArrayList<DiaryDetail>();
     private NoteInfo mNoteInfo;
+    private MenuItem mActionPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
     private void getData() {
 
-        DiarysResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(),
+        DiarysResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiryDetails(),
                 DiarysResponseInfo.class);
         mList = resInfo.getDiarys();
 
@@ -76,10 +78,37 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bar, menu);
+        mActionPermission = menu.findItem(R.id.action_permission);
+
+        setPermissionMemu();
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setPermissionMemu() {
+        if (mNoteInfo.getPermission() == 1) {
+            mActionPermission.setTitle(R.string.str_public);
+        } else {
+            mActionPermission.setTitle(R.string.str_self);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_permission:
+                if (mNoteInfo.getPermission() == 1) {
+                    mNoteInfo.setPermission(0);
+                } else {
+                    mNoteInfo.setPermission(1);
+                }
+                setPermissionMemu();
+                setResult(CodeConstants.RESULT_DETAIL);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,7 +130,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CodeConstants.REQUEST_ADD:
-                if (resultCode == CodeConstants.RESULT_ADD){
+                if (resultCode == CodeConstants.RESULT_ADD) {
                     getData();
                 }
         }
