@@ -1,7 +1,6 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.GlobalUtil;
@@ -32,7 +30,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     public interface OnItemClickListener{
 
-        void onItemClick(NoteInfo diary, int position);
+        void onItemClick(ImageView view, NoteInfo diary, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -143,7 +141,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(diary,position);
+                    mOnItemClickListener.onItemClick(holder.ivPic, diary,position);
                 }
             }
         });

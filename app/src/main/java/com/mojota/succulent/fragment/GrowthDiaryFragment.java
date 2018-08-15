@@ -3,6 +3,7 @@ package com.mojota.succulent.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.mojota.succulent.activity.DiaryAddActivity;
@@ -139,9 +141,15 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onItemClick(NoteInfo diary, int position) {
+    public void onItemClick(ImageView view, NoteInfo diary, int position) {
+//        String transitionName = String.valueOf(position);
+//        view.setTransitionName(transitionName);
         Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
         intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
-        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL);
+//        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
+                (getActivity(), view, view.getTransitionName());
+        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options.toBundle());
     }
 }

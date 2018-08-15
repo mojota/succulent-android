@@ -1,11 +1,14 @@
 package com.mojota.succulent.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +26,7 @@ import java.util.List;
  */
 public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.ViewHolder> {
 
-    private Context mContext;
+    private Activity mContext;
     private List<DiaryDetail> mList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,7 +44,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
         }
     }
 
-    public DiaryDetailAdapter(Context context, List<DiaryDetail> list) {
+    public DiaryDetailAdapter(Activity context, List<DiaryDetail> list) {
         mContext = context;
         mList = list;
     }
@@ -69,6 +72,19 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        if (position == 0) { //控制进场动画
+            holder.ivPic0.setTransitionName("shareIv");
+            holder.ivPic0.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver
+                    .OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    holder.ivPic0.getViewTreeObserver().removeOnPreDrawListener(this);
+                    ActivityCompat.startPostponedEnterTransition(mContext);
+                    return true;
+                }
+            });
+        }
+
         final DiaryDetail diary = mList.get(position);
         if (diary != null) {
             holder.tvContent.setText(diary.getContent());

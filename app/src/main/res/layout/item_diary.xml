@@ -24,6 +24,7 @@
             android:layout_alignParentRight="true"
             android:background="@color/gray_very_light"
             android:scaleType="centerInside"
+            android:transitionName="shareIv"
             android:src="@mipmap/ic_default_pic"/>
 
         <RelativeLayout

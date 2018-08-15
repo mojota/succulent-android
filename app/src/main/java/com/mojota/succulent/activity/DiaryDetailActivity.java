@@ -42,6 +42,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        postponeEnterTransition(); // 延迟转场动画
         setContentView(R.layout.activity_diary_detail);
 
         mToolBar = findViewById(R.id.toolbar);
