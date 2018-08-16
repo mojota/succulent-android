@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
+import com.mojota.succulent.activity.OnImageClickListener;
 import com.mojota.succulent.model.DiaryDetail;
 import com.mojota.succulent.utils.GlobalUtil;
 
@@ -28,15 +30,28 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
     private Activity mContext;
     private List<DiaryDetail> mList;
+    private OnImageClickListener mOnImageClickListener;
+    private OnItemOperateListener mOnItemOperateListener;
+
+    public interface OnItemOperateListener {
+
+        void onEdit(DiaryDetail diary);
+
+        void onDelete(DiaryDetail diary);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvContent;
         private final TextView tvTime;
         private final ImageView ivPic0;
         private final ImageView ivPic1;
+        private final Button btEdit;
+        private final Button btDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            btEdit = itemView.findViewById(R.id.bt_edit);
+            btDelete = itemView.findViewById(R.id.bt_delete);
             tvTime = itemView.findViewById(R.id.tv_time);
             tvContent = itemView.findViewById(R.id.tv_content);
             ivPic0 = itemView.findViewById(R.id.iv_pic0);
@@ -53,6 +68,13 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
         mList = list;
     }
 
+    public void setOnImageClickListener(OnImageClickListener listener) {
+        mOnImageClickListener = listener;
+    }
+
+    public void setOnItemOperateListener(OnItemOperateListener listener) {
+        mOnItemOperateListener = listener;
+    }
 
     @Override
     public int getItemCount() {
@@ -90,6 +112,8 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
             holder.tvContent.setText(diary.getContent());
             holder.tvTime.setText(diary.getCreateTime());
 
+            holder.ivPic0.setOnClickListener(null);
+            holder.ivPic1.setOnClickListener(null);
             RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
                 for (int i = 0; i < diary.getPicUrls().size(); i++) {
@@ -97,11 +121,48 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                             ().get(i)).apply(requestOptions);
                     if (i == 0) {
                         rb.into(holder.ivPic0);
+                        holder.ivPic0.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mOnImageClickListener != null) {
+                                    mOnImageClickListener.onImageClick(holder.ivPic0, diary
+                                            .getContent(), diary.getPicUrls(), 0);
+                                }
+                            }
+                        });
                     } else {
                         rb.into(holder.ivPic1);
+                        holder.ivPic1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mOnImageClickListener != null) {
+                                    mOnImageClickListener.onImageClick(holder.ivPic1, diary
+                                            .getContent(), diary.getPicUrls(), 1);
+                                }
+                            }
+                        });
                     }
                 }
             }
+
+            holder.btEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemOperateListener != null) {
+                        mOnItemOperateListener.onEdit(diary);
+                    }
+                }
+            });
+
+            holder.btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemOperateListener != null) {
+                        mOnItemOperateListener.onDelete(diary);
+                    }
+
+                }
+            });
         }
     }
 

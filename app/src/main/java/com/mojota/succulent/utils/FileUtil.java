@@ -90,12 +90,10 @@ public class FileUtil {
                     while ((count = fis.read(buffer)) != -1) {
                         fos.write(buffer, 0, count);
                     }
-                    GlobalUtil.makeToast(SucculentApplication.getInstance(), R.string
-                            .str_save_success);
+                    GlobalUtil.makeToast(R.string.str_save_success);
                     scanPhoto(file);
                 } catch (Exception e) {
-                    GlobalUtil.makeToast(SucculentApplication.getInstance(), R.string
-                            .str_save_failed);
+                    GlobalUtil.makeToast(R.string.str_save_failed);
                     e.printStackTrace();
                 } finally {
                     try {

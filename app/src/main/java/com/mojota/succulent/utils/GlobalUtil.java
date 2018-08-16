@@ -60,12 +60,12 @@ public class GlobalUtil {
         return dm.heightPixels;
     }
 
-    public static void makeToast(Context context, String tips) {
-        Toast.makeText(context, tips, Toast.LENGTH_LONG).show();
+    public static void makeToast(String tips) {
+        Toast.makeText(SucculentApplication.getInstance(), tips, Toast.LENGTH_LONG).show();
     }
 
-    public static void makeToast(Context context, int tipsId) {
-        Toast.makeText(context, tipsId, Toast.LENGTH_LONG).show();
+    public static void makeToast(int tipsId) {
+        Toast.makeText(SucculentApplication.getInstance(), tipsId, Toast.LENGTH_LONG).show();
     }
 
     /**

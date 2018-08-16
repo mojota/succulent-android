@@ -27,6 +27,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     private Context mContext;
     private List<NoteInfo> mList;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemLongclickListener mOnItemLongcickListener;
 
     public interface OnItemClickListener{
 
@@ -62,8 +63,12 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     }
 
 
-    public void setmOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongcickListener(OnItemLongclickListener onItemLongcickListener) {
+        this.mOnItemLongcickListener =onItemLongcickListener;
     }
 
     @Override
@@ -143,6 +148,16 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(holder.ivPic, diary,position);
                 }
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mOnItemLongcickListener !=null) {
+                    mOnItemLongcickListener.onItemLongclick(position);
+                }
+                return false;
             }
         });
 

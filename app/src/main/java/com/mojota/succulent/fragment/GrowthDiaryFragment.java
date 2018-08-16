@@ -1,11 +1,13 @@
 package com.mojota.succulent.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.GrowthDiaryAdapter;
+import com.mojota.succulent.adapter.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.utils.CodeConstants;
@@ -32,7 +35,7 @@ import java.util.List;
  * Created by mojota on 18-7-23
  */
 public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener {
+        SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener, OnItemLongclickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -82,7 +85,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mRvDiary.setLayoutManager(llm);
         mRvDiary.setItemAnimator(new DefaultItemAnimator());
         mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
-        mDiaryAdapter.setmOnItemClickListener(this);
+        mDiaryAdapter.setOnItemClickListener(this);
+        mDiaryAdapter.setOnItemLongcickListener(this);
         mRvDiary.setAdapter(mDiaryAdapter);
         mFabAdd = view.findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(this);
@@ -142,14 +146,48 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onItemClick(ImageView view, NoteInfo diary, int position) {
-//        String transitionName = String.valueOf(position);
-//        view.setTransitionName(transitionName);
         Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
         intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
-//        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL);
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
                 (getActivity(), view, view.getTransitionName());
         startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options.toBundle());
+    }
+
+    @Override
+    public void onItemLongclick(final int position) {
+        String[] items = {"删除"};
+        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    String title = mList.get(position).getNoteTitle();
+                    deleteItem(position, title);
+                }
+            }
+        }).show();
+    }
+
+    private void deleteItem(final int position, String title) {
+        new AlertDialog.Builder(getContext()).setTitle("确认删除" + title + "?")
+                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteData(position);
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+
+    }
+
+    private void deleteData(int position) {
+        mList.remove(position);
+        setDataToView();
     }
 }

@@ -1,8 +1,10 @@
 package com.mojota.succulent.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.mojota.succulent.R;
@@ -18,6 +21,7 @@ import com.mojota.succulent.adapter.DiaryDetailAdapter;
 import com.mojota.succulent.model.DiaryDetail;
 import com.mojota.succulent.model.DiarysResponseInfo;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 
 import java.util.ArrayList;
@@ -28,7 +32,7 @@ import java.util.List;
  * Created by mojota on 18-8-14
  */
 public class DiaryDetailActivity extends PhotoChooseSupportActivity implements View
-        .OnClickListener {
+        .OnClickListener, OnImageClickListener, DiaryDetailAdapter.OnItemOperateListener {
 
     public static final String KEY_DIARY = "KEY_DIARY";
     private Toolbar mToolBar;
@@ -53,6 +57,8 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         mRvDiarys.setLayoutManager(llm);
         mRvDiarys.setItemAnimator(new DefaultItemAnimator());
         mDetailAdapter = new DiaryDetailAdapter(this, mList);
+        mDetailAdapter.setOnImageClickListener(this);
+        mDetailAdapter.setOnItemOperateListener(this);
         mRvDiarys.setAdapter(mDetailAdapter);
         mFabAdd = findViewById(R.id.fab_add);
         mFabAdd.setOnClickListener(this);
@@ -121,6 +127,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         switch (v.getId()) {
             case R.id.fab_add:
                 Intent intent = new Intent(this, DiaryAddActivity.class);
+                intent.putExtra(DiaryAddActivity.KEY_TITLE, mNoteInfo.getNoteTitle());
                 startActivityForResult(intent, CodeConstants.REQUEST_ADD);
                 break;
         }
@@ -135,5 +142,40 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                     getData();
                 }
         }
+    }
+
+    @Override
+    public void onImageClick(ImageView view, String title, ArrayList<String> picUrls, int
+            picPos) {
+        ActivityUtil.startImageBrowserActivity(this, view, title, picUrls, picPos);
+    }
+
+    @Override
+    public void onEdit(DiaryDetail diary) {
+        Intent intent = new Intent(this, DiaryAddActivity.class);
+        intent.putExtra(DiaryAddActivity.KEY_TITLE, mNoteInfo.getNoteTitle());
+        intent.putExtra(DiaryAddActivity.KEY_DIARY, diary);
+        startActivityForResult(intent, CodeConstants.REQUEST_EDIT);
+    }
+
+    @Override
+    public void onDelete(final DiaryDetail diary) {
+        new AlertDialog.Builder(this).setTitle("确认删除?").setPositiveButton("删除", new
+                DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteData(diary);
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
+    private void deleteData(DiaryDetail diary) {
+        mList.remove(diary);
+        setDataToView();
     }
 }

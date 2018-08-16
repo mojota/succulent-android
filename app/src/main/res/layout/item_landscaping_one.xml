@@ -40,6 +40,9 @@
             android:textColor="@color/white"
             android:textSize="16dp"/>
 
+
+        <include layout="@layout/view_delete"/>
+
         <include layout="@layout/layout_note_bar"/>
 
     </RelativeLayout>
