@@ -73,8 +73,8 @@ public class MyGardenFragment extends Fragment {
 
     private void initFragment() {
         mFragments = new ArrayList<Fragment>();
-        mFragments.add(new GrowthDiaryFragment());
-        mFragments.add(new LandscapingFragment());
+        mFragments.add(GrowthDiaryFragment.newInstance());
+        mFragments.add(LandscapingFragment.newInstance());
         mTitles = Arrays.asList(TITLES);
     }
 

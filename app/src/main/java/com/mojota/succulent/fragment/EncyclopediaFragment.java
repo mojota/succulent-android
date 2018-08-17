@@ -1,42 +1,41 @@
 package com.mojota.succulent.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mojota.succulent.R;
+import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 多肉百科
  * Created by mojota on 18-7-23
 */
 public class EncyclopediaFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String[] TITLES = {"图鉴", "攻略"};
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    private TabLayout mTab;
+    private ViewPager mVp;
+    private List<Fragment> mFragments;
+    private List<String> mTitles;
 
-    public EncyclopediaFragment() {
-        // Required empty public constructor
+    public EncyclopediaFragment(){
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EncyclopediaFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static EncyclopediaFragment newInstance(String param1, String param2) {
         EncyclopediaFragment fragment = new EncyclopediaFragment();
         Bundle args = new Bundle();
@@ -57,19 +56,21 @@ public class EncyclopediaFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_encyclopedia, container, false);
+        View view =  inflater.inflate(R.layout.fragment_encyclopedia, container, false);
+
+        mTab = view.findViewById(R.id.tab);
+        mVp = view.findViewById(R.id.vp);
+        initFragment();
+        mVp.setAdapter(new FragmentViewPagerAdapter(getChildFragmentManager(), mFragments, mTitles));
+        mTab.setupWithViewPager(mVp);
+        return view;
+
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    private void initFragment() {
+        mFragments = new ArrayList<Fragment>();
+        mFragments.add(IllustrationFragment.newInstance());
+        mFragments.add(StrategyFragment.newInstance());
+        mTitles = Arrays.asList(TITLES);
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
 }

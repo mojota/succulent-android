@@ -35,7 +35,8 @@ import java.util.List;
  * Created by mojota on 18-7-23
  */
 public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener, OnItemLongclickListener {
+        SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener,
+        OnItemLongclickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -53,12 +54,12 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
-    public static GrowthDiaryFragment newInstance(String param1, String param2) {
+    public static GrowthDiaryFragment newInstance() {
         GrowthDiaryFragment fragment = new GrowthDiaryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -188,6 +189,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     private void deleteData(int position) {
         mList.remove(position);
-        setDataToView();
+        mDiaryAdapter.notifyItemRemoved(position);
+        mDiaryAdapter.notifyItemRangeChanged(0, mList.size());
     }
 }

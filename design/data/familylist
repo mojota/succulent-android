@@ -1,0 +1,268 @@
+{
+  "code": "200",
+  "msg": "",
+  "list": [
+    {
+      "familyId": "1001",
+      "familyName": "景天科",
+      "genusList": [
+        {
+          "genusId": "1001000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1001001",
+          "genusName": "莲华掌属"
+        },
+        {
+          "genusId": "1001002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1001003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1001004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1002",
+      "familyName": "大㦸科",
+      "genusList": [
+        {
+          "genusId": "1002000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1002001",
+          "genusName": "风车草属"
+        },
+        {
+          "genusId": "1002002",
+          "genusName": "瓦松属"
+        },
+        {
+          "genusId": "1002003",
+          "genusName": "魔南景天属"
+        },
+        {
+          "genusId": "1002004",
+          "genusName": "十二卷属"
+        }
+      ]
+    },
+    {
+      "familyId": "1003",
+      "familyName": "龙舌兰科",
+      "genusList": [
+        {
+          "genusId": "1003000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1003001",
+          "genusName": "圆筒仙人掌属"
+        },
+        {
+          "genusId": "1003002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1003003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1003004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科",
+      "genusList": [
+        {
+          "genusId": "1001000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1001001",
+          "genusName": "莲华掌属"
+        },
+        {
+          "genusId": "1001002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1001003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1001004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科",
+      "genusList": [
+        {
+          "genusId": "1001000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1001001",
+          "genusName": "莲华掌属"
+        },
+        {
+          "genusId": "1001002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1001003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1001004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1001",
+      "familyName": "景天科"
+    },
+    {
+      "familyId": "1002",
+      "familyName": "大㦸科"
+    },
+    {
+      "familyId": "1003",
+      "familyName": "龙舌兰科"
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科"
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科"
+    },
+    {
+      "familyId": "1001",
+      "familyName": "景天科"
+    },
+    {
+      "familyId": "1002",
+      "familyName": "大㦸科"
+    },
+    {
+      "familyId": "1003",
+      "familyName": "龙舌兰科"
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科"
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科"
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科",
+      "genusList": [
+        {
+          "genusId": "1001000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1001001",
+          "genusName": "莲华掌属"
+        },
+        {
+          "genusId": "1001002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1001003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1001004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科",
+      "genusList": [
+        {
+          "genusId": "1001000",
+          "genusName": "全部"
+        },
+        {
+          "genusId": "1001001",
+          "genusName": "莲华掌属"
+        },
+        {
+          "genusId": "1001002",
+          "genusName": "仙女杯属"
+        },
+        {
+          "genusId": "1001003",
+          "genusName": "长生草属"
+        },
+        {
+          "genusId": "1001004",
+          "genusName": "拟石莲属"
+        }
+      ]
+    },
+    {
+      "familyId": "1001",
+      "familyName": "景天科"
+    },
+    {
+      "familyId": "1002",
+      "familyName": "大㦸科"
+    },
+    {
+      "familyId": "1003",
+      "familyName": "龙舌兰科"
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科"
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科"
+    },
+    {
+      "familyId": "1001",
+      "familyName": "景天科"
+    },
+    {
+      "familyId": "1002",
+      "familyName": "大㦸科"
+    },
+    {
+      "familyId": "1003",
+      "familyName": "龙舌兰科"
+    },
+    {
+      "familyId": "1004",
+      "familyName": "番杏科"
+    },
+    {
+      "familyId": "1005",
+      "familyName": "百合科"
+    }
+  ]
+}

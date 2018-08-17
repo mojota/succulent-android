@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_item"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="130dp"
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -39,9 +39,10 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:lines="2"
-                android:textSize="20dp"/>
+                android:textColor="@color/black"
+                android:textSize="17dp"/>
 
             <TextView
                 android:id="@+id/tv_time"
@@ -49,13 +50,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tv_title"
                 android:layout_alignRight="@id/tv_title"
+                android:textSize="12dp"
                 android:layout_below="@id/tv_title"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/tv_time"
-                android:layout_marginTop="16dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="40dp"
                 android:background="@color/gray_light"/>
 
 

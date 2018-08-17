@@ -59,13 +59,12 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static LandscapingFragment newInstance(String param1, String param2) {
+    public static LandscapingFragment newInstance() {
         LandscapingFragment fragment = new LandscapingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -158,7 +157,8 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     private void deleteData(int position) {
         mList.remove(position);
-        setDataToView();
+        mLandscapingAdapter.notifyItemRemoved(position);
+        mLandscapingAdapter.notifyItemRangeChanged(0, mList.size());
     }
 
 }

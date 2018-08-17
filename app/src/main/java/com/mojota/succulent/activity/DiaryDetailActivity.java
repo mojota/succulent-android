@@ -159,12 +159,12 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     }
 
     @Override
-    public void onDelete(final DiaryDetail diary) {
+    public void onDelete(final DiaryDetail diary, final int position) {
         new AlertDialog.Builder(this).setTitle("确认删除?").setPositiveButton("删除", new
                 DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteData(diary);
+                deleteData(position);
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -174,8 +174,9 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         }).show();
     }
 
-    private void deleteData(DiaryDetail diary) {
-        mList.remove(diary);
-        setDataToView();
+    private void deleteData(int position) {
+        mList.remove(position);
+        mDetailAdapter.notifyItemRemoved(position);
+        mDetailAdapter.notifyItemRangeChanged(0, mList.size());
     }
 }

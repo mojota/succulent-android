@@ -1,7 +1,6 @@
 package com.mojota.succulent.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +36,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
         void onEdit(DiaryDetail diary);
 
-        void onDelete(DiaryDetail diary);
+        void onDelete(DiaryDetail diary, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,13 +86,13 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R
-                .layout.item_diary_detail, parent, false));
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_diary_detail, parent, false));
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (position == 0) { //控制进场动画
             holder.ivPic0.setTransitionName("shareIv");
             holder.ivPic0.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver
@@ -158,7 +157,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                 @Override
                 public void onClick(View v) {
                     if (mOnItemOperateListener != null) {
-                        mOnItemOperateListener.onDelete(diary);
+                        mOnItemOperateListener.onDelete(diary, position);
                     }
 
                 }
