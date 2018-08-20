@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:drawableRight="@mipmap/ic_navigate_next_white_18dp"
         android:drawableTint="@color/colorPrimaryLight"
+        android:background="@drawable/col_family_bg_selector"
+        android:textColor="@color/gray_deep"
         android:padding="8dp"
         android:textSize="15dp"/>
 

@@ -1,6 +1,7 @@
 package com.mojota.succulent.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
 
     private OnItemClickListener mOnItemClickListener;
     private List<Family> mList;
+    private SparseBooleanArray mCheckStates = new SparseBooleanArray();
+    private View mLastCheckView;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,16 +64,22 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mCheckStates.clear();
+                    if (mLastCheckView != null) {
+                        mLastCheckView.setEnabled(true);
+                    }
+                    mCheckStates.put(position, false);
+                    holder.tvName.setEnabled(mCheckStates.get(position, true));
+                    mLastCheckView = holder.tvName;
                     if (mOnItemClickListener != null) {
                         mOnItemClickListener.onItemClick(position);
                     }
                 }
             });
         }
+        holder.tvName.setEnabled(mCheckStates.get(position, true));
 
     }
-
-
 
 
 }

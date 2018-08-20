@@ -24,8 +24,8 @@
             android:layout_alignParentRight="true"
             android:background="@color/gray_very_light"
             android:scaleType="centerInside"
-            android:transitionName="shareIv"
-            android:src="@mipmap/ic_default_pic"/>
+            android:src="@mipmap/ic_default_pic"
+            android:transitionName="shareIv"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -50,15 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tv_title"
                 android:layout_alignRight="@id/tv_title"
-                android:textSize="12dp"
-                android:layout_below="@id/tv_title"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="40dp"
-                android:background="@color/gray_light"/>
+                android:layout_below="@id/tv_title"
+                android:textSize="12dp"/>
 
 
             <include layout="@layout/layout_note_bar"/>
