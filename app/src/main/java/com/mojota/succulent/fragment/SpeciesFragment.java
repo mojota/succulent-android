@@ -122,7 +122,7 @@ public class SpeciesFragment extends Fragment implements OnItemClickListener {
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(View view, int position) {
 
     }
 }

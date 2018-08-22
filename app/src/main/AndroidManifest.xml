@@ -43,10 +43,16 @@
             android:theme="@style/AddDataDialog">
         </activity>
         <activity
+            android:name=".activity.QaAskActivity"
+            android:theme="@style/AddDataDialog"/>
+        <activity
             android:name=".activity.ImageBrowserActivity">
         </activity>
-        <activity android:name=".activity.DiaryDetailActivity">
-        </activity>
+        <activity android:name=".activity.DiaryDetailActivity"/>
+        <activity
+            android:name=".activity.QaDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

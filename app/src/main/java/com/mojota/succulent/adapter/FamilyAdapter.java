@@ -35,6 +35,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
     public FamilyAdapter(List<Family> list, OnItemClickListener listener) {
         mList = list;
         mOnItemClickListener = listener;
+        mCheckStates.put(0, false);
     }
 
     public void setList(List<Family> list) {
@@ -72,12 +73,15 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.ViewHolder
                     holder.tvName.setEnabled(mCheckStates.get(position, true));
                     mLastCheckView = holder.tvName;
                     if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(position);
+                        mOnItemClickListener.onItemClick(null, position);
                     }
                 }
             });
         }
         holder.tvName.setEnabled(mCheckStates.get(position, true));
+        if (position == 0 && mCheckStates.get(position) == false) {
+            mLastCheckView = holder.tvName;
+        }
 
     }
 

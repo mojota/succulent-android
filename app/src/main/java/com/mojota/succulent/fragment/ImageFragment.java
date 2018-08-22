@@ -26,10 +26,12 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
         View.OnLongClickListener {
     private static final String ARG_PIC_URL = "pic_url";
     private static final String ARG_TRANSITION_NAME = "transition_name";
+    private static final String ARG_PICS_COUNT = "pics_count";
 
     private String mPicUrl;
     private String mTransitionName;
     private ImageView mIvImage;
+    private int mPicsCount;
 
 
     public ImageFragment() {
@@ -37,11 +39,12 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
     }
 
     public static ImageFragment newInstance(String picUrl, String
-            transitionName) {
+            transitionName, int picsCount) {
         ImageFragment fragment = new ImageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PIC_URL, picUrl);
         args.putString(ARG_TRANSITION_NAME, transitionName);
+        args.putInt(ARG_PICS_COUNT, picsCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,6 +55,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
         if (getArguments() != null) {
             mPicUrl = getArguments().getString(ARG_PIC_URL);
             mTransitionName = getArguments().getString(ARG_TRANSITION_NAME);
+            mPicsCount = getArguments().getInt(ARG_PICS_COUNT);
         }
     }
 
@@ -82,7 +86,11 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_image:
-                getActivity().finish();
+                if ("0".equals(mTransitionName) && mPicsCount == 1) {
+                    getActivity().supportFinishAfterTransition();
+                } else {
+                    getActivity().finish();
+                }
                 break;
         }
     }

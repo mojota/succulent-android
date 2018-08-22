@@ -81,10 +81,6 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvDiary = view.findViewById(R.id.rv_my_diary);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvDiary.setLayoutManager(llm);
-        mRvDiary.setItemAnimator(new DefaultItemAnimator());
         mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
         mDiaryAdapter.setOnItemClickListener(this);
         mDiaryAdapter.setOnItemLongcickListener(this);

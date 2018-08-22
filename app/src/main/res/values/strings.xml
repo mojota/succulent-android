@@ -20,5 +20,13 @@
     <string name="str_save_success">保存成功</string>
     <string name="str_save_failed">保存失败</string>
     <string name="str_undo">撤消</string>
+    <string name="str_ask">提问</string>
+    <string name="str_qa_submit_successful">发布成功</string>
+    <string name="str_qa_submit_failed">发布失败</string>
+    <string name="str_network_error">网络跑丢啦</string>
+
+    <string name="str_hint_ask">在此写下您的问题</string>
+    <string name="str_qa_detail">问答详情</string>
+
 
 </resources>

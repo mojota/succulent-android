@@ -22,7 +22,7 @@ import java.util.List;
 public class EncyclopediaFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String[] TITLES = {"图鉴", "攻略"};
+    private static final String[] TITLES = {"图鉴", "攻略","问答"};
 
     private String mParam1;
     private String mParam2;
@@ -70,7 +70,8 @@ public class EncyclopediaFragment extends Fragment {
     private void initFragment() {
         mFragments = new ArrayList<Fragment>();
         mFragments.add(IllustrationFragment.newInstance());
-        mFragments.add(StrategyFragment.newInstance());
+        mFragments.add(LinkFragment.newInstance());
+        mFragments.add(QaFragment.newInstance());
         mTitles = Arrays.asList(TITLES);
     }
 }

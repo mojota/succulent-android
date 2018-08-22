@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_answer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp">
+
+    <include layout="@layout/layout_user_bar_nobg"/>
+
+    <TextView
+        android:id="@+id/tv_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textColor="#E6000000"
+        android:textSize="15dp"/>
+
+    <ToggleButton
+        android:id="@+id/tb_answer_all"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_gravity="right"
+        android:background="@android:color/transparent"
+        android:maxLines="1"
+        android:padding="0dp"
+        android:textColor="@color/colorPrimary"
+        android:textOff="全文"
+        android:textOn="收起"
+        android:textSize="14dp"
+        android:visibility="visible"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/gray"
+            android:textSize="13dp"/>
+
+        <ToggleButton
+            android:id="@+id/tb_up"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_up_selector"
+            android:drawablePadding="4dp"
+            android:gravity="right"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:text=""
+            android:textColor="@color/col_qa_like_selector"
+            android:textOff=""
+            android:textOn=""
+            android:textSize="13dp"/>
+
+        <ImageView
+            android:id="@+id/iv_anim_up"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@id/tb_up"
+            android:layout_alignLeft="@id/tb_up"
+            android:src="@mipmap/ic_up_selected"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#ededed"/>
+
+</LinearLayout>
+

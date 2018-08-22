@@ -94,7 +94,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (position == 0) { //控制进场动画
-            holder.ivPic0.setTransitionName("shareIv");
+            holder.ivPic0.setTransitionName("0");
             holder.ivPic0.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver
                     .OnPreDrawListener() {
                 @Override

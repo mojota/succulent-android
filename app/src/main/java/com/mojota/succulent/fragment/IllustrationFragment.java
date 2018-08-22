@@ -89,7 +89,7 @@ public class IllustrationFragment extends Fragment implements OnItemClickListene
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(View view, int position) {
         showFragment(position);
     }
 

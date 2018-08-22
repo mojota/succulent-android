@@ -3,6 +3,8 @@ package com.mojota.succulent.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,6 +14,8 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +36,8 @@ public class GlobalUtil {
     private static String mVersioinName;
 
     public static String getDeviceId() {
-        String ANDROID_ID = Settings.System.getString(SucculentApplication
-                .getInstance().getContentResolver(), Settings.Secure
-                .ANDROID_ID);
+        String ANDROID_ID = Settings.System.getString(SucculentApplication.getInstance()
+                .getContentResolver(), Settings.Secure.ANDROID_ID);
         return ANDROID_ID;
     }
 
@@ -60,6 +63,54 @@ public class GlobalUtil {
         return dm.heightPixels;
     }
 
+    /**
+     * 计算采样率的大小
+     */
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int
+            reqHeight) {
+        if (reqHeight <= 0 || reqWidth <= 0) return 1;
+        final int width = options.outWidth;
+        final int height = options.outHeight;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            //计算图片高度和我们需要高度的最接近比例值
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            //宽度比例值
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            //取比例值中的较大值作为inSampleSize
+            inSampleSize = heightRatio > widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * 读取文件生成要求大小的bitmap
+     *
+     * @param reqHeight bitmap大小的宽，小于0默认1920px
+     * @param reqWidth  bitmap高 ，小于0默认720
+     * @param path      文件路径
+     */
+    public static Bitmap compressBitmap(String path, int reqWidth, int reqHeight) {
+        try {
+            if (reqHeight < 0 || reqWidth < 0) return null;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+            options.inJustDecodeBounds = true;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);// 此时返回bm为空
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);//
+            // 设置缩放比例
+            // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+            bitmap = BitmapFactory.decodeFile(path, options);
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public static void makeToast(String tips) {
         Toast.makeText(SucculentApplication.getInstance(), tips, Toast.LENGTH_LONG).show();
     }
@@ -80,14 +131,14 @@ public class GlobalUtil {
         if (snackbarView != null) {
             if (color != 0) {
                 try {
-                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)
-                    ).setTextColor(color);
+                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
+                            (color);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                ((TextView) snackbarView.findViewById(R.id.snackbar_text))
-                        .setTextColor(Color.parseColor("#689f38"));
+                ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
+                        (Color.parseColor("#689f38"));
             }
         }
         snackbar.show();
@@ -105,14 +156,14 @@ public class GlobalUtil {
         if (snackbarView != null) {
             if (color != 0) {
                 try {
-                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)
-                    ).setTextColor(color);
+                    ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
+                            (color);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                ((TextView) snackbarView.findViewById(R.id.snackbar_text))
-                        .setTextColor(Color.parseColor("#689f38"));
+                ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTextColor
+                        (Color.parseColor("#689f38"));
             }
         }
         snackbar.show();
@@ -122,8 +173,8 @@ public class GlobalUtil {
      * 检测网络是否存在 true：存在 false ：不存在网络
      */
     public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService
+                (Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
         if (activeNetInfo != null && activeNetInfo.isConnected()) {
             if (activeNetInfo.getState() == NetworkInfo.State.CONNECTED) {
@@ -135,10 +186,8 @@ public class GlobalUtil {
 
     public static String getVersionName() {
         if (mVersioinName == null || TextUtils.isEmpty(mVersioinName)) {
-            PackageManager pm = SucculentApplication.getInstance()
-                    .getPackageManager();
-            String pkgName = SucculentApplication.getInstance()
-                    .getPackageName();
+            PackageManager pm = SucculentApplication.getInstance().getPackageManager();
+            String pkgName = SucculentApplication.getInstance().getPackageName();
             try {
                 PackageInfo pkgInfo = pm.getPackageInfo(pkgName, 0);
                 mVersioinName = pkgInfo.versionName;
@@ -168,7 +217,39 @@ public class GlobalUtil {
     }
 
     public static RequestOptions getDefaultRequestOptions() {
-        return new RequestOptions().error(R.mipmap.ic_default_pic)
-                .dontAnimate();
+        return new RequestOptions().error(R.mipmap.ic_default_pic).dontAnimate();
     }
+
+    public static RequestOptions getDefaultAvatarRequestOptions() {
+        return new RequestOptions().error(R.mipmap.ic_face_gray_18dp).dontAnimate()
+                .circleCrop();
+    }
+
+
+
+    /**
+     * 放大动画
+     */
+    public static void startAnim(Context context, final View view) {
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_up);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                view.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(animation);
+    }
+
+
 }

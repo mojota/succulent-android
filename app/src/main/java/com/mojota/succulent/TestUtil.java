@@ -11,7 +11,7 @@ public class TestUtil {
                 "\"updateTime\":\"2018-08-02 10:00\",\"permission\":\"0\"," +
                 "\"likeCount\":\"999\",\"hasLike\":\"0\",\"picUrls\":[\"https://ss0.baidu" +
                 ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"]}," +
-                "{\"noteTitle\":\"虹之玉\",\"updateTime\":\"2018-08-02 10:05\"," +
+                "{\"noteTitle\":\"虹之玉虹之玉虹之玉虹之玉虹之玉虹之玉虹之玉虹之玉虹之玉\",\"updateTime\":\"2018-08-02 10:05\"," +
                 "\"permission\":\"1\",\"likeCount\":\"1\",\"hasLike\":\"1\"," +
                 "\"picUrls\":[\"https://ss2.bdstatic" +
                 ".com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=807985943," +
@@ -204,5 +204,87 @@ public class TestUtil {
                 "\"speciesName\":\"新玉缀\",\"speciesPicUrl\":\"http://imgsrc.baidu" +
                 ".com/baike/pic/item/b812c8fcc3cec3fd15f34ab1dc88d43f86942721.jpg\"," +
                 "\"speciesLinkUrl\":\"\"}]}";
+    }
+
+    public static String getLinkList() {
+        return "{\"code\":\"200\",\"msg\":\"\",\"list\":[{\"linkId\":\"0\"," +
+                "\"linkTitle\":\"种植建议\",\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 " +
+                "10:00\",\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\"," +
+                "\"linkPicUrl\":\"https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2875812309," +
+                "3386562784&fm=58\"},{\"linkId\":\"1\",\"linkTitle\":\"多肉夏天怎么过\"," +
+                "\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\"," +
+                "\"linkReadCount\":\"999\",\"linkUrl\":\"www.sohu.com\"," +
+                "\"linkPicUrl\":\"\"},{\"linkId\":\"2\",\"linkTitle\":\"多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬多肉怎么过冬\"," +
+                "\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\"," +
+                "\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\"," +
+                "\"linkPicUrl\":\"\"},{\"linkId\":\"3\"," +
+                "\"linkTitle\":\"多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项多肉注意事项\",\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\",\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\",\"linkPicUrl\":\"https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"},{\"linkId\":\"4\",\"linkTitle\":\"用什么土种\",\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\",\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\",\"linkPicUrl\":\"\"},{\"linkId\":\"5\",\"linkTitle\":\"怎样防虫\",\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\",\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\",\"linkPicUrl\":\"https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"},{\"linkId\":\"6\",\"linkTitle\":\"仙人球\",\"linkSummary\":\"\",\"linkTime\":\"2018-08-02 10:00\",\"linkReadCount\":\"999\",\"linkUrl\":\"www.baidu.com\",\"linkPicUrl\":\"https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}]}";
+    }
+
+    public static String getQaList() {
+        return "{\"code\":\"200\",\"msg\":\"\",\"qaList\":[{\"userId\":\"10001\"," +
+                "\"nickname\":\"小花儿\",\"avatarUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"," +
+                "\"questionId\":\"0\"," +
+                "\"questionTitle\":\"种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议我来回答我来回答我来回答我来回答我来回答我来回答我来回答我来回答\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}," +
+                "{\"userId\":\"10001\",\"nickname\":\"小花儿\",\"avatarUrl\":\"\"," +
+                "\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}," +
+                "{\"userId\":\"10001\",\"nickname\":\"小花儿\",\"avatarUrl\":\"\"," +
+                "\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}," +
+                "{\"userId\":\"10001\",\"nickname\":\"小花儿\",\"avatarUrl\":\"\"," +
+                "\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}," +
+                "{\"userId\":\"10001\",\"nickname\":\"小花儿\",\"avatarUrl\":\"\"," +
+                "\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"questionId\":\"0\",\"questionTitle\":\"种植建议\"," +
+                "\"questionTime\":\"2018-08-02 10:00\",\"answerCount\":\"919\"," +
+                "\"questionPicUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"}]}";
+    }
+
+    public static String getQaAnswers() {
+        return "{\"code\":\"200\",\"msg\":\"\",\"answerList\":[{\"userId\":\"10001\"," +
+                "\"nickname\":\"小花儿\",\"avatarUrl\":\"https://ss0.baidu" +
+                ".com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58\"," +
+                "\"answerId\":\"0\"," +
+                "\"answerContent\":\"种种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建植种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\",\"answerContent\":\"种植建议种植植建议种植建议\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"0\"},{\"userId\":\"10001\",\"nickname\":\"小草儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\",\"answerContent\":\"我来回答\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"},{\"userId\":\"10001\",\"nickname\":\"小小儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\"," +
+                "\"answerContent\":\"种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\"," +
+                "\"answerContent\":\"种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\",\"answerContent\":\"种植建议种植建植建议\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"},{\"userId\":\"10001\",\"nickname\":\"小花儿\"," +
+                "\"avatarUrl\":\"\",\"answerId\":\"0\",\"answerContent\":\"种植建议\"," +
+                "\"answerTime\":\"2018-08-02 10:00\",\"answerUpCount\":\"919\"," +
+                "\"answerUpState\":\"1\"}]}";
     }
 }

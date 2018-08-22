@@ -10,9 +10,12 @@ public class CodeConstants {
     public static final int REQUEST_CHOOSE_PHOTO = 102;
     public static final int REQUEST_DETAIL = 103;
     public static final int REQUEST_EDIT = 104;
+    public static final int REQUEST_QA_ASK = 105;
+    public static final int REQUEST_QA_DETAIL = 106;
 
 
     public static final int RESULT_ADD = 500;
     public static final int RESULT_DETAIL = 503;
     public static final int RESULT_EDIT = 504;
+    public static final int RESULT_QA = 505;
 }

@@ -13,6 +13,16 @@
     <color name="gray_light">#CCCCCC</color>
     <color name="gray_very_light">#E0E0E0</color>
     <color name="gray_deep">#666666</color>
-    <color name="black_overlay">#66000000</color>
+
+    <color name="green">#8bc34a</color>
+    <color name="green_light">#aed581</color>
+    <color name="green_40">#668bc34a</color>
+    <color name="green_80">#cc8bc34a</color>
+
+    <color name="lime_light">#f0f4c3</color>
+
+    <color name="amber_light">#ffd54f</color>
+
+    <color name="red_light">#ef5350</color>
 
 </resources>

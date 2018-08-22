@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.TextView;
 
 import com.mojota.succulent.R;
@@ -51,12 +52,16 @@ public class ImageBrowserActivity extends BaseActivity {
         mTvTitle.setText(mTitle);
         initFragment();
         mViewPager = (ViewPager) findViewById(R.id.vp_image);
-        mVpAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager()
-                , mFragments, null);
+        mVpAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), mFragments,
+                null);
         mViewPager.setAdapter(mVpAdapter);
-        mPageIndicator = (PageIndicatorView) findViewById(R.id
-                .layout_indicator);
-        mPageIndicator.setPagerAdapter(mViewPager);
+        mPageIndicator = (PageIndicatorView) findViewById(R.id.layout_indicator);
+        if (mPicUrls != null && mPicUrls.size() == 1) {
+            mPageIndicator.setVisibility(View.INVISIBLE);
+        } else {
+            mPageIndicator.setVisibility(View.VISIBLE);
+            mPageIndicator.setPagerAdapter(mViewPager);
+        }
         mViewPager.setCurrentItem(mPicPos);
     }
 
@@ -67,13 +72,17 @@ public class ImageBrowserActivity extends BaseActivity {
         mFragments = new ArrayList<Fragment>();
         for (int i = 0; i < mPicUrls.size(); i++) {
             String picUrl = mPicUrls.get(i);
-            mFragments.add(ImageFragment.newInstance(picUrl, String.valueOf
-                    (i)));
+            mFragments.add(ImageFragment.newInstance(picUrl, String.valueOf(i), mPicUrls
+                    .size()));
         }
     }
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (mPicPos == 0 && mViewPager.getCurrentItem() == 0) {
+            supportFinishAfterTransition();
+        } else {
+            finish();
+        }
     }
 }

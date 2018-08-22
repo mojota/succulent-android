@@ -1,0 +1,76 @@
+{
+  "code": "200",
+  "msg": "",
+  "answerList": [
+    {
+      "userId": "10001",
+      "nickname": "小花儿",
+      "avatarUrl": "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2875812309,3386562784&fm=58",
+      "answerId": "0",
+      "answerContent": "种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议建议种植建议种植建建议种植建议种植建",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小花儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "种植建议种植植建议种植建议",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "0"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小草儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "我来回答",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小小儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小花儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "种植建议种植建议种植建议种植建议种植建议种植建议种植建议种植建议",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小花儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "种植建议种植建植建议",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    },
+    {
+      "userId": "10001",
+      "nickname": "小花儿",
+      "avatarUrl": "",
+      "answerId": "0",
+      "answerContent": "种植建议",
+      "answerTime": "2018-08-02 10:00",
+      "answerUpCount": "919",
+      "answerUpState": "1"
+    }
+  ]
+}

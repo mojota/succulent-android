@@ -160,6 +160,8 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
     @Override
     public void onDelete(final DiaryDetail diary, final int position) {
+
+
         new AlertDialog.Builder(this).setTitle("确认删除?").setPositiveButton("删除", new
                 DialogInterface.OnClickListener() {
             @Override
