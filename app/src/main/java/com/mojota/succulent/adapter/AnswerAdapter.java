@@ -92,9 +92,9 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AnswerInfo answer = mList.get(position);
         if (answer != null) {
-            String avatar = answer.getAvatarUrl();
+            String avatar = answer.getUserInfo().getAvatarUrl();
             Glide.with(mActivity).load(avatar).apply(mOptions).into(holder.ivAvatar);
-            holder.tvNickname.setText(answer.getNickname());
+            holder.tvNickname.setText(answer.getUserInfo().getNickname());
 
             if (!TextUtils.isEmpty(answer.getAnswerContent())) {
                 String answerContent = answer.getAnswerContent().replaceAll("\n+", "\n");

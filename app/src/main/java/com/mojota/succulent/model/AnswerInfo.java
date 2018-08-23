@@ -7,37 +7,20 @@ package com.mojota.succulent.model;
 public class AnswerInfo extends BaseBean {
     private static final long serialVersionUID = 1L;
 
-    String userId;//用户id;
-    String nickname;//用户昵称;
-    String avatarUrl;//用户头像;
+    UserInfo userInfo;
+
     String answerId;//回答id;
     String answerContent;//回答正文;
     String answerTime;//回答时间;
     String answerUpCount;//回答点赞数;
     String answerUpState;//点赞状态，0：未点，1：已点;
 
-    public String getUserId() {
-        return userId;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     public String getAnswerId() {

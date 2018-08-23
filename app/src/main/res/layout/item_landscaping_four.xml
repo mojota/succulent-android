@@ -85,7 +85,7 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="4dp"
-            android:textColor="@color/gray_deep"
+            android:textColor="@color/black"
             android:textSize="13dp"/>
 
         <include layout="@layout/view_delete"/>

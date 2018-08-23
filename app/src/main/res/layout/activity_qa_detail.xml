@@ -9,27 +9,38 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/Dark_ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@android:color/transparent"
             app:titleEnabled="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.8">
+                app:layout_collapseParallaxMultiplier="0.9">
 
-                <ImageView
-                    android:id="@+id/iv_pic"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:transitionName="0"/>
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="?attr/colorPrimary"/>
+
+                    <ImageView
+                        android:id="@+id/iv_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:transitionName="0"/>
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -44,7 +55,7 @@
                         android:id="@+id/tv_question_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/gray_deep"
+                        android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold"/>
 
@@ -77,6 +88,11 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lemon"/>
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar

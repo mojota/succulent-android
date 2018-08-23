@@ -18,7 +18,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 import com.mojota.succulent.fragment.EncyclopediaFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
-import com.mojota.succulent.fragment.NeighbourFragment;
+import com.mojota.succulent.fragment.MomentsFragment;
 
 import java.util.ArrayList;
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
         mFragmentList = new ArrayList<>();
         mFragmentList.add(MyGardenFragment.newInstance("", ""));
         mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
-        mFragmentList.add(NeighbourFragment.newInstance("", ""));
+        mFragmentList.add(MomentsFragment.newInstance("", ""));
     }
 
 
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView
                 case R.id.nav_encyclopedia:
                     mVpMain.setCurrentItem(1);
                     return true;
-                case R.id.nav_neighbour:
+                case R.id.nav_moments:
                     mVpMain.setCurrentItem(2);
                     return true;
             }

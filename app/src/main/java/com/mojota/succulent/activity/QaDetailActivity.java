@@ -85,8 +85,8 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         mToolBar = findViewById(R.id.toolbar);
+        mToolBar.setTitle(R.string.str_qa_detail);
         setSupportActionBar(mToolBar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolBar.setNavigationOnClickListener(this);
 
         mSubmitLoading = new ProgressDialog(mActivity);
@@ -199,11 +199,11 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         }
         // 问题
         if (mQuestion != null) {
-            String avatar = mQuestion.getAvatarUrl();
+            String avatar = mQuestion.getUserInfo().getAvatarUrl();
             Glide.with(mActivity).load(avatar).apply(GlobalUtil
                     .getDefaultAvatarRequestOptions()).into(mIvAvatar);
 
-            mTvNickname.setText(mQuestion.getNickname());
+            mTvNickname.setText(mQuestion.getUserInfo().getNickname());
             if (!TextUtils.isEmpty(mQuestion.getQuestionTitle())) {
                 mTvQuestionTitle.setText(mQuestion.getQuestionTitle().replaceAll("\n+", "\n"));
             } else {

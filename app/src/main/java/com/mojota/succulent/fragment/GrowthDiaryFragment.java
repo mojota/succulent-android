@@ -25,6 +25,7 @@ import com.mojota.succulent.adapter.GrowthDiaryAdapter;
 import com.mojota.succulent.adapter.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 
 import java.util.ArrayList;
@@ -143,12 +144,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onItemClick(ImageView view, NoteInfo diary, int position) {
-        Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
-        intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                (getActivity(), view, view.getTransitionName());
-        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options.toBundle());
+        ActivityUtil.startDiaryDetailActivity(getActivity(), view, diary);
     }
 
     @Override

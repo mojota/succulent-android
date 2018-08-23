@@ -11,6 +11,7 @@ public class NoteInfo extends BaseBean {
 
     private static final long serialVersionUID = 1L;
 
+    UserInfo userInfo;
     String noteId;//id
     String noteTitle;// 标题
     String updateTime;// 更新时间
@@ -18,6 +19,15 @@ public class NoteInfo extends BaseBean {
     int likeCount; // 赞数
     int hasLike; // 0未赞 1已赞
     ArrayList<String> picUrls; // 封面图片地址们
+    int noteType; // 笔记类型 1-成长笔记 2-造景
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     public String getNoteId() {
         return noteId;
@@ -73,5 +83,13 @@ public class NoteInfo extends BaseBean {
 
     public void setPicUrls(ArrayList<String> picUrls) {
         this.picUrls = picUrls;
+    }
+
+    public int getNoteType() {
+        return noteType;
+    }
+
+    public void setNoteType(int noteType) {
+        this.noteType = noteType;
     }
 }

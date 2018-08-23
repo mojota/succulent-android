@@ -181,35 +181,42 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
         if (note != null) {
             holder.tvTitle.setText(note.getNoteTitle());
 
-            if (note.getHasLike() == 1) {
-                holder.tbLike.setChecked(true);
-                holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
-                holder.tbLike.setText(String.valueOf(note.getLikeCount()));
-            } else {
-                holder.tbLike.setChecked(false);
-                holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
-                holder.tbLike.setText(String.valueOf(note.getLikeCount()));
-            }
-            holder.tbLike.setOnCheckedChangeListener(new CompoundButton
-                    .OnCheckedChangeListener() {
+            holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
+            holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
+            holder.tbLike.setText(String.valueOf(note.getLikeCount()));
+            holder.tbLike.setChecked(note.getHasLike() == 1);
+
+            holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     int likeCount = note.getLikeCount();
-                    if (isChecked) {
+                    if (holder.tbLike.isChecked()) {
                         note.setLikeCount(likeCount + 1);
+                        note.setHasLike(1);
                         holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
+                        holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
+                        holder.tbLike.setText(String.valueOf(note.getLikeCount()));
                     } else {
                         note.setLikeCount(likeCount - 1);
+                        note.setHasLike(0);
+                        holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
+                        holder.tbLike.setText(String.valueOf(note.getLikeCount()));
                     }
                 }
             });
 
-            if (note.getPermission() == 1) {
-                holder.tbPermission.setChecked(true);
-            } else {
-                holder.tbPermission.setChecked(false);
-            }
+            holder.tbPermission.setChecked(note.getPermission() == 1);
+            holder.tbPermission.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (holder.tbPermission.isChecked()) {
+                        note.setPermission(1);
+                    } else {
+                        note.setPermission(0);
+                    }
+                }
+            });
 
             RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
             if (note.getPicUrls() != null) {

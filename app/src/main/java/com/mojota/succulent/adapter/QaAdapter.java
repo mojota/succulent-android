@@ -87,8 +87,8 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
                 holder.ivPic.setVisibility(View.GONE);
             }
 
-            holder.tvNickname.setText(questionInfo.getNickname());
-            Glide.with(mContext).load(questionInfo.getAvatarUrl()).apply(mAvatarOptions)
+            holder.tvNickname.setText(questionInfo.getUserInfo().getNickname());
+            Glide.with(mContext).load(questionInfo.getUserInfo().getAvatarUrl()).apply(mAvatarOptions)
                     .into(holder.ivAvatar);
         }
 

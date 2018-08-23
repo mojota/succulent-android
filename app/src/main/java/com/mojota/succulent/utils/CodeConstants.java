@@ -5,6 +5,9 @@ package com.mojota.succulent.utils;
  */
 public class CodeConstants {
 
+    public static final int TYPE_DIARY = 1; // 日记类型
+    public static final int TYPE_LANDSCAPE = 2; // 造景类型
+
     public static final int REQUEST_ADD = 100;
     public static final int REQUEST_TAKE_PHOTO = 101;
     public static final int REQUEST_CHOOSE_PHOTO = 102;

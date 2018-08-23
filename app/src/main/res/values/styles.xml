@@ -8,7 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme_Transparent" parent="AppTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="Dark_ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AddDataDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
