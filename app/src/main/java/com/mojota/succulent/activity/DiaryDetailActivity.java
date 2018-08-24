@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -160,25 +161,43 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
     @Override
     public void onDelete(final DiaryDetail diary, final int position) {
+        deleteData(position);
+    }
 
-
-        new AlertDialog.Builder(this).setTitle("确认删除?").setPositiveButton("删除", new
-                DialogInterface.OnClickListener() {
+    private void deleteData(final int position) {
+        final DiaryDetail diaryDetail = mList.get(position);
+        mList.remove(position);
+        mDetailAdapter.notifyItemRemoved(position);
+        mDetailAdapter.notifyItemRangeChanged(0, mList.size());
+        Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string
+                .str_undo, new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteData(position);
+            public void onClick(View v) {
+                mList.add(position, diaryDetail);
+                mDetailAdapter.notifyItemInserted(position);
+                mDetailAdapter.notifyItemRangeChanged(0, mList.size());
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        }).addCallback(new Snackbar.Callback() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                switch (event) {
+                    case Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE:
+                    case Snackbar.Callback.DISMISS_EVENT_MANUAL:
+                    case Snackbar.Callback.DISMISS_EVENT_SWIPE:
+                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                        requestDelete(diaryDetail);
+                        break;
+                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                        break;
+                }
             }
         }).show();
     }
 
-    private void deleteData(int position) {
-        mList.remove(position);
-        mDetailAdapter.notifyItemRemoved(position);
-        mDetailAdapter.notifyItemRangeChanged(0, mList.size());
+    /**
+     * 请求网络删除
+     */
+    private void requestDelete(DiaryDetail diaryDetail) {
+
     }
 }

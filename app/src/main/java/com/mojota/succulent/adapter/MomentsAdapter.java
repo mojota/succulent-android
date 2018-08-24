@@ -3,13 +3,11 @@ package com.mojota.succulent.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -30,11 +28,12 @@ import java.util.List;
  */
 public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseViewHolder> {
 
+    private final RequestOptions mAvatarOptions;
     private final RequestOptions mDefaultOptions;
+    private RequestOptions mRoundedCornersOptions;
 
     private Context mContext;
     private List<NoteInfo> mList;
-    private final RequestOptions mAvatarOptions;
     private OnItemClickListener mOnItemClickListener;
 
 
@@ -86,8 +85,9 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
     public MomentsAdapter(List<NoteInfo> list, OnItemClickListener listener) {
         mList = list;
         mOnItemClickListener = listener;
-        mAvatarOptions = GlobalUtil.getDefaultAvatarRequestOptions();
-        mDefaultOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
+        mAvatarOptions = GlobalUtil.getDefaultAvatarOptions();
+        mDefaultOptions = GlobalUtil.getDefaultOptions().centerCrop();
+        mRoundedCornersOptions = GlobalUtil.getRoundedCornersOptions();
     }
 
     public void setList(List<NoteInfo> list) {
@@ -248,7 +248,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         @Override
         public void onBindViewHolder(final ImageAdapter.ViewHolder holder, final int
                 position) {
-            Glide.with(mContext).load(mPicUrls.get(position)).apply(mDefaultOptions).into
+            Glide.with(mContext).load(mPicUrls.get(position)).apply(mRoundedCornersOptions).into
                     (holder.ivPic);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

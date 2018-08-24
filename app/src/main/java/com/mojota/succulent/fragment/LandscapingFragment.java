@@ -39,8 +39,7 @@ import java.util.List;
  * Created by mojota on 18-7-23
  */
 public class LandscapingFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, OnImageClickListener, LandscapingAdapter
-                .OnItemDeleteClick {
+        SwipeRefreshLayout.OnRefreshListener, OnImageClickListener, OnItemLongclickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -92,7 +91,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mRvLandscaping.setLayoutManager(glm);
         mLandscapingAdapter = new LandscapingAdapter(getActivity(), mList);
         mLandscapingAdapter.setOnImageClickListener(this);
-        mLandscapingAdapter.setOnItemDeleteClick(this);
+        mLandscapingAdapter.setOnItemLongClickListener(this);
         mRvLandscaping.setAdapter(mLandscapingAdapter);
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
         mFabAddLandscaping.setOnClickListener(this);
@@ -138,48 +137,49 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         ActivityUtil.startImageBrowserActivity(getActivity(), view, title, picUrls, picPos);
     }
 
+//    @Override
+//    public void delete(final int position) {
+////        String title = mList.get(position).getNoteTitle();
+//        deleteData(position);
+//    }
+
+
     @Override
-    public void delete(final int position) {
-//        String title = mList.get(position).getNoteTitle();
-        deleteData(position);
-    }
-
-
-    private void deleteData(final int position) {
-        final NoteInfo noteInfo = mList.get(position);
-        mList.remove(position);
-        mLandscapingAdapter.notifyItemRemoved(position);
-        mLandscapingAdapter.notifyItemRangeChanged(0, mList.size());
-        Snackbar.make(mRvLandscaping, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string
-                .str_undo, new View.OnClickListener() {
+    public void onItemLongclick(final int position) {
+        String[] items = {"删除"};
+        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface
+                .OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mList.add(position, noteInfo);
-                mLandscapingAdapter.notifyItemInserted(position);
-                mLandscapingAdapter.notifyItemRangeChanged(0, mList.size());
-            }
-        }).addCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                switch (event) {
-                    case Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE:
-                    case Snackbar.Callback.DISMISS_EVENT_MANUAL:
-                    case Snackbar.Callback.DISMISS_EVENT_SWIPE:
-                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-                        requestDelete(noteInfo);
-                        break;
-                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
-                        break;
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    String title = mList.get(position).getNoteTitle();
+                    deleteItem(position, title);
                 }
             }
         }).show();
     }
 
-    /**
-     * 请求网络删除
-     */
-    private void requestDelete(NoteInfo noteInfo) {
+    private void deleteItem(final int position, String title) {
+        new AlertDialog.Builder(getContext()).setTitle("确认删除?")
+                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteData(position);
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+
+    }
+
+    private void deleteData(int position) {
+        mList.remove(position);
+        mLandscapingAdapter.notifyItemRemoved(position);
+        mLandscapingAdapter.notifyItemRangeChanged(0, mList.size());
     }
 
 }

@@ -70,7 +70,7 @@ public class LinkAdapter extends RecyclerView.Adapter<LinkAdapter.ViewHolder> {
             holder.tvTitle.setText(linkInfo.getLinkTitle());
             holder.tvTime.setText(linkInfo.getLinkTime());
             holder.tvReadCount.setText(linkInfo.getLinkReadCount());
-            RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
+            RequestOptions requestOptions = GlobalUtil.getDefaultOptions().centerCrop();
             if (!TextUtils.isEmpty(linkInfo.getLinkPicUrl())) {
                 Glide.with(mContext).load(linkInfo.getLinkPicUrl()).apply(requestOptions)
                         .into(holder.ivPic);

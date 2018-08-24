@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,12 +32,7 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
     private final Context mContext;
     private List<NoteInfo> mList;
     private OnImageClickListener mOnImageClickListener;
-    private OnItemDeleteClick mOnItemDeleteClick;
-
-    public interface OnItemDeleteClick{
-
-        void delete(int position);
-    }
+    private OnItemLongclickListener mOnItemLongClickListener;
 
     private OneViewHolder mOneViewHolder;
     private TwoViewHolder mTwoViewHolder;
@@ -122,8 +116,8 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
         mOnImageClickListener = listener;
     }
 
-    public void setOnItemDeleteClick(OnItemDeleteClick onItemDeleteClick) {
-        this.mOnItemDeleteClick = onItemDeleteClick;
+    public OnItemLongclickListener setOnItemLongClickListener(OnItemLongclickListener onItemLongclickListener) {
+        return mOnItemLongClickListener = onItemLongclickListener;
     }
 
     @Override
@@ -218,7 +212,7 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
                 }
             });
 
-            RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
+            RequestOptions requestOptions = GlobalUtil.getDefaultOptions().centerCrop();
             if (note.getPicUrls() != null) {
                 if (holder instanceof TwoViewHolder) {
                     Glide.with(mContext).load(note.getPicUrls().get(0)).apply
@@ -360,12 +354,21 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter
                     });
                 }
             }
-            holder.btDelete.setOnClickListener(new View.OnClickListener() {
+//            holder.btDelete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mOnItemDeleteClick != null) {
+//                        mOnItemDeleteClick.delete(position);
+//                    }
+//                }
+//            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (mOnItemDeleteClick != null) {
-                        mOnItemDeleteClick.delete(position);
+                public boolean onLongClick(View v) {
+                    if (mOnItemLongClickListener != null){
+                        mOnItemLongClickListener.onItemLongclick(position);
                     }
+                    return false;
                 }
             });
         }

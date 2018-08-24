@@ -74,8 +74,6 @@
             android:textColor="@color/black"
             android:textSize="13dp"/>
 
-        <include layout="@layout/view_delete"/>
-
         <include layout="@layout/layout_note_bar"/>
 
     </RelativeLayout>

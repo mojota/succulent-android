@@ -64,7 +64,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
     public AnswerAdapter(Activity context, List<AnswerInfo> list) {
         this.mActivity = context;
         this.mList = list;
-        mOptions = GlobalUtil.getDefaultAvatarRequestOptions();
+        mOptions = GlobalUtil.getDefaultAvatarOptions();
         mTotalWidth = GlobalUtil.getScreenWidth() - context.getResources()
                 .getDimensionPixelSize(R.dimen.item_qa_margin);
     }

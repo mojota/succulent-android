@@ -113,7 +113,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
             holder.ivPic0.setOnClickListener(null);
             holder.ivPic1.setOnClickListener(null);
-            RequestOptions requestOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
+            RequestOptions requestOptions = GlobalUtil.getDefaultOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
                 for (int i = 0; i < diary.getPicUrls().size(); i++) {
                     RequestBuilder<Drawable> rb = Glide.with(mContext).load(diary.getPicUrls

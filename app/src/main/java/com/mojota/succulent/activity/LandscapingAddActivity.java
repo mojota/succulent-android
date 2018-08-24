@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 
 import com.mojota.succulent.R;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.GlobalUtil;
 
 /**
  * 添加造景后花园
@@ -64,16 +65,16 @@ public class LandscapingAddActivity extends PhotoChooseSupportActivity implement
                 finish();
                 break;
             case R.id.ibt_pic1:
-                showPicDialog(mIbtPic1);
+                showPicDialog(mIbtPic1, null);
                 break;
             case R.id.ibt_pic2:
-                showPicDialog(mIbtPic2);
+                showPicDialog(mIbtPic2, null);
                 break;
             case R.id.ibt_pic3:
-                showPicDialog(mIbtPic3);
+                showPicDialog(mIbtPic3, null);
                 break;
             case R.id.ibt_pic4:
-                showPicDialog(mIbtPic4);
+                showPicDialog(mIbtPic4, null);
                 break;
             case R.id.bt_commit:
                 setResult(CodeConstants.RESULT_ADD);

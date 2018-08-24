@@ -94,10 +94,10 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                 finish();
                 break;
             case R.id.ibt_pic1:
-                showPicDialog(mIbtPic1);
+                showPicDialog(mIbtPic1, null);
                 break;
             case R.id.ibt_pic2:
-                showPicDialog(mIbtPic2);
+                showPicDialog(mIbtPic2, null);
                 break;
             case R.id.bt_commit:
                 if (TextUtils.isEmpty(mEtTitle.getText())) {

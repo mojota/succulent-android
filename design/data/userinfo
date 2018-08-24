@@ -1,0 +1,11 @@
+{
+  "code": "200",
+  "msg": "",
+  "userInfo": {
+    "userId": "用户id",
+    "nickname": "狂奔的陆龟",
+    "avatarUrl": "",
+    "region": "云南",
+    "momentsCoverUrl": "邻家肉园封面图"
+  }
+}

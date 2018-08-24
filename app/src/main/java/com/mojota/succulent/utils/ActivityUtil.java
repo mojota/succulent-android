@@ -1,6 +1,7 @@
 package com.mojota.succulent.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 
 import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.activity.ImageBrowserActivity;
+import com.mojota.succulent.activity.LoginActivity;
 import com.mojota.succulent.model.NoteInfo;
 
 import java.util.ArrayList;
@@ -41,5 +43,10 @@ public class ActivityUtil {
         ActivityCompat.startActivityForResult(activity, intent, CodeConstants
                 .REQUEST_DETAIL, options.toBundle());
 
+    }
+
+    public static void startLoginActivity(Activity activity) {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivityForResult(intent,CodeConstants.REQUEST_LOGIN);
     }
 }

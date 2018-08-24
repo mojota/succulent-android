@@ -3,7 +3,6 @@ package com.mojota.succulent.fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.SharedElementCallback;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,6 @@ import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
 import com.mojota.succulent.utils.FileUtil;
 import com.mojota.succulent.utils.GlobalUtil;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 图片详情页
@@ -71,7 +67,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
         mIvImage.setOnLongClickListener(this);
 
         Glide.with(getContext()).load(mPicUrl).apply(GlobalUtil
-                .getDefaultRequestOptions().fitCenter()).into(mIvImage);
+                .getDefaultOptions().fitCenter()).into(mIvImage);
 
         return rootView;
     }

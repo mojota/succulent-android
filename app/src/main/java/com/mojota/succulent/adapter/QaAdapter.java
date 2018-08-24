@@ -47,8 +47,8 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
     public QaAdapter(List<QuestionInfo> list, OnItemClickListener listener) {
         mList = list;
         mListener = listener;
-        mDefaultOptions = GlobalUtil.getDefaultRequestOptions().centerCrop();
-        mAvatarOptions = GlobalUtil.getDefaultAvatarRequestOptions();
+        mDefaultOptions = GlobalUtil.getDefaultOptions().centerCrop();
+        mAvatarOptions = GlobalUtil.getDefaultAvatarOptions();
     }
 
     public void setList(List<QuestionInfo> list) {

@@ -201,7 +201,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         if (mQuestion != null) {
             String avatar = mQuestion.getUserInfo().getAvatarUrl();
             Glide.with(mActivity).load(avatar).apply(GlobalUtil
-                    .getDefaultAvatarRequestOptions()).into(mIvAvatar);
+                    .getDefaultAvatarOptions()).into(mIvAvatar);
 
             mTvNickname.setText(mQuestion.getUserInfo().getNickname());
             if (!TextUtils.isEmpty(mQuestion.getQuestionTitle())) {
@@ -215,7 +215,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
                 mPicUrls.clear();
                 mPicUrls.add(mQuestion.getQuestionPicUrl());
                 Glide.with(mActivity).load(mQuestion.getQuestionPicUrl()).apply
-                        (GlobalUtil.getDefaultRequestOptions().centerCrop()).into(mIvPic);
+                        (GlobalUtil.getDefaultOptions().centerCrop()).into(mIvPic);
                 mIvPic.setVisibility(View.VISIBLE);
             } else {
                 mIvPic.setVisibility(View.GONE);

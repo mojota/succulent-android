@@ -139,7 +139,7 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
                 finish();
                 break;
             case R.id.ibt_pic:
-                showPicDialog(mIbtPic);
+                showPicDialog(mIbtPic, null);
                 break;
             case R.id.bt_commit:
                 if (!TextUtils.isEmpty(mEtQuestion.getText())) {

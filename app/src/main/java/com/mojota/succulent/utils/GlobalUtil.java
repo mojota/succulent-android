@@ -22,8 +22,8 @@ import android.widget.Toast;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.SucculentApplication;
+import com.mojota.succulent.view.CenterCropRoundedCorners;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -216,15 +216,20 @@ public class GlobalUtil {
         return formatTime(milliseconds, "yyyy-MM-dd HH:mm:SS");
     }
 
-    public static RequestOptions getDefaultRequestOptions() {
+    public static RequestOptions getDefaultOptions() {
         return new RequestOptions().error(R.mipmap.ic_default_pic).dontAnimate();
     }
 
-    public static RequestOptions getDefaultAvatarRequestOptions() {
-        return new RequestOptions().error(R.mipmap.ic_face_gray_18dp).dontAnimate()
-                .circleCrop();
+    public static RequestOptions getDefaultAvatarOptions() {
+        return new RequestOptions().error(R.mipmap.ic_default_avatar_gray_18dp).dontAnimate
+                ().circleCrop();
     }
 
+    public static RequestOptions getRoundedCornersOptions() {
+        return new RequestOptions().error(R.mipmap.ic_default_pic).dontAnimate().transform
+                (new CenterCropRoundedCorners(SucculentApplication.getInstance()
+                        .getResources().getDimensionPixelSize(R.dimen.di_corner)));
+    }
 
 
     /**

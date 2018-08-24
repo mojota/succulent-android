@@ -31,6 +31,7 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -45,14 +46,23 @@
         <activity
             android:name=".activity.QaAskActivity"
             android:theme="@style/AddDataDialog"/>
-        <activity
-            android:name=".activity.ImageBrowserActivity">
+        <activity android:name=".activity.ImageBrowserActivity">
         </activity>
         <activity android:name=".activity.DiaryDetailActivity"/>
         <activity
             android:name=".activity.QaDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login">
+        </activity>
+        <activity android:name=".activity.FeedbackActivity">
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
     </application>
 
 </manifest>

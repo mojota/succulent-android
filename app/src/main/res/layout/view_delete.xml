@@ -6,5 +6,5 @@
     android:layout_height="32dp"
     android:layout_alignParentRight="true"
     android:background="@android:color/transparent"
-    android:src="@mipmap/ic_delete_forever_white_24dp"
+    android:src="@mipmap/ic_delete_white_24dp"
     android:tint="@color/colorAccent"/>

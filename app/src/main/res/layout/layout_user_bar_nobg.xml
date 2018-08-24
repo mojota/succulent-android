@@ -11,7 +11,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_face_gray_18dp"/>
+        android:src="@mipmap/ic_default_avatar_gray_18dp"/>
 
     <TextView
         android:id="@+id/tv_nickname"

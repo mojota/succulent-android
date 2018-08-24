@@ -67,7 +67,7 @@ public class SpeciesAdapter extends RecyclerView.Adapter<SpeciesAdapter.ViewHold
         if (species != null) {
             holder.tvName.setText(species.getSpeciesName());
             Glide.with(mContext).load(species.getSpeciesPicUrl()).apply(GlobalUtil
-                    .getDefaultRequestOptions().centerCrop()).into(holder.ivPic);
+                    .getDefaultOptions().centerCrop()).into(holder.ivPic);
         }
     }
 

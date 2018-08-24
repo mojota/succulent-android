@@ -7,9 +7,10 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.BuildConfig;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.FileUtil;
@@ -24,11 +25,17 @@ import java.io.File;
 public class PhotoChooseSupportActivity extends BaseActivity {
 
     private Uri mUploadUri = null;
-    private ImageButton mUploadIbt;
+    private ImageView mUploadIbt;
+    private RequestOptions mRequestOptions;
 
 
-    protected void showPicDialog(ImageButton uploadIbt) {
+    protected void showPicDialog(ImageView uploadIbt, RequestOptions requestOptions) {
         mUploadIbt = uploadIbt;
+        if (requestOptions == null) {
+            mRequestOptions = GlobalUtil.getDefaultOptions();
+        } else {
+            mRequestOptions = requestOptions;
+        }
         String[] items = {"拍照", "从相册选择"};
         new AlertDialog.Builder(this).setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -75,14 +82,14 @@ public class PhotoChooseSupportActivity extends BaseActivity {
         switch (requestCode) {
             case CodeConstants.REQUEST_TAKE_PHOTO:
                 if (resultCode == RESULT_OK && mUploadUri != null && mUploadIbt != null) {
-                    Glide.with(this).load(mUploadUri).into(mUploadIbt);
+                    Glide.with(this).load(mUploadUri).apply(mRequestOptions).into(mUploadIbt);
                 }
                 mUploadUri = null;
                 mUploadIbt = null;
                 break;
             case CodeConstants.REQUEST_CHOOSE_PHOTO:
                 if (resultCode == RESULT_OK && mUploadIbt != null) {
-                    Glide.with(this).load(data.getData()).into(mUploadIbt);
+                    Glide.with(this).load(data.getData()).apply(mRequestOptions).into(mUploadIbt);
                 }
                 mUploadIbt = null;
                 break;
