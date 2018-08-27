@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_user_bar"/>
+        <include layout="@layout/layout_user_bar_nobg"/>
 
 
         <LinearLayout

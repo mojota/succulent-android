@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.FeedbackActivity">
+    tools:context=".activity.UserEditActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -21,26 +20,36 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_feedback"
-            android:textColor="@color/green"
-            android:layout_marginBottom="8dp"
-            android:textSize="15dp"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_feedback"
+                android:id="@+id/et_nickname"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@drawable/bg_edit"
-                android:gravity="top"
-                android:padding="8dp"
-                android:textSize="14dp"/>
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_nickname"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="15dp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/et_region"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_region"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="15dp"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -51,11 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
-            android:text="@string/str_commit"
+            android:text="@string/str_edit_submit"
             android:textColor="@color/white"
             android:textStyle="bold"/>
-
-
     </LinearLayout>
-
 </LinearLayout>

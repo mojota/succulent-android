@@ -52,6 +52,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
         mToolBar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRvDiarys = findViewById(R.id.rv_diarys);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);

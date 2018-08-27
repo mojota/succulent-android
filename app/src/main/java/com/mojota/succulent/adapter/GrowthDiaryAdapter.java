@@ -26,6 +26,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     private List<NoteInfo> mList;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongclickListener mOnItemLongcickListener;
+    private RequestOptions mRequestOptions;
 
     public interface OnItemClickListener {
 
@@ -35,7 +36,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView ivPic;
         private final TextView tvTitle;
-        private final TextView tvTime;
+//        private final TextView tvTime;
         private final ToggleButton tbLike;
         private final ToggleButton tbPermission;
 
@@ -43,7 +44,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             super(itemView);
             ivPic = itemView.findViewById(R.id.iv_pic);
             tvTitle = itemView.findViewById(R.id.tv_title);
-            tvTime = itemView.findViewById(R.id.tv_time);
+//            tvTime = itemView.findViewById(R.id.tv_time);
             tbLike = itemView.findViewById(R.id.tb_like);
             tbPermission = itemView.findViewById(R.id.tb_permission);
         }
@@ -52,6 +53,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     public GrowthDiaryAdapter(Context context, List<NoteInfo> list) {
         mContext = context;
         mList = list;
+        mRequestOptions = GlobalUtil.getDefaultOptions().centerCrop();
     }
 
     public void setList(List<NoteInfo> list) {
@@ -88,7 +90,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
         final NoteInfo diary = mList.get(position);
         if (diary != null) {
             holder.tvTitle.setText(diary.getNoteTitle());
-            holder.tvTime.setText(diary.getUpdateTime());
+//            holder.tvTime.setText(diary.getUpdateTime());
 
             holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
             holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
@@ -126,9 +128,8 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
                 }
             });
 
-            RequestOptions requestOptions = GlobalUtil.getDefaultOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(requestOptions)
+                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(mRequestOptions)
                         .into(holder.ivPic);
             }
         }

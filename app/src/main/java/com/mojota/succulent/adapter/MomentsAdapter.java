@@ -3,7 +3,13 @@ package com.mojota.succulent.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +20,8 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.ActivityUtil;
@@ -47,10 +55,12 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         private final ImageView ivAvatar;
         private final TextView tvRegion;
         private final ImageView ivNoteType;
+        private final ViewGroup mLayoutBar;
 
         public BaseViewHolder(View itemView) {
             super(itemView);
 
+            mLayoutBar = itemView.findViewById(R.id.layout_bar);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             ivAvatar = itemView.findViewById(R.id.iv_avatar);
             tvRegion = itemView.findViewById(R.id.tv_region);
@@ -130,8 +140,32 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         final NoteInfo noteInfo = mList.get(position);
         if (noteInfo != null) {
             holder.tvNickname.setText(noteInfo.getUserInfo().getNickname());
-            Glide.with(mContext).load(noteInfo.getUserInfo().getAvatarUrl()).apply
-                    (mAvatarOptions).into(holder.ivAvatar);
+//            Glide.with(mContext).load(noteInfo.getUserInfo().getAvatarUrl()).apply
+//                    (mAvatarOptions).into(holder.ivAvatar);
+            final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
+            Glide.with(mContext).asBitmap().load(noteInfo.getUserInfo().getAvatarUrl())
+                    .apply(mAvatarOptions).into(new SimpleTarget<Bitmap>() {
+
+                @Override
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
+                        transition) {
+                    holder.ivAvatar.setImageBitmap(resource);
+                    Palette.Builder pb = Palette.from(resource);
+                    pb.generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            colors[2] = palette.getDarkMutedColor(0xffff9800);
+
+                            Drawable bgDrawable = new GradientDrawable(GradientDrawable.Orientation
+                                    .LEFT_RIGHT, colors);
+                            holder.mLayoutBar.setBackground(bgDrawable);
+                        }
+                    });
+                }
+            });
+
+
+
             holder.tvRegion.setText(noteInfo.getUserInfo().getRegion());
 
             holder.tvTitle.setText(noteInfo.getNoteTitle());
@@ -183,7 +217,8 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                 // 图
                 if (noteInfo.getPicUrls() != null) {
                     ((LandscapeViewHolder) holder).rvPics.setAdapter(new ImageAdapter
-                            (noteInfo.getPicUrls(), noteInfo.getNoteTitle()));
+                            (mContext, noteInfo.getPicUrls(), noteInfo.getNoteTitle(),
+                                    mRoundedCornersOptions));
                 }
             } else if (noteInfo.getNoteType() == 1) {
                 // 笔记类型标识
@@ -208,55 +243,4 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         }
     }
 
-
-    private class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
-        private final ArrayList<String> mPicUrls;
-        private final String mTitle;
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            private final ImageView ivPic;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                ivPic = itemView.findViewById(R.id.iv_pic);
-            }
-        }
-
-        public ImageAdapter(ArrayList<String> picUrls, String title) {
-            mPicUrls = picUrls;
-            mTitle = title;
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mPicUrls != null) {
-                if (mPicUrls.size() >= 3) {
-                    return 3;
-                } else {
-                    return mPicUrls.size();
-                }
-            }
-            return 0;
-        }
-
-        @Override
-        public ImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_pic,
-                    parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(final ImageAdapter.ViewHolder holder, final int
-                position) {
-            Glide.with(mContext).load(mPicUrls.get(position)).apply(mRoundedCornersOptions).into
-                    (holder.ivPic);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ActivityUtil.startImageBrowserActivity((Activity) mContext, holder.ivPic, mTitle, mPicUrls, position);
-                }
-            });
-        }
-
-    }
 }

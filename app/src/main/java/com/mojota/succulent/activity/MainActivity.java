@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,6 +51,9 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private TextView mTvNickname;
     private TextView mTvRegion;
     private TextView mTvLogin;
+    private ViewGroup mLayoutUser;
+    private FloatingActionButton mFabUserEdit;
+    private UserInfo mUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +95,15 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mLayoutUser = mNavigationView.getHeaderView(0).findViewById(R.id.layout_user);
         mIvAvatar = mNavigationView.getHeaderView(0).findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mTvNickname = mNavigationView.getHeaderView(0).findViewById(R.id.tv_nickname);
         mTvRegion = mNavigationView.getHeaderView(0).findViewById(R.id.tv_region);
         mTvLogin = mNavigationView.getHeaderView(0).findViewById(R.id.tv_login);
         mTvLogin.setOnClickListener(this);
+        mFabUserEdit = mNavigationView.getHeaderView(0).findViewById(R.id.fab_user_edit);
+        mFabUserEdit.setOnClickListener(this);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, null, R
@@ -116,7 +124,10 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         UserInfoResponseInfo responseInfo = new Gson().fromJson(TestUtil.getUserinfo(),
                 UserInfoResponseInfo.class);
         UserInfo userInfo = responseInfo.getUserInfo();
+        mUserInfo = userInfo;
         if (userInfo != null) {
+            mLayoutUser.setVisibility(View.VISIBLE);
+            mFabUserEdit.setVisibility(View.VISIBLE);
             mTvLogin.setVisibility(View.GONE);
             mTvNickname.setText(userInfo.getNickname());
             mTvRegion.setText(userInfo.getRegion());
@@ -125,6 +136,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                     .into(mIvAvatar);
         } else {
             mTvLogin.setVisibility(View.VISIBLE);
+            mLayoutUser.setVisibility(View.GONE);
+            mFabUserEdit.setVisibility(View.GONE);
         }
     }
 
@@ -179,8 +192,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -192,6 +205,11 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
             case R.id.iv_avatar:
                 showPicDialog(mIvAvatar, GlobalUtil.getDefaultAvatarOptions());
+                break;
+            case R.id.fab_user_edit:
+                Intent intent = new Intent(MainActivity.this, UserEditActivity.class);
+                intent.putExtra(UserEditActivity.KEY_USER, mUserInfo);
+                startActivity(intent);
                 break;
         }
     }

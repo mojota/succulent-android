@@ -9,6 +9,7 @@ public class UserInfo extends BaseBean {
     private static final long serialVersionUID = 1L;
 
     String userId;//用户id
+    String userName; //用户名
     String nickname;//用户昵称
     String avatarUrl;//用户头像地址
     String region; //地区
@@ -20,6 +21,14 @@ public class UserInfo extends BaseBean {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getNickname() {

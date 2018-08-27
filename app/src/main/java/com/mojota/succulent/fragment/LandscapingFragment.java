@@ -39,7 +39,7 @@ import java.util.List;
  * Created by mojota on 18-7-23
  */
 public class LandscapingFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, OnImageClickListener, OnItemLongclickListener {
+        SwipeRefreshLayout.OnRefreshListener, OnItemLongclickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -87,10 +87,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvLandscaping = view.findViewById(R.id.rv_landscaping);
-        GridLayoutManager glm = new GridLayoutManager(getActivity(), 2);
-        mRvLandscaping.setLayoutManager(glm);
         mLandscapingAdapter = new LandscapingAdapter(getActivity(), mList);
-        mLandscapingAdapter.setOnImageClickListener(this);
         mLandscapingAdapter.setOnItemLongClickListener(this);
         mRvLandscaping.setAdapter(mLandscapingAdapter);
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
@@ -131,17 +128,6 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         getData();
     }
 
-    @Override
-    public void onImageClick(ImageView view, String title, ArrayList<String> picUrls, int
-            picPos) {
-        ActivityUtil.startImageBrowserActivity(getActivity(), view, title, picUrls, picPos);
-    }
-
-//    @Override
-//    public void delete(final int position) {
-////        String title = mList.get(position).getNoteTitle();
-//        deleteData(position);
-//    }
 
 
     @Override
