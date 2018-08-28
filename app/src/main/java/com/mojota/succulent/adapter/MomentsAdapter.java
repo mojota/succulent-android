@@ -154,7 +154,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                     pb.generate(new Palette.PaletteAsyncListener() {
                         @Override
                         public void onGenerated(Palette palette) {
-                            colors[2] = palette.getDarkMutedColor(0xffff9800);
+                            colors[2] = palette.getDarkVibrantColor(0xffff9800);
 
                             Drawable bgDrawable = new GradientDrawable(GradientDrawable.Orientation
                                     .LEFT_RIGHT, colors);
