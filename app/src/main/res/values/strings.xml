@@ -11,6 +11,8 @@
     <string name="hello_blank_fragment">test</string>
     <string name="str_self">私密</string>
     <string name="str_public">公开</string>
+    <string name="str_edit_title">修改标题</string>
+    <string name="str_hint_edit_title">在此编辑标题(不超过15个字)</string>
     <string name="str_hint_title">在此写下笔记标题</string>
     <string name="str_hint_body">在此写下成长笔记</string>
     <string name="str_commit">提交</string>
@@ -28,7 +30,7 @@
     <string name="str_hint_ask">在此写下您的问题</string>
     <string name="str_qa_detail">问答详情</string>
     <string name="str_login">登录</string>
-    <string name="str_feedback">意见反馈</string>
+    <string name="str_feedback">帮助App改善</string>
     <string name="str_settings">设置</string>
 
     <!-- Strings related to login -->
@@ -45,6 +47,7 @@
     <string name="prompt_nickname">修改昵称</string>
     <string name="prompt_region">修改地区</string>
     <string name="str_edit_submit">提交修改</string>
+    <string name="str_cancel">取消</string>
 
     <string name="prompt_feedback">对app有什么想说的?请尽情写下来吧!</string>
 

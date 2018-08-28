@@ -1,18 +1,22 @@
 package com.mojota.succulent.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -24,6 +28,7 @@ import com.mojota.succulent.model.DiarysResponseInfo;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.GlobalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private List<DiaryDetail> mList = new ArrayList<DiaryDetail>();
     private NoteInfo mNoteInfo;
     private MenuItem mActionPermission;
+    private MenuItem mActivonEditTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +96,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_bar, menu);
         mActionPermission = menu.findItem(R.id.action_permission);
+        mActivonEditTitle = menu.findItem(R.id.action_edit_title);
 
         setPermissionMemu();
 
@@ -108,7 +115,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                supportFinishAfterTransition();
                 return true;
             case R.id.action_permission:
                 if (mNoteInfo.getPermission() == 1) {
@@ -117,11 +124,48 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                     mNoteInfo.setPermission(1);
                 }
                 setPermissionMemu();
-                setResult(CodeConstants.RESULT_DETAIL);
+                return true;
+            case R.id.action_edit_title:
+                showEditDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showEditDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_title, null);
+        final EditText etTitle = view.findViewById(R.id.et_title);
+        etTitle.setText(mNoteInfo.getNoteTitle());
+        final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.str_edit_title)
+                .setView(view).setPositiveButton(R.string.str_edit_submit, null)
+                .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setCancelable(false).create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View
+                .OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(etTitle.getText())) {
+                    submitTitle(etTitle.getText().toString());
+                    dialog.dismiss();
+                } else {
+                    GlobalUtil.makeToast("标题不可以为空");
+                }
+            }
+        });
+    }
+
+    /**
+     * 修改标题请求
+     */
+    private void submitTitle(String title) {
+
     }
 
     @Override

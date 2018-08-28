@@ -6,12 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:layout_marginBottom="4dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
     android:layout_marginTop="4dp"
     android:background="@android:color/white"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="0dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,12 +51,12 @@
                     android:textSize="15dp"/>
 
                 <TextView
-                    android:id="@+id/tv_anser_count"
+                    android:id="@+id/tv_answer_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:drawableLeft="@mipmap/ic_question_answer_white_18dp"
+                    android:drawableLeft="@mipmap/ic_answer_count_white"
                     android:drawablePadding="2dp"
                     android:drawableTint="@color/colorAccent"
                     android:textColor="@color/gray"
@@ -68,7 +66,7 @@
                     android:id="@+id/tv_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tv_anser_count"
+                    android:layout_alignBottom="@id/tv_answer_count"
                     android:textColor="@color/gray"
                     android:textSize="12dp"/>
             </RelativeLayout>

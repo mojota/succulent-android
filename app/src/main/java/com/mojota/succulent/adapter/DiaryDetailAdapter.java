@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.ViewHolder> {
 
+    private final RequestOptions mRequestOptions;
     private Activity mContext;
     private List<DiaryDetail> mList;
     private OnImageClickListener mOnImageClickListener;
@@ -61,6 +62,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     public DiaryDetailAdapter(Activity context, List<DiaryDetail> list) {
         mContext = context;
         mList = list;
+        mRequestOptions = GlobalUtil.getDefaultOptions().centerCrop();
     }
 
     public void setList(List<DiaryDetail> list) {
@@ -113,11 +115,10 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
             holder.ivPic0.setOnClickListener(null);
             holder.ivPic1.setOnClickListener(null);
-            RequestOptions requestOptions = GlobalUtil.getDefaultOptions().centerCrop();
             if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
                 for (int i = 0; i < diary.getPicUrls().size(); i++) {
                     RequestBuilder<Drawable> rb = Glide.with(mContext).load(diary.getPicUrls
-                            ().get(i)).apply(requestOptions);
+                            ().get(i)).apply(mRequestOptions);
                     if (i == 0) {
                         rb.into(holder.ivPic0);
                         holder.ivPic0.setOnClickListener(new View.OnClickListener() {

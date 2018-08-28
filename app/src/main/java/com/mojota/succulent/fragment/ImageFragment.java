@@ -82,7 +82,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_image:
-                if ("0".equals(mTransitionName) && mPicsCount == 1) {
+                if ("0".equals(mTransitionName)) {
                     getActivity().supportFinishAfterTransition();
                 } else {
                     getActivity().finish();

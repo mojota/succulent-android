@@ -37,7 +37,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvTime = itemView.findViewById(R.id.tv_time);
-            tvAnswerCount = itemView.findViewById(R.id.tv_anser_count);
+            tvAnswerCount = itemView.findViewById(R.id.tv_answer_count);
             ivPic = itemView.findViewById(R.id.iv_pic);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             ivAvatar = itemView.findViewById(R.id.iv_avatar);

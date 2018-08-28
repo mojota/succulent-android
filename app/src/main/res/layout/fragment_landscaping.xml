@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragment.LandscapingFragment">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.LandscapingFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -16,7 +17,6 @@
             android:id="@+id/rv_landscaping"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="4dp"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -28,4 +28,4 @@
         android:layout_margin="@dimen/default_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:srcCompat="@mipmap/ic_add_white_48dp"/>
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

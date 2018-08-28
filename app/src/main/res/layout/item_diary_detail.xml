@@ -29,7 +29,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@android:color/white"
                 android:maxLines="1"
                 android:textSize="16dp"/>
 
@@ -69,14 +68,14 @@
 
             <ImageView
                 android:id="@+id/iv_pic0"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:scaleType="centerInside"/>
 
             <ImageView
                 android:id="@+id/iv_pic1"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:layout_marginLeft="16dp"
                 android:scaleType="centerInside"/>
         </LinearLayout>
