@@ -54,6 +54,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private ViewGroup mLayoutUser;
     private FloatingActionButton mFabUserEdit;
     private UserInfo mUserInfo;
+    private TextView mTvLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mLayoutUser = mNavigationView.getHeaderView(0).findViewById(R.id.layout_user);
+        mTvLogout = mNavigationView.getHeaderView(0).findViewById(R.id.tv_logout);
+        mTvLogout.setOnClickListener(this);
         mIvAvatar = mNavigationView.getHeaderView(0).findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mTvNickname = mNavigationView.getHeaderView(0).findViewById(R.id.tv_nickname);
@@ -125,13 +128,17 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 UserInfoResponseInfo.class);
         UserInfo userInfo = responseInfo.getUserInfo();
         mUserInfo = userInfo;
-        if (userInfo != null) {
+        setDataToView();
+    }
+
+    private void setDataToView() {
+        if (mUserInfo != null) {
             mLayoutUser.setVisibility(View.VISIBLE);
             mFabUserEdit.setVisibility(View.VISIBLE);
             mTvLogin.setVisibility(View.GONE);
-            mTvNickname.setText(userInfo.getNickname());
-            mTvRegion.setText(userInfo.getRegion());
-            Glide.with(this).load(userInfo.getAvatarUrl()).apply(GlobalUtil
+            mTvNickname.setText(mUserInfo.getNickname());
+            mTvRegion.setText(mUserInfo.getRegion());
+            Glide.with(this).load(mUserInfo.getAvatarUrl()).apply(GlobalUtil
                     .getDefaultAvatarOptions().error(R.mipmap.ic_default_avatar_white_48dp))
                     .into(mIvAvatar);
         } else {
@@ -202,6 +209,10 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         switch (v.getId()) {
             case R.id.tv_login:
                 ActivityUtil.startLoginActivity(this);
+                break;
+            case R.id.tv_logout:
+                mUserInfo = null;
+                setDataToView();
                 break;
             case R.id.iv_avatar:
                 showPicDialog(mIvAvatar, GlobalUtil.getDefaultAvatarOptions());
