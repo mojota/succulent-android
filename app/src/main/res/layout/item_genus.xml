@@ -6,7 +6,8 @@
           android:gravity="right"
           android:padding="8dp"
           android:singleLine="true"
-          android:textColor="@color/black"
-          android:textSize="13dp">
+          android:drawableTint="@color/gray_deep"
+          android:textColor="@color/gray_deep"
+          android:textSize="14dp">
 
 </TextView>

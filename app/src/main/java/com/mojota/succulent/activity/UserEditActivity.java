@@ -18,6 +18,7 @@ public class UserEditActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private EditText mEtNickname;
     private EditText mEtRegion;
+    private EditText mEtPassword;
     private Button mBtSubmit;
     private UserInfo mUser;
 
@@ -31,6 +32,7 @@ public class UserEditActivity extends AppCompatActivity {
 
         mEtNickname = findViewById(R.id.et_nickname);
         mEtRegion = findViewById(R.id.et_region);
+        mEtPassword = findViewById(R.id.et_password);
         mBtSubmit = findViewById(R.id.bt_submit);
 
         mUser = (UserInfo) getIntent().getSerializableExtra(KEY_USER);

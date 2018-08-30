@@ -36,17 +36,21 @@
     <!-- Strings related to login -->
     <string name="prompt_email">请输入Email</string>
     <string name="prompt_password">请输入密码</string>
-    <string name="action_sign_in">登入或注册</string>
+    <string name="prompt_password_again">请再输入一遍密码</string>
+    <string name="action_sign_in">登入</string>
+    <string name="str_register">注册</string>
     <string name="str_logout">登出</string>
+    <string name="str_forget_pw">忘记密码</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">Email格式不正确</string>
     <string name="error_invalid_password">密码至少输入6位</string>
     <string name="error_incorrect_password">密码不正确</string>
     <string name="error_field_required">Email不可以为空</string>
     <string name="str_user_edit">修改个人信息</string>
-    <string name="prompt_nickname">修改昵称</string>
-    <string name="prompt_region">修改地区</string>
+    <string name="prompt_nickname">你的昵称</string>
+    <string name="prompt_region">你的地区</string>
     <string name="str_edit_submit">提交修改</string>
+    <string name="str_edit_password">修改密码</string>
     <string name="str_cancel">取消</string>
 
     <string name="prompt_feedback">对app有什么想说的?请尽情写下来吧!</string>

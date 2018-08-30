@@ -19,8 +19,8 @@
             android:padding="8dp"
             android:singleLine="true"
             android:maxLength="20"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="13dp"/>
+            android:textColor="@color/lime"
+            android:textSize="14dp"/>
 
         <Spinner
             android:id="@+id/spinner_genus"

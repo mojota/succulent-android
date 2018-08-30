@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,10 +41,14 @@ public class LoginActivity extends AppCompatActivity {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
+    private EditText mEtPassword;
+    private EditText mEtPasswordAgain;
     private View mProgressView;
     private View mLoginFormView;
     private Toolbar mToolbar;
+    private Button mBtLogin;
+    private Button mBtRegister;
+    private MenuItem mActionRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mEtPassword = (EditText) findViewById(R.id.et_password);
+        mEtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -65,12 +70,22 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+        mEtPasswordAgain = (EditText) findViewById(R.id.et_password_again);
+        mEtPasswordAgain.setVisibility(View.GONE);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        mBtLogin = (Button) findViewById(R.id.bt_login);
+        mBtLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        mBtRegister = findViewById(R.id.bt_register);
+        mBtRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptRegister();
             }
         });
 
@@ -80,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.login_menu_bar, menu);
+        mActionRegister = menu.findItem(R.id.action_register);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -89,26 +106,53 @@ public class LoginActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.action_register:
+                if (getString(R.string.str_register).equals(mActionRegister.getTitle())) {
+                    mEtPasswordAgain.setVisibility(View.VISIBLE);
+                    mBtRegister.setVisibility(View.VISIBLE);
+                    mBtLogin.setVisibility(View.GONE);
+                    mActionRegister.setTitle(R.string.str_login);
+                } else if (getString(R.string.str_login).equals(mActionRegister.getTitle())) {
+                    mEtPasswordAgain.setVisibility(View.GONE);
+                    mBtRegister.setVisibility(View.GONE);
+                    mBtLogin.setVisibility(View.VISIBLE);
+                    mActionRegister.setTitle(R.string.str_register);
+                }
+
+                break;
+            case R.id.action_forget_pw:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * 注册校验
+     */
+    private void attemptRegister() {
+
+    }
+
+    /**
+     * 登录校验
+     */
     private void attemptLogin() {
         // Reset errors.
         mEmailView.setError(null);
-        mPasswordView.setError(null);
+        mEtPassword.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String password = mEtPassword.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mEtPassword.setError(getString(R.string.error_invalid_password));
+            focusView = mEtPassword;
             cancel = true;
         }
 
@@ -160,8 +204,8 @@ public class LoginActivity extends AppCompatActivity {
                 showProgress(false);
                 if (responseInfo != null || !"0".equals(responseInfo.getCode()) ||
                         responseInfo.getUserInfo() == null) {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    mPasswordView.requestFocus();
+                    mEtPassword.setError(getString(R.string.error_incorrect_password));
+                    mEtPassword.requestFocus();
                 }
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
