@@ -3,6 +3,7 @@ package com.mojota.succulent.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -28,6 +30,7 @@ import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UrlConstants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mBtLogin;
     private Button mBtRegister;
     private MenuItem mActionRegister;
+    private InputMethodManager mInputManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mEtPassword = (EditText) findViewById(R.id.et_password);
@@ -131,7 +137,9 @@ public class LoginActivity extends AppCompatActivity {
      * 注册校验
      */
     private void attemptRegister() {
-
+        String email = mEmailView.getText().toString();
+        String password = mEtPassword.getText().toString();
+        requestLoginOrRegister(1, email, password);
     }
 
     /**
@@ -174,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            requestLoginOrRegister(email, password);
+            requestLoginOrRegister(0, email, password);
         }
     }
 
@@ -189,23 +197,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
+     * type 0-登录 1-注册
      * 登录或注册请求
      */
-    private void requestLoginOrRegister(String email, String password) {
+    private void requestLoginOrRegister(final int type, String email, String password) {
+        closeKeyboard();
         String url = "";
+        if (type == 0) {
+            url = UrlConstants.LOGIN_URL;
+        } else if (type == 1) {
+            url = UrlConstants.REGISTER_URL;
+        }
         showProgress(true);
         Map<String, String> map = new HashMap<String, String>();
-        GsonPostRequest<UserInfoResponseInfo> request = new GsonPostRequest<>(url, null,
-                map, UserInfoResponseInfo.class, new Response.Listener<UserInfoResponseInfo>
-                () {
+        map.put("userName", email);
+        map.put("password", password);
+        GsonPostRequest request = new GsonPostRequest(url, null, map, UserInfoResponseInfo
+                .class, new Response.Listener<UserInfoResponseInfo>() {
 
             @Override
             public void onResponse(UserInfoResponseInfo responseInfo) {
                 showProgress(false);
-                if (responseInfo != null || !"0".equals(responseInfo.getCode()) ||
-                        responseInfo.getUserInfo() == null) {
-                    mEtPassword.setError(getString(R.string.error_incorrect_password));
-                    mEtPassword.requestFocus();
+                if (responseInfo == null || !"0".equals(responseInfo.getCode())) {
+//                    mEtPassword.setError(getString(R.string.error_incorrect_password));
+//                    mEtPassword.requestFocus();
+                    if (type == 1) {
+                        if (responseInfo != null) {
+                            GlobalUtil.makeToast(responseInfo.getMsg());
+                        } else {
+                            GlobalUtil.makeToast("注册失败");
+                        }
+                    }
+                } else {
+                    if (type == 1) {
+                        GlobalUtil.makeToast("注册成功");
+                    }
                 }
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -263,6 +289,15 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView.setAdapter(adapter);
     }
 
+
+    /**
+     * 关闭软键盘
+     */
+    private void closeKeyboard() {
+        mInputManager.hideSoftInputFromWindow(mEmailView.getWindowToken(),0);
+        mInputManager.hideSoftInputFromWindow(mEtPassword.getWindowToken(),0);
+        mInputManager.hideSoftInputFromWindow(mEtPasswordAgain.getWindowToken(), 0);
+    }
 
 }
 

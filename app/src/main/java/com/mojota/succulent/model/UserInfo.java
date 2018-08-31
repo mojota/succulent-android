@@ -13,6 +13,8 @@ public class UserInfo extends BaseBean {
     String nickname;//用户昵称
     String avatarUrl;//用户头像地址
     String region; //地区
+    String email;
+    String phone;
     String coverUrl; // 邻家肉园封面图
 
     public String getUserId() {
@@ -53,6 +55,22 @@ public class UserInfo extends BaseBean {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getCoverUrl() {

@@ -126,7 +126,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private void getData() {
         UserInfoResponseInfo responseInfo = new Gson().fromJson(TestUtil.getUserinfo(),
                 UserInfoResponseInfo.class);
-        UserInfo userInfo = responseInfo.getUserInfo();
+        UserInfo userInfo = responseInfo.getData();
         mUserInfo = userInfo;
         setDataToView();
     }

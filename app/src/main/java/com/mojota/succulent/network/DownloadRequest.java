@@ -1,6 +1,9 @@
 package com.mojota.succulent.network;
 
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.mojota.succulent.utils.AppLog;
 
 import java.io.File;
@@ -18,10 +21,12 @@ import java.net.URL;
  */
 
 public class DownloadRequest {
+    private static final String TAG = "DownloadRequest";
     private static final long INTERVAL = 1000; // 更新进度的间隔时间
 
-    private DownloadStateListener mStateListener;
     private long mInterval = INTERVAL;
+    private DownloadStateListener mStateListener;
+    private Handler mMainHandler = new Handler(Looper.getMainLooper()); // 主线程handler
 
     public interface DownloadStateListener {
         void onProgress(int progress);
@@ -49,7 +54,7 @@ public class DownloadRequest {
      * 开始下载
      */
     public void startDownload(final String urlStr, final String filename) {
-        AppLog.d("DownloadRequest", "url:" + urlStr + " ,filename:" + filename);
+        AppLog.d(TAG, "url:" + urlStr + " ,filename:" + filename);
         new Thread((new Runnable() {
             @Override
             public void run() {
@@ -92,7 +97,7 @@ public class DownloadRequest {
                 updateProgress(100);
                 isSuccess = true;
             } else {
-                AppLog.d("DownloadRequest", String.valueOf(conn.getResponseCode()));
+                AppLog.d(TAG, String.valueOf(conn.getResponseCode()));
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -120,30 +125,30 @@ public class DownloadRequest {
      * 更新下载进度
      */
     private void updateProgress(final int progress) {
-//        TaskExecutor.runOnMainThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                AppLog.d("DownloadRequest", "progress:" + progress);
-//                if (mStateListener != null) {
-//                    mStateListener.onProgress(progress);
-//                }
-//            }
-//        });
+        mMainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                AppLog.d(TAG, "progress:" + progress);
+                if (mStateListener != null) {
+                    mStateListener.onProgress(progress);
+                }
+            }
+        });
     }
 
     /**
      * 是否下载成功
      */
     private void downloadEnd(final boolean isSuccess) {
-//        TaskExecutor.runOnMainThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                AppLog.d("DownloadRequest", "success:" + isSuccess);
-//                if (mStateListener != null) {
-//                    mStateListener.onComplete(isSuccess);
-//                }
-//            }
-//        });
+        mMainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                AppLog.d(TAG, "success:" + isSuccess);
+                if (mStateListener != null) {
+                    mStateListener.onComplete(isSuccess);
+                }
+            }
+        });
     }
 
 }
