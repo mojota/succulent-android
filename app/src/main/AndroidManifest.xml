@@ -54,8 +54,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/str_login">
+            android:name=".activity.LoginActivity">
         </activity>
         <activity
             android:name=".activity.FeedbackActivity"
@@ -64,7 +63,8 @@
             android:name=".activity.UserEditActivity"
             android:label="@string/str_user_edit">
         </activity>
-        <activity android:name=".activity.SettingsActivity"
+        <activity
+            android:name=".activity.SettingsActivity"
             android:label="@string/str_settings">
         </activity>
     </application>

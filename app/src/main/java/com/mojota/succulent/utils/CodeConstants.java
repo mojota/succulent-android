@@ -16,6 +16,7 @@ public class CodeConstants {
     public static final int REQUEST_QA_ASK = 105;
     public static final int REQUEST_QA_DETAIL = 106;
     public static final int REQUEST_LOGIN = 107;
+    public static final int REQUEST_USER_CHANGE = 108;
 
 
     public static final int RESULT_ADD = 500;
@@ -23,4 +24,5 @@ public class CodeConstants {
     public static final int RESULT_EDIT = 504;
     public static final int RESULT_QA = 505;
     public static final int RESULT_LOGIN = 507;
+    public static final int RESULT_USER_CHANGE = 508;
 }

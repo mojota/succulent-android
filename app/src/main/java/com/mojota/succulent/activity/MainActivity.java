@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ import com.mojota.succulent.fragment.MomentsFragment;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.model.UserInfoResponseInfo;
 import com.mojota.succulent.utils.ActivityUtil;
+import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
 
@@ -120,24 +123,30 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                     .WRITE_EXTERNAL_STORAGE}, 100);
         }
 
-        getData();
+        refreshData();
     }
 
-    private void getData() {
-        UserInfoResponseInfo responseInfo = new Gson().fromJson(TestUtil.getUserinfo(),
-                UserInfoResponseInfo.class);
-        UserInfo userInfo = responseInfo.getData();
-        mUserInfo = userInfo;
+    private void refreshData() {
+        mUserInfo = UserUtil.getUser();
         setDataToView();
     }
 
     private void setDataToView() {
-        if (mUserInfo != null) {
+        if (mUserInfo != null && !TextUtils.isEmpty(mUserInfo.getUserName())) {
             mLayoutUser.setVisibility(View.VISIBLE);
             mFabUserEdit.setVisibility(View.VISIBLE);
             mTvLogin.setVisibility(View.GONE);
-            mTvNickname.setText(mUserInfo.getNickname());
-            mTvRegion.setText(mUserInfo.getRegion());
+            if (TextUtils.isEmpty(mUserInfo.getNickname())) {
+                mTvNickname.setText(mUserInfo.getUserName());
+            } else {
+                mTvNickname.setText(mUserInfo.getNickname());
+            }
+            if (TextUtils.isEmpty(mUserInfo.getRegion())) {
+                mTvRegion.setVisibility(View.GONE);
+            } else {
+                mTvRegion.setVisibility(View.VISIBLE);
+                mTvRegion.setText(mUserInfo.getRegion());
+            }
             Glide.with(this).load(mUserInfo.getAvatarUrl()).apply(GlobalUtil
                     .getDefaultAvatarOptions().error(R.mipmap.ic_default_avatar_white_48dp))
                     .into(mIvAvatar);
@@ -155,6 +164,14 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mFragmentList.add(MomentsFragment.newInstance("", ""));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CodeConstants.REQUEST_USER_CHANGE && resultCode == CodeConstants
+                .RESULT_USER_CHANGE) {
+            refreshData();
+        }
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener
             mOnBottomNaviItemSelectedListener = new BottomNavigationView
@@ -212,6 +229,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
             case R.id.tv_logout:
                 mUserInfo = null;
+                UserUtil.clearUser();
                 setDataToView();
                 break;
             case R.id.iv_avatar:
@@ -220,7 +238,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
             case R.id.fab_user_edit:
                 Intent intent = new Intent(MainActivity.this, UserEditActivity.class);
                 intent.putExtra(UserEditActivity.KEY_USER, mUserInfo);
-                startActivity(intent);
+                startActivityForResult(intent, CodeConstants.REQUEST_USER_CHANGE);
                 break;
         }
     }

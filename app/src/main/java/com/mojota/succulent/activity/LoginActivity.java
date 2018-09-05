@@ -1,53 +1,47 @@
 package com.mojota.succulent.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.mojota.succulent.R;
+import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.model.UserInfoResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
+import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.KeyConstants;
+import com.mojota.succulent.utils.SpManager;
 import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
+import com.mojota.succulent.view.LoadingDialog;
+import com.mojota.succulent.view.PasswordView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * 登录
  * Created by mojota on 18-8-27
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity implements OnClickListener {
 
     // UI references.
     private AutoCompleteTextView mEmailView;
-    private EditText mEtPassword;
-    private EditText mEtPasswordAgain;
-    private View mProgressView;
-    private View mLoginFormView;
+    private PasswordView mEtPassword;
+    private PasswordView mEtPasswordAgain;
     private Toolbar mToolbar;
     private Button mBtLogin;
     private Button mBtRegister;
@@ -61,42 +55,21 @@ public class LoginActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.str_login);
 
         mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mEtPassword = (EditText) findViewById(R.id.et_password);
-        mEtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-        mEtPasswordAgain = (EditText) findViewById(R.id.et_password_again);
+        mEtPassword = findViewById(R.id.et_password);
+        mEtPasswordAgain = findViewById(R.id.et_password_again);
         mEtPasswordAgain.setVisibility(View.GONE);
 
-        mBtLogin = (Button) findViewById(R.id.bt_login);
-        mBtLogin.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        mBtLogin = findViewById(R.id.bt_login);
+        mBtLogin.setOnClickListener(this);
 
         mBtRegister = findViewById(R.id.bt_register);
-        mBtRegister.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptRegister();
-            }
-        });
+        mBtRegister.setOnClickListener(this);
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     @Override
@@ -118,11 +91,13 @@ public class LoginActivity extends AppCompatActivity {
                     mBtRegister.setVisibility(View.VISIBLE);
                     mBtLogin.setVisibility(View.GONE);
                     mActionRegister.setTitle(R.string.str_login);
+                    getSupportActionBar().setTitle(R.string.str_register);
                 } else if (getString(R.string.str_login).equals(mActionRegister.getTitle())) {
                     mEtPasswordAgain.setVisibility(View.GONE);
                     mBtRegister.setVisibility(View.GONE);
                     mBtLogin.setVisibility(View.VISIBLE);
                     mActionRegister.setTitle(R.string.str_register);
+                    getSupportActionBar().setTitle(R.string.str_login);
                 }
 
                 break;
@@ -132,37 +107,22 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
-     * 注册校验
+     * type 0-登录 1-注册
+     * 登录或注册校验
      */
-    private void attemptRegister() {
-        String email = mEmailView.getText().toString();
-        String password = mEtPassword.getText().toString();
-        requestLoginOrRegister(1, email, password);
-    }
-
-    /**
-     * 登录校验
-     */
-    private void attemptLogin() {
+    private void attemptRegisterOrLogin(final int type) {
         // Reset errors.
         mEmailView.setError(null);
         mEtPassword.setError(null);
+        mEtPasswordAgain.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mEtPassword.getText().toString();
+        String passwordAgain = mEtPasswordAgain.getText();
 
         boolean cancel = false;
         View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mEtPassword.setError(getString(R.string.error_invalid_password));
-            focusView = mEtPassword;
-            cancel = true;
-        }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
@@ -175,25 +135,33 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mEtPassword.setError(getString(R.string.error_invalid_password));
+            focusView = mEtPassword;
+            cancel = true;
+        }
+        if (type == 1) {
+            if (!TextUtils.isEmpty(password) && !password.equals(passwordAgain)) {
+                mEtPasswordAgain.setError(getString(R.string.error_password_not_same));
+                focusView = mEtPasswordAgain;
+                cancel = true;
+            }
+        }
+
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            requestLoginOrRegister(0, email, password);
+            requestLoginOrRegister(type, email, password);
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 6;
+        return password.length() >= 6;
     }
 
     /**
@@ -218,20 +186,33 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(UserInfoResponseInfo responseInfo) {
                 showProgress(false);
-                if (responseInfo == null || !"0".equals(responseInfo.getCode())) {
-//                    mEtPassword.setError(getString(R.string.error_incorrect_password));
-//                    mEtPassword.requestFocus();
+                if (responseInfo == null || !"0".equals(responseInfo.getCode()) ||
+                        responseInfo.getData() == null) {
                     if (type == 1) {
-                        if (responseInfo != null) {
-                            GlobalUtil.makeToast(responseInfo.getMsg());
+                        if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg()
+                        )) {
+                            GlobalUtil.makeToast("注册失败:" + responseInfo.getMsg());
                         } else {
                             GlobalUtil.makeToast("注册失败");
+                        }
+                    } else if (type == 0) {
+                        if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg()
+                        )) {
+                            GlobalUtil.makeToast("登录失败:" + responseInfo.getMsg());
+                        } else {
+                            GlobalUtil.makeToast("登录失败");
                         }
                     }
                 } else {
                     if (type == 1) {
                         GlobalUtil.makeToast("注册成功");
+                    } else if (type == 0) {
+                        GlobalUtil.makeToast("登录成功");
                     }
+                    UserInfo userInfo = responseInfo.getData();
+                    UserUtil.saveUser(userInfo);
+                    setResult(CodeConstants.RESULT_USER_CHANGE);
+                    finish();
                 }
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -244,60 +225,26 @@ public class LoginActivity extends AppCompatActivity {
         VolleyUtil.execute(request);
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer
-                    .config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(LoginActivity.this, android.R
-                .layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
 
     /**
      * 关闭软键盘
      */
     private void closeKeyboard() {
-        mInputManager.hideSoftInputFromWindow(mEmailView.getWindowToken(),0);
-        mInputManager.hideSoftInputFromWindow(mEtPassword.getWindowToken(),0);
+        mInputManager.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+        mInputManager.hideSoftInputFromWindow(mEtPassword.getWindowToken(), 0);
         mInputManager.hideSoftInputFromWindow(mEtPasswordAgain.getWindowToken(), 0);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_login:
+                attemptRegisterOrLogin(0);
+                break;
+            case R.id.bt_register:
+                attemptRegisterOrLogin(1);
+                break;
+        }
+    }
 }
 

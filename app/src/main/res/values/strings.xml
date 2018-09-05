@@ -44,6 +44,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">Email格式不正确</string>
     <string name="error_invalid_password">密码至少输入6位</string>
+    <string name="error_password_not_same">两次输入的密码不一致</string>
     <string name="error_incorrect_password">密码不正确</string>
     <string name="error_field_required">Email不可以为空</string>
     <string name="str_user_edit">修改个人信息</string>

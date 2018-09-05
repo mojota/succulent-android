@@ -38,9 +38,8 @@ public class UploadFileRequest extends Request<String> {
         super(Method.POST, url, errorListener);
         mListener = listener;
         mBody = getFileByte(fileName);
-        // 设置超时20秒
-        setRetryPolicy(new DefaultRetryPolicy(20000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 设置超时
+        VolleyUtil.setRetryPolicy(this);
         AppLog.d(TAG, "url:" + url + " ;fileName:" + fileName);
     }
 
@@ -52,9 +51,8 @@ public class UploadFileRequest extends Request<String> {
         super(Method.POST, url, errorListener);
         mListener = listener;
         mBody = fileByte;
-        // 设置超时20秒
-        setRetryPolicy(new DefaultRetryPolicy(20000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 设置超时
+        VolleyUtil.setRetryPolicy(this);
     }
 
     /**

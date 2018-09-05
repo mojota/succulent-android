@@ -30,9 +30,8 @@ public class GsonForJsonObjectRequest<T> extends JsonObjectRequest {
         mGson = new Gson();
         mClass = clazz;
 
-        // 设置超时20秒
-        setRetryPolicy(new DefaultRetryPolicy(20000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 设置超时
+        VolleyUtil.setRetryPolicy(this);
     }
 
     @Override
