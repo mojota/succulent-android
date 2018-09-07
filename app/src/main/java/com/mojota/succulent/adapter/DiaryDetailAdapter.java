@@ -17,7 +17,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.activity.OnImageClickListener;
-import com.mojota.succulent.model.DiaryDetail;
+import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.utils.GlobalUtil;
 
 import java.util.List;
@@ -29,15 +29,15 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
     private final RequestOptions mRequestOptions;
     private Activity mContext;
-    private List<DiaryDetail> mList;
+    private List<NoteDetail> mList;
     private OnImageClickListener mOnImageClickListener;
     private OnItemOperateListener mOnItemOperateListener;
 
     public interface OnItemOperateListener {
 
-        void onEdit(DiaryDetail diary);
+        void onEdit(NoteDetail diary);
 
-        void onDelete(DiaryDetail diary, int position);
+        void onDelete(NoteDetail diary, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,13 +59,13 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
         }
     }
 
-    public DiaryDetailAdapter(Activity context, List<DiaryDetail> list) {
+    public DiaryDetailAdapter(Activity context, List<NoteDetail> list) {
         mContext = context;
         mList = list;
         mRequestOptions = GlobalUtil.getDefaultOptions().centerCrop();
     }
 
-    public void setList(List<DiaryDetail> list) {
+    public void setList(List<NoteDetail> list) {
         mList = list;
     }
 
@@ -108,7 +108,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
             });
         }
 
-        final DiaryDetail diary = mList.get(position);
+        final NoteDetail diary = mList.get(position);
         if (diary != null) {
             holder.tvContent.setText(diary.getContent());
             holder.tvTime.setText(diary.getCreateTime());

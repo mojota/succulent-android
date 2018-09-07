@@ -27,6 +27,7 @@ import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,8 +114,13 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_add_my:
-                Intent intent = new Intent(getActivity(), DiaryAddActivity.class);
-                startActivityForResult(intent, CodeConstants.REQUEST_ADD);
+                if (UserUtil.isLogin()){
+                    Intent intent = new Intent(getActivity(), DiaryAddActivity.class);
+                    intent.putExtra(DiaryAddActivity.KEY_MODE,CodeConstants.NOTE_ADD);
+                    startActivityForResult(intent, CodeConstants.REQUEST_ADD);
+                } else {
+                    ActivityUtil.startLoginActivity(getActivity());
+                }
                 break;
         }
     }

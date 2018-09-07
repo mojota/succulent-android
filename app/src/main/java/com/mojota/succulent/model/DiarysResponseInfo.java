@@ -9,7 +9,7 @@ import java.util.List;
 public class DiarysResponseInfo extends ResponseInfo {
 
     private NoteInfo noteInfo;
-    private List<DiaryDetail> diarys;
+    private List<NoteDetail> diarys;
 
     public NoteInfo getNoteInfo() {
         return noteInfo;
@@ -19,11 +19,11 @@ public class DiarysResponseInfo extends ResponseInfo {
         this.noteInfo = noteInfo;
     }
 
-    public List<DiaryDetail> getDiarys() {
+    public List<NoteDetail> getDiarys() {
         return diarys;
     }
 
-    public void setDiarys(List<DiaryDetail> diarys) {
+    public void setDiarys(List<NoteDetail> diarys) {
         this.diarys = diarys;
     }
 }

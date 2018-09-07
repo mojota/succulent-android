@@ -160,8 +160,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private void initFragment() {
         mFragmentList = new ArrayList<>();
         mFragmentList.add(MyGardenFragment.newInstance("", ""));
-        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
         mFragmentList.add(MomentsFragment.newInstance("", ""));
+        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
     }
 
     @Override
@@ -183,10 +183,10 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 case R.id.nav_my:
                     mVpMain.setCurrentItem(0);
                     return true;
-                case R.id.nav_encyclopedia:
+                case R.id.nav_moments:
                     mVpMain.setCurrentItem(1);
                     return true;
-                case R.id.nav_moments:
+                case R.id.nav_encyclopedia:
                     mVpMain.setCurrentItem(2);
                     return true;
             }

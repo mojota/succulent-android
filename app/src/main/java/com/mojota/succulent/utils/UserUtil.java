@@ -1,5 +1,7 @@
 package com.mojota.succulent.utils;
 
+import android.text.TextUtils;
+
 import com.mojota.succulent.model.UserInfo;
 
 /**
@@ -51,5 +53,12 @@ public class UserUtil {
      */
     public static String getCurrentUserId() {
         return mSp.getString(KeyConstants.KEY_USER_ID);
+    }
+
+    public static boolean isLogin() {
+        if (!TextUtils.isEmpty(getCurrentUserId())) {
+            return true;
+        }
+        return false;
     }
 }

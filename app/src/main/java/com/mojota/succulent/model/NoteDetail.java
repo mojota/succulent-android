@@ -6,21 +6,21 @@ import java.util.ArrayList;
  * 笔记详情item结构
  * Created by mojota on 18-8-14.
  */
-public class DiaryDetail extends BaseBean {
+public class NoteDetail extends BaseBean {
 
     private static final long serialVersionUID = 1L;
 
-    String diaryId;//id
+    String detailId;//id
     String content;// 笔记内容
     String createTime;// 记录时间
     ArrayList<String> picUrls; // 图片地址们
 
-    public String getDiaryId() {
-        return diaryId;
+    public String getDetailId() {
+        return detailId;
     }
 
-    public void setDiaryId(String diaryId) {
-        this.diaryId = diaryId;
+    public void setDetailId(String detailId) {
+        this.detailId = detailId;
     }
 
     public String getContent() {

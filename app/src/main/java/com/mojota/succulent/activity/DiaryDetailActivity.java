@@ -10,7 +10,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,15 +22,18 @@ import com.google.gson.Gson;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.DiaryDetailAdapter;
-import com.mojota.succulent.model.DiaryDetail;
+import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.model.DiarysResponseInfo;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
-import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 笔记详情
@@ -45,10 +47,11 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private RecyclerView mRvDiarys;
     private FloatingActionButton mFabAdd;
     private DiaryDetailAdapter mDetailAdapter;
-    private List<DiaryDetail> mList = new ArrayList<DiaryDetail>();
+    private List<NoteDetail> mList = new ArrayList<NoteDetail>();
     private NoteInfo mNoteInfo;
     private MenuItem mActionPermission;
     private MenuItem mActivonEditTitle;
+    private int mNewPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         mFabAdd.setOnClickListener(this);
 
         mNoteInfo = (NoteInfo) getIntent().getSerializableExtra(KEY_DIARY);
+        mNewPermission = mNoteInfo.getPermission();
         getSupportActionBar().setTitle(mNoteInfo.getNoteTitle());
 
         getData();
@@ -118,12 +122,8 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                 supportFinishAfterTransition();
                 return true;
             case R.id.action_permission:
-                if (mNoteInfo.getPermission() == 1) {
-                    mNoteInfo.setPermission(0);
-                } else {
-                    mNoteInfo.setPermission(1);
-                }
-                setPermissionMemu();
+                mNewPermission = mNoteInfo.getPermission() == 1 ? 0 : 1;
+                submitPermission(mNewPermission);
                 return true;
             case R.id.action_edit_title:
                 showEditDialog();
@@ -136,9 +136,10 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private void showEditDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.layout_title, null);
         final EditText etTitle = view.findViewById(R.id.et_title);
+        etTitle.setError(null);
         etTitle.setText(mNoteInfo.getNoteTitle());
-        final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.str_edit_title)
-                .setView(view).setPositiveButton(R.string.str_edit_submit, null)
+        final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string
+                .str_edit_title).setView(view).setPositiveButton(R.string.str_edit_submit, null)
                 .setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -155,7 +156,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                     submitTitle(etTitle.getText().toString());
                     dialog.dismiss();
                 } else {
-                    GlobalUtil.makeToast("标题不可以为空");
+                    etTitle.setError("标题不可以为空");
                 }
             }
         });
@@ -165,7 +166,31 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
      * 修改标题请求
      */
     private void submitTitle(String title) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", mNoteInfo.getNoteId());
+        map.put("noteTitle", title);
+        requestSubmit(UrlConstants.NOTE_TITLE_EDIT_URL, map, CodeConstants.REQUEST_NOTE_TITLE_EDIT);
+    }
 
+    /**
+     * 修改权限请求
+     */
+    private void submitPermission(int permission) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", mNoteInfo.getNoteId());
+        map.put("permission", String.valueOf(permission));
+        requestSubmit(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
+                .REQUEST_PERMISSION_CHANGE);
+    }
+
+    @Override
+    protected void onRequestSuccess(int requestCode) {
+        if (requestCode == CodeConstants.REQUEST_PERMISSION_CHANGE) {
+            mNoteInfo.setPermission(mNewPermission);
+            setPermissionMemu();
+        }
     }
 
     @Override
@@ -173,6 +198,8 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         switch (v.getId()) {
             case R.id.fab_add:
                 Intent intent = new Intent(this, DiaryAddActivity.class);
+                intent.putExtra(DiaryAddActivity.KEY_MODE, CodeConstants.NOTE_DETAIL_ADD);
+                intent.putExtra(DiaryAddActivity.KEY_NOTE_ID, mNoteInfo.getNoteId());
                 intent.putExtra(DiaryAddActivity.KEY_TITLE, mNoteInfo.getNoteTitle());
                 startActivityForResult(intent, CodeConstants.REQUEST_ADD);
                 break;
@@ -191,34 +218,35 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     }
 
     @Override
-    public void onImageClick(ImageView view, String title, ArrayList<String> picUrls, int
-            picPos) {
+    public void onImageClick(ImageView view, String title, ArrayList<String> picUrls, int picPos) {
         ActivityUtil.startImageBrowserActivity(this, view, title, picUrls, picPos);
     }
 
     @Override
-    public void onEdit(DiaryDetail diary) {
+    public void onEdit(NoteDetail diary) {
         Intent intent = new Intent(this, DiaryAddActivity.class);
+        intent.putExtra(DiaryAddActivity.KEY_MODE, CodeConstants.NOTE_DETAIL_EDIT);
+        intent.putExtra(DiaryAddActivity.KEY_NOTE_ID, mNoteInfo.getNoteId());
         intent.putExtra(DiaryAddActivity.KEY_TITLE, mNoteInfo.getNoteTitle());
         intent.putExtra(DiaryAddActivity.KEY_DIARY, diary);
         startActivityForResult(intent, CodeConstants.REQUEST_EDIT);
     }
 
     @Override
-    public void onDelete(final DiaryDetail diary, final int position) {
+    public void onDelete(final NoteDetail diary, final int position) {
         deleteData(position);
     }
 
     private void deleteData(final int position) {
-        final DiaryDetail diaryDetail = mList.get(position);
+        final NoteDetail noteDetail = mList.get(position);
         mList.remove(position);
         mDetailAdapter.notifyItemRemoved(position);
         mDetailAdapter.notifyItemRangeChanged(0, mList.size());
-        Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string
-                .str_undo, new View.OnClickListener() {
+        Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mList.add(position, diaryDetail);
+                mList.add(position, noteDetail);
                 mDetailAdapter.notifyItemInserted(position);
                 mDetailAdapter.notifyItemRangeChanged(0, mList.size());
             }
@@ -230,7 +258,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                     case Snackbar.Callback.DISMISS_EVENT_MANUAL:
                     case Snackbar.Callback.DISMISS_EVENT_SWIPE:
                     case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-                        requestDelete(diaryDetail);
+                        requestDelete(noteDetail);
                         break;
                     case Snackbar.Callback.DISMISS_EVENT_ACTION:
                         break;
@@ -242,7 +270,11 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     /**
      * 请求网络删除
      */
-    private void requestDelete(DiaryDetail diaryDetail) {
-
+    private void requestDelete(NoteDetail noteDetail) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("detailId", noteDetail.getDetailId());
+        requestSubmit(UrlConstants.NOTE_DETAIL_DELETE_URL, map, CodeConstants
+                .REQUEST_NOTE_DETAIL_DELETE);
     }
 }
