@@ -31,9 +31,9 @@ public class CodeConstants {
         REQUEST_MAP.put(REQUEST_DIARY_DETAIL_ADD, "添加笔记条目");
         REQUEST_MAP.put(REQUEST_DIARY_DETAIL_EDIT, "编辑笔记条目");
         REQUEST_MAP.put(REQUEST_NOTE_TITLE_EDIT, "修改标题");
-        REQUEST_MAP.put(REQUEST_PERMISSION_CHANGE, "");
+        REQUEST_MAP.put(REQUEST_PERMISSION_CHANGE, "修改可见范围");
         REQUEST_MAP.put(REQUEST_NOTE_DETAIL_DELETE, "");
-        REQUEST_MAP.put(REQUEST_NOTE_DELETE, "删除笔记");
+        REQUEST_MAP.put(REQUEST_NOTE_DELETE, "");
     }
 
 

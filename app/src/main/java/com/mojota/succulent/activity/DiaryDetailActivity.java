@@ -27,6 +27,7 @@ import com.mojota.succulent.model.DiarysResponseInfo;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
@@ -170,7 +171,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("noteId", mNoteInfo.getNoteId());
         map.put("noteTitle", title);
-        requestSubmit(UrlConstants.NOTE_TITLE_EDIT_URL, map, CodeConstants.REQUEST_NOTE_TITLE_EDIT);
+        loadingRequestSubmit(UrlConstants.NOTE_TITLE_EDIT_URL, map, CodeConstants.REQUEST_NOTE_TITLE_EDIT);
     }
 
     /**
@@ -181,12 +182,13 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("noteId", mNoteInfo.getNoteId());
         map.put("permission", String.valueOf(permission));
-        requestSubmit(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
+        loadingRequestSubmit(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
                 .REQUEST_PERMISSION_CHANGE);
     }
 
     @Override
-    protected void onRequestSuccess(int requestCode) {
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
         if (requestCode == CodeConstants.REQUEST_PERMISSION_CHANGE) {
             mNoteInfo.setPermission(mNewPermission);
             setPermissionMemu();
@@ -274,7 +276,8 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         Map<String, String> map = new HashMap<String, String>();
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("detailId", noteDetail.getDetailId());
-        requestSubmit(UrlConstants.NOTE_DETAIL_DELETE_URL, map, CodeConstants
-                .REQUEST_NOTE_DETAIL_DELETE);
+
+        RequestUtils.commonRequest(UrlConstants.NOTE_DETAIL_DELETE_URL, map, CodeConstants
+                .REQUEST_NOTE_DETAIL_DELETE, null);
     }
 }

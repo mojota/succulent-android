@@ -137,7 +137,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("content", content);
                     map.put("noteType", "1");
                     map.put("strPicUrls", picUrls);
-                    requestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
+                    loadingRequestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
                 }
                 break;
             case CodeConstants.NOTE_DETAIL_ADD:
@@ -149,7 +149,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("noteId", mNoteId);
                     map.put("content", content);
                     map.put("strPicUrls", picUrls);
-                    requestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map, CodeConstants
+                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map, CodeConstants
                             .REQUEST_DIARY_DETAIL_ADD);
                 }
                 break;
@@ -162,14 +162,15 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("detailId", mDetailId);
                     map.put("content", content);
                     map.put("strPicUrls", picUrls);
-                    requestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map, CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
+                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map, CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
                 }
                 break;
         }
     }
 
     @Override
-    protected void onRequestSuccess(int requestCode) {
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
         setResult(CodeConstants.RESULT_REFRESH);
         finish();
     }

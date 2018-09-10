@@ -27,10 +27,14 @@ import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 多肉成长记
@@ -97,8 +101,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private void getData() {
 
         mSwipeRefresh.setRefreshing(false);
-        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(),
-                NoteResponseInfo.class);
+        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(), NoteResponseInfo
+                .class);
         mList = resInfo.getList();
 
         setDataToView();
@@ -114,9 +118,9 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_add_my:
-                if (UserUtil.isLogin()){
+                if (UserUtil.isLogin()) {
                     Intent intent = new Intent(getActivity(), DiaryAddActivity.class);
-                    intent.putExtra(DiaryAddActivity.KEY_MODE,CodeConstants.NOTE_ADD);
+                    intent.putExtra(DiaryAddActivity.KEY_MODE, CodeConstants.NOTE_ADD);
                     startActivityForResult(intent, CodeConstants.REQUEST_ADD);
                 } else {
                     ActivityUtil.startLoginActivity(getActivity());
@@ -156,8 +160,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     @Override
     public void onItemLongclick(final int position) {
         String[] items = {"删除"};
-        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface
-                .OnClickListener() {
+        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface.OnClickListener
+                () {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
@@ -169,8 +173,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     }
 
     private void deleteItem(final int position, String title) {
-        new AlertDialog.Builder(getContext()).setTitle("确认删除" + title + "?")
-                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getContext()).setTitle("确认删除" + title + "?").setPositiveButton
+                ("删除", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -186,8 +190,23 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     }
 
     private void deleteData(int position) {
+        NoteInfo note = mList.get(position);
         mList.remove(position);
         mDiaryAdapter.notifyItemRemoved(position);
         mDiaryAdapter.notifyItemRangeChanged(0, mList.size());
+
+        requestDelete(note);
+    }
+
+    /**
+     * 请求网络删除
+     */
+    private void requestDelete(NoteInfo note) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+
+        RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
+                .REQUEST_NOTE_DELETE, null);
     }
 }
