@@ -9,13 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.mojota.succulent.activity.DiaryAddActivity;
 import com.mojota.succulent.R;
@@ -25,11 +28,18 @@ import com.mojota.succulent.adapter.GrowthDiaryAdapter;
 import com.mojota.succulent.adapter.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
+import com.mojota.succulent.network.GsonPostRequest;
+import com.mojota.succulent.network.VolleyErrorListener;
+import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
+import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
+import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,18 +52,21 @@ import java.util.Map;
  */
 public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener,
-        OnItemLongclickListener {
+        OnItemLongclickListener, LoadMoreRecyclerView.OnLoadListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final int PAGE_SIZE = 10; // 每页的条数
     private String mParam1;
     private String mParam2;
     private SwipeRefreshLayout mSwipeRefresh;
-    private RecyclerView mRvDiary;
+    private LoadMoreRecyclerView mRvDiary;
     private FloatingActionButton mFabAdd;
     private GrowthDiaryAdapter mDiaryAdapter;
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
+    private int mPage = 0;
+    private WrapRecycleAdapter mWrapAdapter;
 
 
     public GrowthDiaryFragment() {
@@ -87,31 +100,74 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvDiary = view.findViewById(R.id.rv_my_diary);
+        final GridLayoutManager glm = (GridLayoutManager) mRvDiary.getLayoutManager();
+        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return (mWrapAdapter.getItemViewType(position) == WrapRecycleAdapter.TYPE_FOOTER)
+                        ? glm.getSpanCount() : 1;
+            }
+        });
         mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
         mDiaryAdapter.setOnItemClickListener(this);
         mDiaryAdapter.setOnItemLongcickListener(this);
-        mRvDiary.setAdapter(mDiaryAdapter);
+        mWrapAdapter = new WrapRecycleAdapter(mDiaryAdapter);
+        mRvDiary.setAdapter(mWrapAdapter);
+        mRvDiary.setOnLoadListener(this);
         mFabAdd = view.findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(this);
 
-        getData();
+        onRefresh();
         return view;
     }
 
-    private void getData() {
+    private void getData(final int page) {
+        String url = UrlConstants.GET_NOTE_LIST_URL;
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userId", UserUtil.getCurrentUserId());
+        paramMap.put("noteType", "1");
+        paramMap.put("size", String.valueOf(PAGE_SIZE));
+        String updateTime = "";
+        if (page > 0) {
+            if (mList != null && mList.size() > 0) {
+                updateTime = mList.get(mList.size() - 1).getUpdateTime();
+            }
+        }
+        paramMap.put("updateTime", updateTime);
+        GsonPostRequest request = new GsonPostRequest(url, null, paramMap, NoteResponseInfo
+                .class, new Response.Listener<NoteResponseInfo>() {
 
-        mSwipeRefresh.setRefreshing(false);
-        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiaryList(), NoteResponseInfo
-                .class);
-        mList = resInfo.getList();
-
-        setDataToView();
+            @Override
+            public void onResponse(NoteResponseInfo responseInfo) {
+                mSwipeRefresh.setRefreshing(false);
+                if (responseInfo != null && "0".equals(responseInfo.getCode())) {
+                    if (page == 0) {
+                        mList.clear();
+                    }
+                    List<NoteInfo> list = responseInfo.getList();
+                    mList.addAll(list);
+                    setDataToView();
+                    mRvDiary.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
+                } else {
+                    mRvDiary.loadMoreFailed();
+                    GlobalUtil.makeToast(R.string.str_no_data);
+                }
+            }
+        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
+            @Override
+            public void onError(String error) {
+                mSwipeRefresh.setRefreshing(false);
+                mRvDiary.loadMoreFailed();
+                GlobalUtil.makeToast(R.string.str_network_error);
+            }
+        }));
+        VolleyUtil.execute(request);
     }
 
 
     private void setDataToView() {
         mDiaryAdapter.setList(mList);
-        mDiaryAdapter.notifyDataSetChanged();
+        mWrapAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -131,7 +187,16 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRefresh() {
-        getData();
+        mPage = 0;
+        getData(mPage);
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (mRvDiary.isLoadSuccess()) { // 若上次失败页码不再变化
+            mPage++;
+        }
+        getData(mPage);
     }
 
     @Override
@@ -139,13 +204,15 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CodeConstants.REQUEST_ADD:
-                if (resultCode == CodeConstants.RESULT_ADD) {
-                    getData();
+                if (resultCode == CodeConstants.RESULT_REFRESH) {
+                    onRefresh();
+                    mRvDiary.smoothScrollToPosition(0);
                 }
                 break;
             case CodeConstants.REQUEST_DETAIL:
-                if (resultCode == CodeConstants.RESULT_DETAIL) {
-                    getData();
+                if (resultCode == CodeConstants.RESULT_REFRESH) {
+                    onRefresh();
+                    mRvDiary.smoothScrollToPosition(0);
                 }
                 break;
 
@@ -192,8 +259,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private void deleteData(int position) {
         NoteInfo note = mList.get(position);
         mList.remove(position);
-        mDiaryAdapter.notifyItemRemoved(position);
-        mDiaryAdapter.notifyItemRangeChanged(0, mList.size());
+        mWrapAdapter.notifyItemRemoved(position);
+        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
 
         requestDelete(note);
     }
@@ -209,4 +276,5 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
                 .REQUEST_NOTE_DELETE, null);
     }
+
 }

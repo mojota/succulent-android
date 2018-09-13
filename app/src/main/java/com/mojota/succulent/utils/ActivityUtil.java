@@ -14,6 +14,7 @@ import com.mojota.succulent.activity.LoginActivity;
 import com.mojota.succulent.model.NoteInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mojota on 18-8-16.
@@ -21,13 +22,13 @@ import java.util.ArrayList;
 public class ActivityUtil {
 
     public static void startImageBrowserActivity(Activity activity, View view, String
-            title, ArrayList<String> picUrls, int picPos) {
+            title, List<String> picUrls, int picPos) {
         String transitionName = String.valueOf(picPos);
         view.setTransitionName(transitionName);
         Intent intent = new Intent(activity, ImageBrowserActivity.class);
         intent.putExtra(ImageBrowserActivity.KEY_TITLE, title);
         intent.putExtra(ImageBrowserActivity.KEY_PIC_POS, picPos);
-        intent.putStringArrayListExtra(ImageBrowserActivity.KEY_PIC_URLS, picUrls);
+        intent.putStringArrayListExtra(ImageBrowserActivity.KEY_PIC_URLS, (ArrayList<String>) picUrls);
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
                 (activity, view, view.getTransitionName());

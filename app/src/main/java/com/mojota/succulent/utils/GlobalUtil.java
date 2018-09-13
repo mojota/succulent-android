@@ -25,7 +25,9 @@ import com.mojota.succulent.SucculentApplication;
 import com.mojota.succulent.view.CenterCropRoundedCorners;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 通用工具类
@@ -232,6 +234,7 @@ public class GlobalUtil {
     }
 
 
+
     /**
      * 放大动画
      */
@@ -257,4 +260,13 @@ public class GlobalUtil {
     }
 
 
+    /**
+     * 以;分隔字符串
+     */
+    public static List<String> getStringList(String str) {
+        if (!TextUtils.isEmpty(str)){
+            return Arrays.asList(str.split(";"));
+        }
+        return null;
+    }
 }

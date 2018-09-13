@@ -1,7 +1,5 @@
 package com.mojota.succulent.model;
 
-import java.util.ArrayList;
-
 /**
  * 笔记详情item结构
  * Created by mojota on 18-8-14.
@@ -13,7 +11,7 @@ public class NoteDetail extends BaseBean {
     String detailId;//id
     String content;// 笔记内容
     String createTime;// 记录时间
-    ArrayList<String> picUrls; // 图片地址们
+    String picUrls; // 图片地址们
 
     public String getDetailId() {
         return detailId;
@@ -39,11 +37,11 @@ public class NoteDetail extends BaseBean {
         this.createTime = createTime;
     }
 
-    public ArrayList<String> getPicUrls() {
+    public String getPicUrls() {
         return picUrls;
     }
 
-    public void setPicUrls(ArrayList<String> picUrls) {
+    public void setPicUrls(String picUrls) {
         this.picUrls = picUrls;
     }
 }

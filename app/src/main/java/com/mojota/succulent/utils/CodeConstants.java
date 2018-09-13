@@ -20,8 +20,9 @@ public class CodeConstants {
     public static final int REQUEST_DIARY_DETAIL_EDIT = 1002;
     public static final int REQUEST_NOTE_TITLE_EDIT = 1003;
     public static final int REQUEST_PERMISSION_CHANGE = 1004;
-    public static final int REQUEST_NOTE_DETAIL_DELETE = 1005;
-    public static final int REQUEST_NOTE_DELETE = 1006;
+    public static final int REQUEST_LIKE = 1005;
+    public static final int REQUEST_NOTE_DETAIL_DELETE = 1006;
+    public static final int REQUEST_NOTE_DELETE = 1007;
 
 
     public static final Map<Integer, String> REQUEST_MAP = new HashMap<>();
@@ -32,6 +33,7 @@ public class CodeConstants {
         REQUEST_MAP.put(REQUEST_DIARY_DETAIL_EDIT, "编辑笔记条目");
         REQUEST_MAP.put(REQUEST_NOTE_TITLE_EDIT, "修改标题");
         REQUEST_MAP.put(REQUEST_PERMISSION_CHANGE, "修改可见范围");
+        REQUEST_MAP.put(REQUEST_LIKE, "");
         REQUEST_MAP.put(REQUEST_NOTE_DETAIL_DELETE, "");
         REQUEST_MAP.put(REQUEST_NOTE_DELETE, "");
     }

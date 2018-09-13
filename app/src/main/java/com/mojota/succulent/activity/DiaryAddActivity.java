@@ -19,6 +19,7 @@ import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,9 +79,10 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
             if (!TextUtils.isEmpty(diary.getContent())) {
                 mEtBody.setText(diary.getContent());
             }
-            if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                for (int i = 0; i < diary.getPicUrls().size(); i++) {
-                    RequestBuilder<Drawable> rb = Glide.with(this).load(diary.getPicUrls().get(i));
+            List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
+            if (pics != null && pics.size() > 0) {
+                for (int i = 0; i < pics.size(); i++) {
+                    RequestBuilder<Drawable> rb = Glide.with(this).load(pics.get(i));
                     if (i == 0) {
                         rb.into(mIbtPic1);
                     } else {
@@ -136,7 +138,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("noteTitle", title);
                     map.put("content", content);
                     map.put("noteType", "1");
-                    map.put("strPicUrls", picUrls);
+                    map.put("picUrls", picUrls);
                     loadingRequestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
                 }
                 break;
@@ -148,7 +150,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("userId", UserUtil.getCurrentUserId());
                     map.put("noteId", mNoteId);
                     map.put("content", content);
-                    map.put("strPicUrls", picUrls);
+                    map.put("picUrls", picUrls);
                     loadingRequestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map, CodeConstants
                             .REQUEST_DIARY_DETAIL_ADD);
                 }
@@ -161,7 +163,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("userId", UserUtil.getCurrentUserId());
                     map.put("detailId", mDetailId);
                     map.put("content", content);
-                    map.put("strPicUrls", picUrls);
+                    map.put("picUrls", picUrls);
                     loadingRequestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map, CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
                 }
                 break;

@@ -220,7 +220,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     }
 
     @Override
-    public void onImageClick(ImageView view, String title, ArrayList<String> picUrls, int picPos) {
+    public void onImageClick(ImageView view, String title, List<String> picUrls, int picPos) {
         ActivityUtil.startImageBrowserActivity(this, view, title, picUrls, picPos);
     }
 

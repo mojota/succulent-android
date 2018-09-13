@@ -2,6 +2,7 @@ package com.mojota.succulent.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,6 +12,11 @@ import android.widget.ImageButton;
 import com.mojota.succulent.R;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 添加造景后花园
@@ -32,7 +38,6 @@ public class LandscapingAddActivity extends PhotoChooseSupportActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landscaping_add);
-
 
         mBtClose = findViewById(R.id.bt_close);
         mBtClose.setOnClickListener(this);
@@ -77,10 +82,36 @@ public class LandscapingAddActivity extends PhotoChooseSupportActivity implement
                 showPicDialog(mIbtPic4, null);
                 break;
             case R.id.bt_commit:
-                setResult(CodeConstants.RESULT_ADD);
-                finish();
+                submit();
                 break;
         }
 
+    }
+
+    /**
+     * 提交请求
+     */
+    private void submit() {
+        String title = mEtTitle.getText().toString();
+        int permission = mCbPermission.isChecked() ? 1 : 0;
+        String picUrls = "";
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(picUrls)) {
+            GlobalUtil.makeToast("提交内容为空");
+        } else {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", UserUtil.getCurrentUserId());
+            map.put("noteType", "2");
+            map.put("permission", String.valueOf(permission));
+            map.put("noteTitle", title);
+            map.put("picUrls", picUrls);
+            loadingRequestSubmit(UrlConstants.NOTE_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
+        }
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        setResult(CodeConstants.RESULT_REFRESH);
+        finish();
     }
 }

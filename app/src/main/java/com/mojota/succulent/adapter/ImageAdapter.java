@@ -14,6 +14,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.utils.ActivityUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mojota on 18-8-27.
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
 
-    private final ArrayList<String> mPicUrls;
+    private final List<String> mPicUrls;
     private final String mTitle;
     private final Context mContext;
     private final RequestOptions mRequestOptions;
@@ -35,7 +36,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         }
     }
 
-    public ImageAdapter(Context context, ArrayList<String> picUrls, String title, RequestOptions requestOptions) {
+    public ImageAdapter(Context context, List<String> picUrls, String title, RequestOptions requestOptions) {
         mPicUrls = picUrls;
         mTitle = title;
         mContext = context;

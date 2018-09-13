@@ -126,8 +126,8 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         mContext = parent.getContext();
         BaseViewHolder viewHolder = null;
         if (viewType == CodeConstants.TYPE_LANDSCAPE) {
-            viewHolder = new LandscapeViewHolder(LayoutInflater.from(mContext).inflate(R
-                    .layout.item_moment_landscape, parent, false));
+            viewHolder = new LandscapeViewHolder(LayoutInflater.from(mContext).inflate(R.layout
+                    .item_moment_landscape, parent, false));
         } else if (viewType == CodeConstants.TYPE_DIARY) {
             viewHolder = new DiaryViewHolder(LayoutInflater.from(mContext).inflate(R.layout
                     .item_moment_diary, parent, false));
@@ -143,8 +143,8 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
 //            Glide.with(mContext).load(noteInfo.getUserInfo().getAvatarUrl()).apply
 //                    (mAvatarOptions).into(holder.ivAvatar);
             final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
-            Glide.with(mContext).asBitmap().load(noteInfo.getUserInfo().getAvatarUrl())
-                    .apply(mAvatarOptions).into(new SimpleTarget<Bitmap>() {
+            Glide.with(mContext).asBitmap().load(noteInfo.getUserInfo().getAvatarUrl()).apply
+                    (mAvatarOptions).into(new SimpleTarget<Bitmap>() {
 
                 @Override
                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
@@ -156,14 +156,13 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                         public void onGenerated(Palette palette) {
                             colors[2] = palette.getDarkVibrantColor(0xffff9800);
 
-                            Drawable bgDrawable = new GradientDrawable(GradientDrawable.Orientation
-                                    .LEFT_RIGHT, colors);
+                            Drawable bgDrawable = new GradientDrawable(GradientDrawable
+                                    .Orientation.LEFT_RIGHT, colors);
                             holder.mLayoutBar.setBackground(bgDrawable);
                         }
                     });
                 }
             });
-
 
 
             holder.tvRegion.setText(noteInfo.getUserInfo().getRegion());
@@ -174,20 +173,20 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
             holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
             holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
             holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
-            holder.tbLike.setChecked(noteInfo.getHasLike() == 1);
+            holder.tbLike.setChecked(noteInfo.getIsLike() == 1);
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int likeCount = noteInfo.getLikeCount();
                     if (holder.tbLike.isChecked()) {
                         noteInfo.setLikeCount(likeCount + 1);
-                        noteInfo.setHasLike(1);
+                        noteInfo.setIsLike(1);
                         holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
                     } else {
                         noteInfo.setLikeCount(likeCount - 1);
-                        noteInfo.setHasLike(0);
+                        noteInfo.setIsLike(0);
                         holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
@@ -210,26 +209,27 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
 
             if (noteInfo.getNoteType() == 2) {
                 // 笔记类型标识
-                holder.ivNoteType.setImageTintList(ColorStateList.valueOf(ContextCompat
-                        .getColor(mContext, R.color.red)));
+                holder.ivNoteType.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor
+                        (mContext, R.color.red)));
                 holder.ivNoteType.setImageResource(R.mipmap.ic_type_landscape);
 
                 // 图
-                if (noteInfo.getPicUrls() != null) {
-                    ((LandscapeViewHolder) holder).rvPics.setAdapter(new ImageAdapter
-                            (mContext, noteInfo.getPicUrls(), noteInfo.getNoteTitle(),
-                                    mRoundedCornersOptions));
+                List<String> pics = GlobalUtil.getStringList(noteInfo.getPicUrls());
+                if (pics != null) {
+                    ((LandscapeViewHolder) holder).rvPics.setAdapter(new ImageAdapter(mContext,
+                            pics, noteInfo.getNoteTitle(), mRoundedCornersOptions));
                 }
             } else if (noteInfo.getNoteType() == 1) {
                 // 笔记类型标识
-                holder.ivNoteType.setImageTintList(ColorStateList.valueOf(ContextCompat
-                        .getColor(mContext, R.color.lemon)));
+                holder.ivNoteType.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor
+                        (mContext, R.color.lemon)));
                 holder.ivNoteType.setImageResource(R.mipmap.ic_type_diary);
 
                 // 封面图
-                if (noteInfo.getPicUrls() != null && noteInfo.getPicUrls().size() > 0) {
-                    Glide.with(mContext).load(noteInfo.getPicUrls().get(0)).apply
-                            (mDefaultOptions).into(holder.ivPic);
+                List<String> pics = GlobalUtil.getStringList(noteInfo.getPicUrls());
+                if (pics != null && pics.size() > 0) {
+                    Glide.with(mContext).load(pics.get(0)).apply(mDefaultOptions).into(holder
+                            .ivPic);
                 }
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

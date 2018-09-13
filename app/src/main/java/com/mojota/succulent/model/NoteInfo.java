@@ -1,8 +1,5 @@
 package com.mojota.succulent.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 笔记通用结构
  * Created by mojota on 18-7-24.
@@ -17,8 +14,8 @@ public class NoteInfo extends BaseBean {
     String updateTime;// 更新时间
     int permission; // 0保密 1公开
     int likeCount; // 赞数
-    int hasLike; // 0未赞 1已赞
-    ArrayList<String> picUrls; // 封面图片地址们
+    int isLike; // 0未赞 1已赞
+    String picUrls; // 封面图片地址们
     int noteType; // 笔记类型 1-成长笔记 2-造景
 
     public UserInfo getUserInfo() {
@@ -69,19 +66,19 @@ public class NoteInfo extends BaseBean {
         this.likeCount = likeCount;
     }
 
-    public int getHasLike() {
-        return hasLike;
+    public int getIsLike() {
+        return isLike;
     }
 
-    public void setHasLike(int hasLike) {
-        this.hasLike = hasLike;
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
     }
 
-    public ArrayList<String> getPicUrls() {
+    public String getPicUrls() {
         return picUrls;
     }
 
-    public void setPicUrls(ArrayList<String> picUrls) {
+    public void setPicUrls(String picUrls) {
         this.picUrls = picUrls;
     }
 

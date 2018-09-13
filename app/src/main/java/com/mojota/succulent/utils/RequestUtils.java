@@ -56,9 +56,9 @@ public class RequestUtils {
                     if (requestListener != null) {
                         requestListener.onRequestSuccess(requestCode);
                     }
-                    if (!TextUtils.isEmpty(requestName)){
-                        GlobalUtil.makeToast(requestName + "成功");
-                    }
+//                    if (!TextUtils.isEmpty(requestName)){
+//                        GlobalUtil.makeToast(requestName + "成功");
+//                    }
                 }
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {

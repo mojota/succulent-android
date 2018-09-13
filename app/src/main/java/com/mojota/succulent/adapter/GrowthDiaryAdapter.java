@@ -1,6 +1,7 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mojota on 18-7-24.
@@ -36,7 +43,7 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView ivPic;
         private final TextView tvTitle;
-//        private final TextView tvTime;
+        //        private final TextView tvTime;
         private final ToggleButton tbLike;
         private final ToggleButton tbPermission;
 
@@ -80,8 +87,8 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R
-                .layout.item_diary, parent, false));
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
+                .item_diary, parent, false));
         return viewHolder;
     }
 
@@ -95,24 +102,27 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
             holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
             holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
-            holder.tbLike.setChecked(diary.getHasLike() == 1);
+            holder.tbLike.setChecked(diary.getIsLike() == 1);
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int likeCount = diary.getLikeCount();
                     if (holder.tbLike.isChecked()) {
                         diary.setLikeCount(likeCount + 1);
-                        diary.setHasLike(1);
+                        diary.setIsLike(1);
+                        requestLike(diary, 1);
                         holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
                     } else {
                         diary.setLikeCount(likeCount - 1);
-                        diary.setHasLike(0);
+                        diary.setIsLike(0);
+                        requestLike(diary, 0);
                         holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
                     }
+
                 }
             });
 
@@ -120,17 +130,19 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             holder.tbPermission.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int newPermission = 0;
                     if (holder.tbPermission.isChecked()) {
-                        diary.setPermission(1);
+                        newPermission = 1;
                     } else {
-                        diary.setPermission(0);
+                        newPermission = 0;
                     }
+                    requestPermission(diary, newPermission, holder.tbPermission);
                 }
             });
 
-            if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                Glide.with(mContext).load(diary.getPicUrls().get(0)).apply(mRequestOptions)
-                        .into(holder.ivPic);
+            List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
+            if (pics != null && pics.size() > 0) {
+                Glide.with(mContext).load(pics.get(0)).apply(mRequestOptions).into(holder.ivPic);
             }
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -154,5 +166,42 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     }
 
+    /**
+     * 请求网络赞
+     */
+    private void requestLike(NoteInfo note, int isLike) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        map.put("isLike", String.valueOf(isLike));
+        RequestUtils.commonRequest(UrlConstants.NOTE_LIKE_URL, map, CodeConstants.REQUEST_LIKE,
+                null);
+    }
+
+
+    /**
+     * 请求网络修改权限
+     */
+    private void requestPermission(final NoteInfo note, final int newPermission, final ToggleButton tbPermission) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        map.put("permission", String.valueOf(newPermission));
+        RequestUtils.commonRequest(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
+                .REQUEST_PERMISSION_CHANGE, new RequestUtils.RequestListener() {
+
+            @Override
+            public void onRequestSuccess(int requestCode) {
+                note.setPermission(newPermission);
+            }
+
+            @Override
+            public void onRequestFailure(int requestCode) {
+                int oldPermission = note.getPermission();
+                note.setPermission(oldPermission);
+                tbPermission.setChecked(oldPermission == 1);
+            }
+        });
+    }
 
 }

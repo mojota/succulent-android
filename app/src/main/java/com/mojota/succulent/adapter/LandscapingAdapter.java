@@ -11,9 +11,15 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mojota on 18-8-3.
@@ -86,7 +92,7 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
             holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
             holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
             holder.tbLike.setText(String.valueOf(note.getLikeCount()));
-            holder.tbLike.setChecked(note.getHasLike() == 1);
+            holder.tbLike.setChecked(note.getIsLike() == 1);
 
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,13 +100,15 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
                     int likeCount = note.getLikeCount();
                     if (holder.tbLike.isChecked()) {
                         note.setLikeCount(likeCount + 1);
-                        note.setHasLike(1);
+                        note.setIsLike(1);
+                        requestLike(note, 1);
                         holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(note.getLikeCount()));
                     } else {
                         note.setLikeCount(likeCount - 1);
-                        note.setHasLike(0);
+                        note.setIsLike(0);
+                        requestLike(note, 0);
                         holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
                         holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
                         holder.tbLike.setText(String.valueOf(note.getLikeCount()));
@@ -112,17 +120,20 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
             holder.tbPermission.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int newPermission = 0;
                     if (holder.tbPermission.isChecked()) {
-                        note.setPermission(1);
+                        newPermission = 1;
                     } else {
-                        note.setPermission(0);
+                        newPermission = 0;
                     }
+                    requestPermission(note, newPermission, holder.tbPermission);
                 }
             });
 
             // 图
+            List<String> pics = GlobalUtil.getStringList(note.getPicUrls());
             if (note.getPicUrls() != null) {
-                holder.rvPics.setAdapter(new ImageAdapter(mContext, note.getPicUrls(), note
+                holder.rvPics.setAdapter(new ImageAdapter(mContext, pics, note
                         .getNoteTitle(), mRoundedCornersOptions));
             }
 
@@ -137,6 +148,45 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
             });
         }
 
+    }
+
+
+    /**
+     * 请求网络赞
+     */
+    private void requestLike(NoteInfo note, int isLike) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        map.put("isLike", String.valueOf(isLike));
+        RequestUtils.commonRequest(UrlConstants.NOTE_LIKE_URL, map, CodeConstants.REQUEST_LIKE,
+                null);
+    }
+
+
+    /**
+     * 请求网络修改权限
+     */
+    private void requestPermission(final NoteInfo note, final int newPermission, final ToggleButton tbPermission) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        map.put("permission", String.valueOf(newPermission));
+        RequestUtils.commonRequest(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
+                .REQUEST_PERMISSION_CHANGE, new RequestUtils.RequestListener() {
+
+            @Override
+            public void onRequestSuccess(int requestCode) {
+                note.setPermission(newPermission);
+            }
+
+            @Override
+            public void onRequestFailure(int requestCode) {
+                int oldPermission = note.getPermission();
+                note.setPermission(oldPermission);
+                tbPermission.setChecked(oldPermission == 1);
+            }
+        });
     }
 
 }

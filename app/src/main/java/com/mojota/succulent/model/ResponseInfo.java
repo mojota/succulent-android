@@ -9,6 +9,7 @@ public class ResponseInfo extends BaseBean {
 
     private String code;
     private String msg;
+    private PageInfo pageInfo;
 
     public String getCode() {
         return code;
@@ -24,5 +25,13 @@ public class ResponseInfo extends BaseBean {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public PageInfo getPageInfo() {
+        return pageInfo;
+    }
+
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
     }
 }

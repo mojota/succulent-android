@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.mojota.succulent.activity.ImageBrowserActivity;
 import com.mojota.succulent.activity.LandscapingAddActivity;
@@ -27,33 +28,47 @@ import com.mojota.succulent.adapter.LandscapingAdapter;
 import com.mojota.succulent.adapter.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
+import com.mojota.succulent.network.GsonPostRequest;
+import com.mojota.succulent.network.VolleyErrorListener;
+import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
+import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 造景后花园
  * Created by mojota on 18-7-23
  */
 public class LandscapingFragment extends Fragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, OnItemLongclickListener {
+        SwipeRefreshLayout.OnRefreshListener, OnItemLongclickListener, LoadMoreRecyclerView
+                .OnLoadListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final int PAGE_SIZE = 10; // 每页的条数
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private SwipeRefreshLayout mSwipeRefresh;
-    private RecyclerView mRvLandscaping;
+    private LoadMoreRecyclerView mRvLandscaping;
     private FloatingActionButton mFabAddLandscaping;
     private LandscapingAdapter mLandscapingAdapter;
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
+    private WrapRecycleAdapter mWrapAdapter;
+    private int mPage = 0;
 
 
     public LandscapingFragment() {
@@ -89,27 +104,63 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mRvLandscaping = view.findViewById(R.id.rv_landscaping);
         mLandscapingAdapter = new LandscapingAdapter(getActivity(), mList);
         mLandscapingAdapter.setOnItemLongClickListener(this);
-        mRvLandscaping.setAdapter(mLandscapingAdapter);
+        mWrapAdapter = new WrapRecycleAdapter(mLandscapingAdapter);
+        mRvLandscaping.setAdapter(mWrapAdapter);
+        mRvLandscaping.setOnLoadListener(this);
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
         mFabAddLandscaping.setOnClickListener(this);
 
-        getData();
+        onRefresh();
         return view;
     }
 
-    private void getData() {
+    private void getData(final int page) {
+        String url = UrlConstants.GET_NOTE_LIST_URL;
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userId", UserUtil.getCurrentUserId());
+        paramMap.put("noteType", "2");
+        paramMap.put("size", String.valueOf(PAGE_SIZE));
+        String updateTime = "";
+        if (page > 0) {
+            if (mList != null && mList.size() > 0) {
+                updateTime = mList.get(mList.size() - 1).getUpdateTime();
+            }
+        }
+        paramMap.put("updateTime", updateTime);
 
-        mSwipeRefresh.setRefreshing(false);
-        NoteResponseInfo resInfo = new Gson().fromJson(TestUtil.getLandscapingList(),
-                NoteResponseInfo.class);
-        mList = resInfo.getList();
+        GsonPostRequest request = new GsonPostRequest(url, null, paramMap, NoteResponseInfo
+                .class, new Response.Listener<NoteResponseInfo>() {
 
-        setDataToView();
+            @Override
+            public void onResponse(NoteResponseInfo responseInfo) {
+                mSwipeRefresh.setRefreshing(false);
+                if (responseInfo != null && "0".equals(responseInfo.getCode())) {
+                    if (page == 0) {
+                        mList.clear();
+                    }
+                    List<NoteInfo> list = responseInfo.getList();
+                    mList.addAll(list);
+                    setDataToView();
+                    mRvLandscaping.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
+                } else {
+                    mRvLandscaping.loadMoreFailed();
+                    GlobalUtil.makeToast(R.string.str_no_data);
+                }
+            }
+        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
+            @Override
+            public void onError(String error) {
+                mSwipeRefresh.setRefreshing(false);
+                mRvLandscaping.loadMoreFailed();
+                GlobalUtil.makeToast(R.string.str_network_error);
+            }
+        }));
+        VolleyUtil.execute(request);
     }
 
     private void setDataToView() {
         mLandscapingAdapter.setList(mList);
-        mLandscapingAdapter.notifyDataSetChanged();
+        mWrapAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -125,16 +176,36 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRefresh() {
-        getData();
+        mPage = 0;
+        getData(mPage);
     }
 
+    @Override
+    public void onLoadMore() {
+        if (mRvLandscaping.isLoadSuccess()) { // 若上次失败页码不再变化
+            mPage++;
+        }
+        getData(mPage);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CodeConstants.REQUEST_ADD:
+                if (resultCode == CodeConstants.RESULT_REFRESH) {
+                    onRefresh();
+                    mRvLandscaping.smoothScrollToPosition(0);
+                }
+                break;
+        }
+    }
 
     @Override
     public void onItemLongclick(final int position) {
         String[] items = {"删除"};
-        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface
-                .OnClickListener() {
+        new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface.OnClickListener
+                () {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
@@ -146,14 +217,14 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     }
 
     private void deleteItem(final int position, String title) {
-        new AlertDialog.Builder(getContext()).setTitle("确认删除?")
-                .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getContext()).setTitle("确认删除?").setPositiveButton("删除", new
+                DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteData(position);
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteData(position);
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -163,9 +234,22 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     }
 
     private void deleteData(int position) {
+        NoteInfo note = mList.get(position);
         mList.remove(position);
-        mLandscapingAdapter.notifyItemRemoved(position);
-        mLandscapingAdapter.notifyItemRangeChanged(0, mList.size());
+        mWrapAdapter.notifyItemRemoved(position);
+        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
+
+        requestDelete(note);
     }
 
+    /**
+     * 请求网络删除
+     */
+    private void requestDelete(NoteInfo note) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
+                .REQUEST_NOTE_DELETE, null);
+    }
 }

@@ -115,10 +115,12 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
             holder.ivPic0.setOnClickListener(null);
             holder.ivPic1.setOnClickListener(null);
-            if (diary.getPicUrls() != null && diary.getPicUrls().size() > 0) {
-                for (int i = 0; i < diary.getPicUrls().size(); i++) {
-                    RequestBuilder<Drawable> rb = Glide.with(mContext).load(diary.getPicUrls
-                            ().get(i)).apply(mRequestOptions);
+
+            final List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
+            if (pics != null && pics.size() > 0) {
+                for (int i = 0; i < pics.size(); i++) {
+                    RequestBuilder<Drawable> rb = Glide.with(mContext).load(pics.get(i)).apply
+                            (mRequestOptions);
                     if (i == 0) {
                         rb.into(holder.ivPic0);
                         holder.ivPic0.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +128,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                             public void onClick(View v) {
                                 if (mOnImageClickListener != null) {
                                     mOnImageClickListener.onImageClick(holder.ivPic0, diary
-                                            .getContent(), diary.getPicUrls(), 0);
+                                            .getContent(), pics, 0);
                                 }
                             }
                         });
@@ -137,7 +139,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                             public void onClick(View v) {
                                 if (mOnImageClickListener != null) {
                                     mOnImageClickListener.onImageClick(holder.ivPic1, diary
-                                            .getContent(), diary.getPicUrls(), 1);
+                                            .getContent(), pics, 1);
                                 }
                             }
                         });
