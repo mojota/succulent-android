@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     private LandscapingAdapter mLandscapingAdapter;
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
     private WrapRecycleAdapter mWrapAdapter;
-    private int mPage = 0;
+    private String mUpdateTime = "";
 
 
     public LandscapingFragment() {
@@ -114,18 +115,12 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    private void getData(final int page) {
+    private void getData(final String updateTime) {
         String url = UrlConstants.GET_NOTE_LIST_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userId", UserUtil.getCurrentUserId());
         paramMap.put("noteType", "2");
         paramMap.put("size", String.valueOf(PAGE_SIZE));
-        String updateTime = "";
-        if (page > 0) {
-            if (mList != null && mList.size() > 0) {
-                updateTime = mList.get(mList.size() - 1).getUpdateTime();
-            }
-        }
         paramMap.put("updateTime", updateTime);
 
         GsonPostRequest request = new GsonPostRequest(url, null, paramMap, NoteResponseInfo
@@ -135,7 +130,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
             public void onResponse(NoteResponseInfo responseInfo) {
                 mSwipeRefresh.setRefreshing(false);
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
-                    if (page == 0) {
+                    if (TextUtils.isEmpty(updateTime)) {
                         mList.clear();
                     }
                     List<NoteInfo> list = responseInfo.getList();
@@ -176,16 +171,18 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRefresh() {
-        mPage = 0;
-        getData(mPage);
+        mUpdateTime = "";
+        getData(mUpdateTime);
     }
 
     @Override
     public void onLoadMore() {
         if (mRvLandscaping.isLoadSuccess()) { // 若上次失败页码不再变化
-            mPage++;
+            if (mList != null && mList.size() > 0) {
+                mUpdateTime = mList.get(mList.size() - 1).getUpdateTime();
+            }
         }
-        getData(mPage);
+        getData(mUpdateTime);
     }
 
     @Override

@@ -11,9 +11,8 @@ import android.view.ViewGroup;
  */
 
 public class WrapRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public static final int TYPE_HEADER = 1;
-    public static final int TYPE_ITEM = 2;
-    public static final int TYPE_FOOTER = 3;
+    public static final int TYPE_HEADER = -1;
+    public static final int TYPE_FOOTER = -2;
 
     private RecyclerView.Adapter mAdapter;
     private View mFooterView;

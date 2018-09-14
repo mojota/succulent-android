@@ -65,8 +65,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private FloatingActionButton mFabAdd;
     private GrowthDiaryAdapter mDiaryAdapter;
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
-    private int mPage = 0;
     private WrapRecycleAdapter mWrapAdapter;
+    private String mUpdateTime = "";
 
 
     public GrowthDiaryFragment() {
@@ -121,18 +121,12 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    private void getData(final int page) {
+    private void getData(final String updateTime) {
         String url = UrlConstants.GET_NOTE_LIST_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userId", UserUtil.getCurrentUserId());
         paramMap.put("noteType", "1");
         paramMap.put("size", String.valueOf(PAGE_SIZE));
-        String updateTime = "";
-        if (page > 0) {
-            if (mList != null && mList.size() > 0) {
-                updateTime = mList.get(mList.size() - 1).getUpdateTime();
-            }
-        }
         paramMap.put("updateTime", updateTime);
         GsonPostRequest request = new GsonPostRequest(url, null, paramMap, NoteResponseInfo
                 .class, new Response.Listener<NoteResponseInfo>() {
@@ -141,7 +135,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
             public void onResponse(NoteResponseInfo responseInfo) {
                 mSwipeRefresh.setRefreshing(false);
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
-                    if (page == 0) {
+                    if (TextUtils.isEmpty(updateTime)) {
                         mList.clear();
                     }
                     List<NoteInfo> list = responseInfo.getList();
@@ -187,16 +181,18 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onRefresh() {
-        mPage = 0;
-        getData(mPage);
+        mUpdateTime = "";
+        getData(mUpdateTime);
     }
 
     @Override
     public void onLoadMore() {
         if (mRvDiary.isLoadSuccess()) { // 若上次失败页码不再变化
-            mPage++;
+            if (mList != null && mList.size() > 0) {
+                mUpdateTime = mList.get(mList.size() - 1).getUpdateTime();
+            }
         }
-        getData(mPage);
+        getData(mUpdateTime);
     }
 
     @Override

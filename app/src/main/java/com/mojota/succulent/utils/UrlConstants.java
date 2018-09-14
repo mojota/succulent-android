@@ -22,4 +22,5 @@ public class UrlConstants {
     public static final String NOTE_DELETE_URL = SERVER + "succulent/note/deleteNote";
 
     public static final String GET_NOTE_LIST_URL = SERVER + "succulent/note/getNoteList";
+    public static final String GET_MOMENTS_URL = SERVER + "succulent/note/getMoments";
 }

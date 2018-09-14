@@ -13,8 +13,8 @@ public class NoteInfo extends BaseBean {
     String noteTitle;// 标题
     String updateTime;// 更新时间
     int permission; // 0保密 1公开
-    int likeCount; // 赞数
-    int isLike; // 0未赞 1已赞
+    int likeyCount; // 赞数
+    int isLikey; // 0未赞 1已赞
     String picUrls; // 封面图片地址们
     int noteType; // 笔记类型 1-成长笔记 2-造景
 
@@ -58,20 +58,20 @@ public class NoteInfo extends BaseBean {
         this.permission = permission;
     }
 
-    public int getLikeCount() {
-        return likeCount;
+    public int getLikeyCount() {
+        return likeyCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
+    public void setLikeyCount(int likeyCount) {
+        this.likeyCount = likeyCount;
     }
 
     public int getIsLike() {
-        return isLike;
+        return isLikey;
     }
 
-    public void setIsLike(int isLike) {
-        this.isLike = isLike;
+    public void setIsLike(int isLikey) {
+        this.isLikey = isLikey;
     }
 
     public String getPicUrls() {

@@ -99,30 +99,27 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             holder.tvTitle.setText(diary.getNoteTitle());
 //            holder.tvTime.setText(diary.getUpdateTime());
 
-            holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
-            holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
-            holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
+            holder.tbLike.setTextOn(String.valueOf(diary.getLikeyCount()));
+            holder.tbLike.setTextOff(String.valueOf(diary.getLikeyCount()));
+            holder.tbLike.setText(String.valueOf(diary.getLikeyCount()));
             holder.tbLike.setChecked(diary.getIsLike() == 1);
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int likeCount = diary.getLikeCount();
+                    int likeyCount = diary.getLikeyCount();
+                    int isLikey;
                     if (holder.tbLike.isChecked()) {
-                        diary.setLikeCount(likeCount + 1);
-                        diary.setIsLike(1);
-                        requestLike(diary, 1);
-                        holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
+                        diary.setLikeyCount(likeyCount + 1);
+                        isLikey = 1;
                     } else {
-                        diary.setLikeCount(likeCount - 1);
-                        diary.setIsLike(0);
-                        requestLike(diary, 0);
-                        holder.tbLike.setTextOn(String.valueOf(diary.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(diary.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(diary.getLikeCount()));
+                        diary.setLikeyCount(likeyCount - 1);
+                        isLikey = 0;
                     }
-
+                    diary.setIsLike(isLikey);
+                    RequestUtils.requestLike(diary.getNoteId(), isLikey);
+                    holder.tbLike.setTextOn(String.valueOf(diary.getLikeyCount()));
+                    holder.tbLike.setTextOff(String.valueOf(diary.getLikeyCount()));
+                    holder.tbLike.setText(String.valueOf(diary.getLikeyCount()));
                 }
             });
 
@@ -130,13 +127,8 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
             holder.tbPermission.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int newPermission = 0;
-                    if (holder.tbPermission.isChecked()) {
-                        newPermission = 1;
-                    } else {
-                        newPermission = 0;
-                    }
-                    requestPermission(diary, newPermission, holder.tbPermission);
+                    int newPermission = holder.tbPermission.isChecked() ? 1 : 0;
+                    RequestUtils.requestPermission(diary, newPermission, holder.tbPermission);
                 }
             });
 
@@ -166,42 +158,5 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
     }
 
-    /**
-     * 请求网络赞
-     */
-    private void requestLike(NoteInfo note, int isLike) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-        map.put("isLike", String.valueOf(isLike));
-        RequestUtils.commonRequest(UrlConstants.NOTE_LIKE_URL, map, CodeConstants.REQUEST_LIKE,
-                null);
-    }
-
-
-    /**
-     * 请求网络修改权限
-     */
-    private void requestPermission(final NoteInfo note, final int newPermission, final ToggleButton tbPermission) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-        map.put("permission", String.valueOf(newPermission));
-        RequestUtils.commonRequest(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
-                .REQUEST_PERMISSION_CHANGE, new RequestUtils.RequestListener() {
-
-            @Override
-            public void onRequestSuccess(int requestCode) {
-                note.setPermission(newPermission);
-            }
-
-            @Override
-            public void onRequestFailure(int requestCode) {
-                int oldPermission = note.getPermission();
-                note.setPermission(oldPermission);
-                tbPermission.setChecked(oldPermission == 1);
-            }
-        });
-    }
 
 }

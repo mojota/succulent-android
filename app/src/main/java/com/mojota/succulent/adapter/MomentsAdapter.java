@@ -1,16 +1,14 @@
 package com.mojota.succulent.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +22,11 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
-import com.mojota.succulent.utils.ActivityUtil;
+import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,6 +69,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
             tvTime = itemView.findViewById(R.id.tv_time);
             tbLike = itemView.findViewById(R.id.tb_like);
             tbPermission = itemView.findViewById(R.id.tb_permission);
+            tbPermission.setVisibility(View.GONE);
         }
     }
 
@@ -139,73 +138,67 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
     public void onBindViewHolder(final BaseViewHolder holder, final int position) {
         final NoteInfo noteInfo = mList.get(position);
         if (noteInfo != null) {
-            holder.tvNickname.setText(noteInfo.getUserInfo().getNickname());
-//            Glide.with(mContext).load(noteInfo.getUserInfo().getAvatarUrl()).apply
-//                    (mAvatarOptions).into(holder.ivAvatar);
-            final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
-            Glide.with(mContext).asBitmap().load(noteInfo.getUserInfo().getAvatarUrl()).apply
-                    (mAvatarOptions).into(new SimpleTarget<Bitmap>() {
-
-                @Override
-                public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
-                        transition) {
-                    holder.ivAvatar.setImageBitmap(resource);
-                    Palette.Builder pb = Palette.from(resource);
-                    pb.generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette palette) {
-                            colors[2] = palette.getDarkVibrantColor(0xffff9800);
-
-                            Drawable bgDrawable = new GradientDrawable(GradientDrawable
-                                    .Orientation.LEFT_RIGHT, colors);
-                            holder.mLayoutBar.setBackground(bgDrawable);
-                        }
-                    });
+            UserInfo userInfo = noteInfo.getUserInfo();
+            if (userInfo != null) {
+                if (TextUtils.isEmpty(userInfo.getNickname())) {
+                    holder.tvNickname.setText(userInfo.getUserName());
+                } else {
+                    holder.tvNickname.setText(userInfo.getNickname());
                 }
-            });
+
+//            Glide.with(mContext).load(userInfo.getAvatarUrl()).apply
+//                    (mAvatarOptions).into(holder.ivAvatar);
+                final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
+                Glide.with(mContext).asBitmap().load(userInfo.getAvatarUrl()).apply
+                        (mAvatarOptions).into(new SimpleTarget<Bitmap>() {
 
 
-            holder.tvRegion.setText(noteInfo.getUserInfo().getRegion());
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
+                            transition) {
+                        holder.ivAvatar.setImageBitmap(resource);
+                        Palette.Builder pb = Palette.from(resource);
+                        pb.generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                colors[2] = palette.getDarkVibrantColor(0xffff9800);
+
+                                Drawable bgDrawable = new GradientDrawable(GradientDrawable
+                                        .Orientation.LEFT_RIGHT, colors);
+                                holder.mLayoutBar.setBackground(bgDrawable);
+                            }
+                        });
+                    }
+                });
+                holder.tvRegion.setText(userInfo.getRegion());
+            }
 
             holder.tvTitle.setText(noteInfo.getNoteTitle());
             holder.tvTime.setText(noteInfo.getUpdateTime());
 
-            holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
-            holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
-            holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
+            holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeyCount()));
+            holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeyCount()));
+            holder.tbLike.setText(String.valueOf(noteInfo.getLikeyCount()));
             holder.tbLike.setChecked(noteInfo.getIsLike() == 1);
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int likeCount = noteInfo.getLikeCount();
+                    int likeyCount = noteInfo.getLikeyCount();
+                    int isLikey;
                     if (holder.tbLike.isChecked()) {
-                        noteInfo.setLikeCount(likeCount + 1);
-                        noteInfo.setIsLike(1);
-                        holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
+                        noteInfo.setLikeyCount(likeyCount + 1);
+                        isLikey = 1;
                     } else {
-                        noteInfo.setLikeCount(likeCount - 1);
-                        noteInfo.setIsLike(0);
-                        holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(noteInfo.getLikeCount()));
+                        noteInfo.setLikeyCount(likeyCount - 1);
+                        isLikey = 0;
                     }
+                    noteInfo.setIsLike(isLikey);
+                    RequestUtils.requestLike(noteInfo.getNoteId(), isLikey);
+                    holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeyCount()));
+                    holder.tbLike.setTextOff(String.valueOf(noteInfo.getLikeyCount()));
+                    holder.tbLike.setText(String.valueOf(noteInfo.getLikeyCount()));
                 }
             });
-
-            holder.tbPermission.setChecked(noteInfo.getPermission() == 1);
-            holder.tbPermission.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (holder.tbPermission.isChecked()) {
-                        noteInfo.setPermission(1);
-                    } else {
-                        noteInfo.setPermission(0);
-                    }
-                }
-            });
-
 
             if (noteInfo.getNoteType() == 2) {
                 // 笔记类型标识

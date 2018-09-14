@@ -76,8 +76,8 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R
-                .layout.item_landscaping, parent, false));
+        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout
+                .item_landscaping, parent, false));
         return viewHolder;
     }
 
@@ -89,30 +89,28 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
             holder.tvTitle.setText(note.getNoteTitle());
             holder.tvTime.setText(note.getUpdateTime());
 
-            holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
-            holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
-            holder.tbLike.setText(String.valueOf(note.getLikeCount()));
+            holder.tbLike.setTextOn(String.valueOf(note.getLikeyCount()));
+            holder.tbLike.setTextOff(String.valueOf(note.getLikeyCount()));
+            holder.tbLike.setText(String.valueOf(note.getLikeyCount()));
             holder.tbLike.setChecked(note.getIsLike() == 1);
 
             holder.tbLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int likeCount = note.getLikeCount();
+                    int likeyCount = note.getLikeyCount();
+                    int isLikey;
                     if (holder.tbLike.isChecked()) {
-                        note.setLikeCount(likeCount + 1);
-                        note.setIsLike(1);
-                        requestLike(note, 1);
-                        holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(note.getLikeCount()));
+                        note.setLikeyCount(likeyCount + 1);
+                        isLikey = 1;
                     } else {
-                        note.setLikeCount(likeCount - 1);
-                        note.setIsLike(0);
-                        requestLike(note, 0);
-                        holder.tbLike.setTextOn(String.valueOf(note.getLikeCount()));
-                        holder.tbLike.setTextOff(String.valueOf(note.getLikeCount()));
-                        holder.tbLike.setText(String.valueOf(note.getLikeCount()));
+                        note.setLikeyCount(likeyCount - 1);
+                        isLikey = 0;
                     }
+                    note.setIsLike(isLikey);
+                    RequestUtils.requestLike(note.getNoteId(), isLikey);
+                    holder.tbLike.setTextOn(String.valueOf(note.getLikeyCount()));
+                    holder.tbLike.setTextOff(String.valueOf(note.getLikeyCount()));
+                    holder.tbLike.setText(String.valueOf(note.getLikeyCount()));
                 }
             });
 
@@ -120,21 +118,16 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
             holder.tbPermission.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int newPermission = 0;
-                    if (holder.tbPermission.isChecked()) {
-                        newPermission = 1;
-                    } else {
-                        newPermission = 0;
-                    }
-                    requestPermission(note, newPermission, holder.tbPermission);
+                    int newPermission = holder.tbPermission.isChecked() ? 1 : 0;
+                    RequestUtils.requestPermission(note, newPermission, holder.tbPermission);
                 }
             });
 
             // 图
             List<String> pics = GlobalUtil.getStringList(note.getPicUrls());
             if (note.getPicUrls() != null) {
-                holder.rvPics.setAdapter(new ImageAdapter(mContext, pics, note
-                        .getNoteTitle(), mRoundedCornersOptions));
+                holder.rvPics.setAdapter(new ImageAdapter(mContext, pics, note.getNoteTitle(),
+                        mRoundedCornersOptions));
             }
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -147,46 +140,6 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
                 }
             });
         }
-
-    }
-
-
-    /**
-     * 请求网络赞
-     */
-    private void requestLike(NoteInfo note, int isLike) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-        map.put("isLike", String.valueOf(isLike));
-        RequestUtils.commonRequest(UrlConstants.NOTE_LIKE_URL, map, CodeConstants.REQUEST_LIKE,
-                null);
-    }
-
-
-    /**
-     * 请求网络修改权限
-     */
-    private void requestPermission(final NoteInfo note, final int newPermission, final ToggleButton tbPermission) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-        map.put("permission", String.valueOf(newPermission));
-        RequestUtils.commonRequest(UrlConstants.NOTE_PERMISSION_CHANGE_URL, map, CodeConstants
-                .REQUEST_PERMISSION_CHANGE, new RequestUtils.RequestListener() {
-
-            @Override
-            public void onRequestSuccess(int requestCode) {
-                note.setPermission(newPermission);
-            }
-
-            @Override
-            public void onRequestFailure(int requestCode) {
-                int oldPermission = note.getPermission();
-                note.setPermission(oldPermission);
-                tbPermission.setChecked(oldPermission == 1);
-            }
-        });
     }
 
 }
