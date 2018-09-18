@@ -207,8 +207,16 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
                 break;
             case CodeConstants.REQUEST_DETAIL:
                 if (resultCode == CodeConstants.RESULT_REFRESH) {
-                    onRefresh();
-                    mRvDiary.smoothScrollToPosition(0);
+                    if (data != null) {
+                        int pos = data.getIntExtra(DiaryDetailActivity.KEY_ITEM_POS, 0);
+                        NoteInfo noteInfo = (NoteInfo) data.getSerializableExtra
+                                (DiaryDetailActivity.KEY_ITEM_NOTE);
+
+                        mList.remove(pos);
+                        mList.add(pos, noteInfo);
+                        mWrapAdapter.notifyItemChanged(pos);
+                        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
+                    }
                 }
                 break;
 
@@ -217,7 +225,12 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onItemClick(ImageView view, NoteInfo diary, int position) {
-        ActivityUtil.startDiaryDetailActivity(getActivity(), view, diary);
+        Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
+        intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
+        intent.putExtra(DiaryDetailActivity.KEY_ITEM_POS, position);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
+                (getActivity(), view, view.getTransitionName());
+        startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options.toBundle());
     }
 
     @Override
@@ -258,19 +271,8 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
 
-        requestDelete(note);
+        RequestUtils.requestDelete(note);
     }
 
-    /**
-     * 请求网络删除
-     */
-    private void requestDelete(NoteInfo note) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-
-        RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
-                .REQUEST_NOTE_DELETE, null);
-    }
 
 }

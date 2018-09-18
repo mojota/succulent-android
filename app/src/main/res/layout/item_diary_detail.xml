@@ -1,85 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white">
-
-    <View
-        android:layout_width="2dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="24dp"
-        android:background="@drawable/ic_line"/>
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:background="@color/white"
-                android:textSize="16dp"/>
-
-            <Button
-                android:id="@+id/bt_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@mipmap/ic_mode_edit_white_24dp"
-                android:backgroundTint="@color/colorPrimary"/>
-
-            <Button
-                android:id="@+id/bt_delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="16dp"
-                android:background="@mipmap/ic_delete_white_24dp"
-                android:backgroundTint="@color/colorAccent"/>
-        </LinearLayout>
+        android:layout_marginTop="16dp">
 
         <TextView
-            android:id="@+id/tv_content"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_time"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="8dp"
-            android:textSize="14dp"/>
+            android:layout_weight="1"
+            android:background="?android:attr/windowBackground"
+            android:maxLines="1"
+            android:textSize="16dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/tv_content"
-            android:layout_alignRight="@id/tv_content"
-            android:layout_below="@id/tv_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="8dp">
+        <Button
+            android:id="@+id/bt_edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@mipmap/ic_mode_edit_white_24dp"
+            android:backgroundTint="@color/colorPrimary"/>
 
-            <ImageView
-                android:id="@+id/iv_pic0"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:scaleType="centerInside"/>
-
-            <ImageView
-                android:id="@+id/iv_pic1"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:layout_marginLeft="16dp"
-                android:scaleType="centerInside"/>
-        </LinearLayout>
+        <Button
+            android:id="@+id/bt_delete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:background="@mipmap/ic_delete_white_24dp"
+            android:backgroundTint="@color/colorAccent"/>
     </LinearLayout>
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_time"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:textSize="14dp"/>
+
+    <LinearLayout
+        android:id="@+id/layout_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_content"
+        android:layout_alignRight="@id/tv_content"
+        android:layout_below="@id/tv_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/iv_pic0"
+            android:layout_width="135dp"
+            android:layout_height="135dp"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:id="@+id/iv_pic1"
+            android:layout_width="135dp"
+            android:layout_height="135dp"
+            android:layout_marginLeft="16dp"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
+</LinearLayout>

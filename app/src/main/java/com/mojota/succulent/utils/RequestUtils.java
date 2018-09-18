@@ -118,4 +118,14 @@ public class RequestUtils {
     }
 
 
+    /**
+     * 请求网络删除
+     */
+    public static void requestDelete(NoteInfo note) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("noteId", note.getNoteId());
+        RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
+                .REQUEST_NOTE_DELETE, null);
+    }
 }

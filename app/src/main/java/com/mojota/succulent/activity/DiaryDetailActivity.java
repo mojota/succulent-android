@@ -1,14 +1,12 @@
 package com.mojota.succulent.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,18 +16,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
+import com.android.volley.Response;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.DiaryDetailAdapter;
-import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.model.DiarysResponseInfo;
+import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.network.GsonPostRequest;
+import com.mojota.succulent.network.VolleyErrorListener;
+import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
+import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,11 +44,17 @@ import java.util.Map;
  * Created by mojota on 18-8-14
  */
 public class DiaryDetailActivity extends PhotoChooseSupportActivity implements View
-        .OnClickListener, OnImageClickListener, DiaryDetailAdapter.OnItemOperateListener {
+        .OnClickListener, OnImageClickListener, DiaryDetailAdapter.OnItemOperateListener,
+        LoadMoreRecyclerView.OnLoadListener {
 
     public static final String KEY_DIARY = "KEY_DIARY";
+    public static final String KEY_ONLY_READ = "KEY_ONLY_READ";
+    public static final String KEY_ITEM_POS = "KEY_ITEM_POS";
+    public static final String KEY_ITEM_NOTE = "KEY_ITEM_NOTE";
+
+    private static final int PAGE_SIZE = 10; // 每页的条数
     private Toolbar mToolBar;
-    private RecyclerView mRvDiarys;
+    private LoadMoreRecyclerView mRvDiarys;
     private FloatingActionButton mFabAdd;
     private DiaryDetailAdapter mDetailAdapter;
     private List<NoteDetail> mList = new ArrayList<NoteDetail>();
@@ -53,25 +62,27 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private MenuItem mActionPermission;
     private MenuItem mActivonEditTitle;
     private int mNewPermission;
+    private WrapRecycleAdapter mWrapAdapter;
+    private String mCreateTime = "";
+    private String mNewTitle = "";
+    private boolean mReadOnly = true;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        postponeEnterTransition(); // 延迟转场动画
         setContentView(R.layout.activity_diary_detail);
 
         mToolBar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRvDiarys = findViewById(R.id.rv_diarys);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvDiarys.setLayoutManager(llm);
-        mRvDiarys.setItemAnimator(new DefaultItemAnimator());
         mDetailAdapter = new DiaryDetailAdapter(this, mList);
         mDetailAdapter.setOnImageClickListener(this);
         mDetailAdapter.setOnItemOperateListener(this);
-        mRvDiarys.setAdapter(mDetailAdapter);
+        mWrapAdapter = new WrapRecycleAdapter(mDetailAdapter);
+        mRvDiarys.setAdapter(mWrapAdapter);
+        mRvDiarys.setOnLoadListener(this);
         mFabAdd = findViewById(R.id.fab_add);
         mFabAdd.setOnClickListener(this);
 
@@ -79,31 +90,65 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         mNewPermission = mNoteInfo.getPermission();
         getSupportActionBar().setTitle(mNoteInfo.getNoteTitle());
 
-        getData();
+        mReadOnly = getIntent().getBooleanExtra(KEY_ONLY_READ, false);
+
+        mFabAdd.setVisibility(mReadOnly ? View.GONE : View.VISIBLE);
+
+        refresh();
     }
 
-    private void getData() {
+    private void getData(final String createTime) {
+        String url = UrlConstants.GET_DIARY_DETAILS_URL;
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("noteId", mNoteInfo.getNoteId());
+        paramMap.put("createTime", createTime);
+        paramMap.put("size", String.valueOf(PAGE_SIZE));
+        GsonPostRequest request = new GsonPostRequest(url, null, paramMap, DiarysResponseInfo
+                .class, new Response.Listener<DiarysResponseInfo>() {
 
-        DiarysResponseInfo resInfo = new Gson().fromJson(TestUtil.getDiryDetails(),
-                DiarysResponseInfo.class);
-        mList = resInfo.getDiarys();
-
-        setDataToView();
+            @Override
+            public void onResponse(DiarysResponseInfo responseInfo) {
+                if (responseInfo != null && "0".equals(responseInfo.getCode())) {
+                    if (TextUtils.isEmpty(createTime)) {
+                        mList.clear();
+                    }
+                    List<NoteDetail> list = responseInfo.getList();
+                    mList.addAll(list);
+                    setDataToView();
+                    mRvDiarys.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
+                } else {
+                    mRvDiarys.loadMoreFailed();
+                    GlobalUtil.makeToast(R.string.str_no_data);
+                }
+            }
+        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
+            @Override
+            public void onError(String error) {
+                mRvDiarys.loadMoreFailed();
+                GlobalUtil.makeToast(R.string.str_network_error);
+            }
+        }));
+        VolleyUtil.execute(request);
     }
 
 
     private void setDataToView() {
+        if (mList != null && mList.size() > 0) {
+            postponeEnterTransition(); // 当有数据时延迟转场动画
+        }
+        mDetailAdapter.setIsReadOnly(mReadOnly);
         mDetailAdapter.setList(mList);
-        mDetailAdapter.notifyDataSetChanged();
+        mWrapAdapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_bar, menu);
-        mActionPermission = menu.findItem(R.id.action_permission);
-        mActivonEditTitle = menu.findItem(R.id.action_edit_title);
-
-        setPermissionMemu();
+        if (!mReadOnly) {
+            getMenuInflater().inflate(R.menu.menu_bar, menu);
+            mActionPermission = menu.findItem(R.id.action_permission);
+            mActivonEditTitle = menu.findItem(R.id.action_edit_title);
+            setPermissionMemu();
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -167,11 +212,13 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
      * 修改标题请求
      */
     private void submitTitle(String title) {
+        mNewTitle = title;
         Map<String, String> map = new HashMap<String, String>();
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("noteId", mNoteInfo.getNoteId());
-        map.put("noteTitle", title);
-        loadingRequestSubmit(UrlConstants.NOTE_TITLE_EDIT_URL, map, CodeConstants.REQUEST_NOTE_TITLE_EDIT);
+        map.put("noteTitle", mNewTitle);
+        loadingRequestSubmit(UrlConstants.NOTE_TITLE_EDIT_URL, map, CodeConstants
+                .REQUEST_NOTE_TITLE_EDIT);
     }
 
     /**
@@ -193,7 +240,16 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
             mNoteInfo.setPermission(mNewPermission);
             setPermissionMemu();
         }
+        if (requestCode == CodeConstants.REQUEST_NOTE_TITLE_EDIT) {
+            mNoteInfo.setNoteTitle(mNewTitle);
+            getSupportActionBar().setTitle(mNoteInfo.getNoteTitle());
+        }
+        Intent data = new Intent();
+        data.putExtra(KEY_ITEM_POS, getIntent().getIntExtra(KEY_ITEM_POS, 0));
+        data.putExtra(KEY_ITEM_NOTE, mNoteInfo);
+        setResult(CodeConstants.RESULT_REFRESH, data);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -208,14 +264,27 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         }
     }
 
+    public void refresh() {
+        mCreateTime = "";
+        getData(mCreateTime);
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (mRvDiarys.isLoadSuccess()) { // 若上次失败页码不再变化
+            if (mList != null && mList.size() > 0) {
+                mCreateTime = mList.get(mList.size() - 1).getCreateTime();
+            }
+        }
+        getData(mCreateTime);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CodeConstants.REQUEST_ADD:
-                if (resultCode == CodeConstants.RESULT_ADD) {
-                    getData();
-                }
+        switch (resultCode) {
+            case CodeConstants.RESULT_REFRESH:
+                refresh();
         }
     }
 
@@ -242,15 +311,15 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private void deleteData(final int position) {
         final NoteDetail noteDetail = mList.get(position);
         mList.remove(position);
-        mDetailAdapter.notifyItemRemoved(position);
-        mDetailAdapter.notifyItemRangeChanged(0, mList.size());
+        mWrapAdapter.notifyItemRemoved(position);
+        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
         Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
                 new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mList.add(position, noteDetail);
-                mDetailAdapter.notifyItemInserted(position);
-                mDetailAdapter.notifyItemRangeChanged(0, mList.size());
+                mWrapAdapter.notifyItemInserted(position);
+                mWrapAdapter.notifyItemRangeChanged(0, mList.size());
             }
         }).addCallback(new Snackbar.Callback() {
             @Override

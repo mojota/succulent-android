@@ -8,22 +8,13 @@ import java.util.List;
  */
 public class DiarysResponseInfo extends ResponseInfo {
 
-    private NoteInfo noteInfo;
-    private List<NoteDetail> diarys;
+    private List<NoteDetail> list;
 
-    public NoteInfo getNoteInfo() {
-        return noteInfo;
+    public List<NoteDetail> getList() {
+        return list;
     }
 
-    public void setNoteInfo(NoteInfo noteInfo) {
-        this.noteInfo = noteInfo;
-    }
-
-    public List<NoteDetail> getDiarys() {
-        return diarys;
-    }
-
-    public void setDiarys(List<NoteDetail> diarys) {
-        this.diarys = diarys;
+    public void setList(List<NoteDetail> list) {
+        this.list = list;
     }
 }

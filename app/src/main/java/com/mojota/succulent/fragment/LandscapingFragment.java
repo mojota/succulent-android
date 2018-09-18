@@ -236,17 +236,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
 
-        requestDelete(note);
+        RequestUtils.requestDelete(note);
     }
 
-    /**
-     * 请求网络删除
-     */
-    private void requestDelete(NoteInfo note) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", UserUtil.getCurrentUserId());
-        map.put("noteId", note.getNoteId());
-        RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
-                .REQUEST_NOTE_DELETE, null);
-    }
 }

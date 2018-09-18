@@ -61,4 +61,11 @@ public class UserUtil {
         }
         return false;
     }
+
+    /**
+     * 判断用户是否是当前登录用户
+     */
+    public static boolean isCurrentUser(String userId) {
+        return isLogin() && getCurrentUserId().equals(userId);
+    }
 }

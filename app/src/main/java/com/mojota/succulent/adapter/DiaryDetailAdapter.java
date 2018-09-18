@@ -32,6 +32,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     private List<NoteDetail> mList;
     private OnImageClickListener mOnImageClickListener;
     private OnItemOperateListener mOnItemOperateListener;
+    private boolean mIsReadOnly = true;
 
     public interface OnItemOperateListener {
 
@@ -47,6 +48,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
         private final ImageView ivPic1;
         private final Button btEdit;
         private final Button btDelete;
+        private final ViewGroup layoutPic;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -54,6 +56,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
             btDelete = itemView.findViewById(R.id.bt_delete);
             tvTime = itemView.findViewById(R.id.tv_time);
             tvContent = itemView.findViewById(R.id.tv_content);
+            layoutPic = itemView.findViewById(R.id.layout_pic);
             ivPic0 = itemView.findViewById(R.id.iv_pic0);
             ivPic1 = itemView.findViewById(R.id.iv_pic1);
         }
@@ -67,6 +70,10 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
     public void setList(List<NoteDetail> list) {
         mList = list;
+    }
+
+    public void setIsReadOnly(boolean readOnly) {
+        mIsReadOnly = readOnly;
     }
 
     public void setOnImageClickListener(OnImageClickListener listener) {
@@ -107,6 +114,10 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                 }
             });
         }
+        if (mIsReadOnly){
+            holder.btDelete.setVisibility(View.GONE);
+            holder.btEdit.setVisibility(View.GONE);
+        }
 
         final NoteDetail diary = mList.get(position);
         if (diary != null) {
@@ -118,6 +129,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
             final List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
             if (pics != null && pics.size() > 0) {
+                holder.layoutPic.setVisibility(View.VISIBLE);
                 for (int i = 0; i < pics.size(); i++) {
                     RequestBuilder<Drawable> rb = Glide.with(mContext).load(pics.get(i)).apply
                             (mRequestOptions);
@@ -145,6 +157,8 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                         });
                     }
                 }
+            } else {
+                holder.layoutPic.setVisibility(View.GONE);
             }
 
             holder.btEdit.setOnClickListener(new View.OnClickListener() {

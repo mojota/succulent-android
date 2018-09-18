@@ -35,17 +35,6 @@ public class ActivityUtil {
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-
-    public static void startDiaryDetailActivity(Activity activity, View view, NoteInfo diary) {
-        Intent intent = new Intent(activity, DiaryDetailActivity.class);
-        intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                (activity, view, view.getTransitionName());
-        ActivityCompat.startActivityForResult(activity, intent, CodeConstants
-                .REQUEST_DETAIL, options.toBundle());
-
-    }
-
     public static void startLoginActivity(Activity activity) {
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivityForResult(intent,CodeConstants.REQUEST_USER_CHANGE);

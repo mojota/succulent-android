@@ -1,6 +1,8 @@
 package com.mojota.succulent.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
+import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.MomentsAdapter;
 import com.mojota.succulent.adapter.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
@@ -156,7 +159,12 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         int type = mMomentsAdapter.getItemViewType(position);
         NoteInfo noteInfo = mList.get(position);
         if (type == CodeConstants.TYPE_DIARY) {
-            ActivityUtil.startDiaryDetailActivity(getActivity(), view, noteInfo);
+            Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
+            intent.putExtra(DiaryDetailActivity.KEY_DIARY, noteInfo);
+            intent.putExtra(DiaryDetailActivity.KEY_ONLY_READ, true);
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
+                    (getActivity(), view, view.getTransitionName());
+            startActivityForResult(intent, CodeConstants.REQUEST_DETAIL,options.toBundle());
         }
     }
 
