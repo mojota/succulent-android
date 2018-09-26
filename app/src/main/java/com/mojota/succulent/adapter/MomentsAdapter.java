@@ -26,6 +26,7 @@ import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.List;
 
@@ -140,12 +141,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         if (noteInfo != null) {
             UserInfo userInfo = noteInfo.getUserInfo();
             if (userInfo != null) {
-                if (TextUtils.isEmpty(userInfo.getNickname())) {
-                    holder.tvNickname.setText(userInfo.getUserName());
-                } else {
-                    holder.tvNickname.setText(userInfo.getNickname());
-                }
-
+                holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
 //            Glide.with(mContext).load(userInfo.getAvatarUrl()).apply
 //                    (mAvatarOptions).into(holder.ivAvatar);
                 final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};

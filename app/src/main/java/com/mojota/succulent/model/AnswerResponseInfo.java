@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class AnswerResponseInfo extends ResponseInfo {
 
-    private List<AnswerInfo> answerList;
+    private List<AnswerInfo> list;
 
-    public List<AnswerInfo> getAnswerList() {
-        return answerList;
+    public List<AnswerInfo> getList() {
+        return list;
     }
 
-    public void AnswerInfo(List<AnswerInfo> answerList) {
-        this.answerList = answerList;
+    public void setList(List<AnswerInfo> list) {
+        this.list = list;
     }
 }

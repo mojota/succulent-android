@@ -3,6 +3,7 @@ package com.mojota.succulent.activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,6 +23,8 @@ import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UrlConstants;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,7 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
     private Button mBtClose;
     private ImageButton mIbtPic;
     private Button mBtCommit;
+    private TextInputLayout mTiQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
     private void initView() {
         mBtClose = findViewById(R.id.bt_close);
         mBtClose.setOnClickListener(this);
+        mTiQuestion = findViewById(R.id.ti_question);
         mEtQuestion = (EditText) findViewById(R.id.et_question);
         mTvLength = (TextView) findViewById(R.id.tv_length);
         mEtQuestion.addTextChangedListener(new TextWatcher() {
@@ -95,34 +100,20 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
      * 提交问题
      */
     private void submitQuestion(String questionStr) {
-        String url = "url";
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
+        String picUrls = "";
         Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
         map.put("questionTitle", questionStr);
-        GsonPostRequest<ResponseInfo> request = new GsonPostRequest<ResponseInfo>(url, null,
-                map, ResponseInfo.class, new Response.Listener<ResponseInfo>() {
+        map.put("questionPicUrl", picUrls);
+        loadingRequestSubmit(UrlConstants.QA_ADD_URL, map, CodeConstants.REQUEST_QA_ADD);
+    }
 
-            @Override
-            public void onResponse(ResponseInfo repInfo) {
-                if (repInfo != null && "0".equals(repInfo.getCode())) {
-                    GlobalUtil.makeToast(R.string.str_qa_submit_successful);
-                    closeKeyboard();
-                    setResult(CodeConstants.RESULT_QA);
-                    finish();
-                } else {
-                    AppLog.d(TAG, "submit question faild");
-                    GlobalUtil.makeToast(R.string.str_qa_submit_failed);
-                }
-            }
-        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
-            @Override
-            public void onError(String error) {
-                GlobalUtil.makeToast(R.string.str_network_error);
-            }
-        }));
-        VolleyUtil.execute(request);
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        closeKeyboard();
+        setResult(CodeConstants.RESULT_QA);
+        finish();
     }
 
     /**
@@ -148,6 +139,8 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
                     if (!TextUtils.isEmpty(questionStr.trim())) {
                         submitQuestion(questionStr);
                     }
+                } else {
+                    mTiQuestion.setError("问题不可以为空");
                 }
                 break;
         }

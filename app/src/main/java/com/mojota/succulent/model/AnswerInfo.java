@@ -10,10 +10,11 @@ public class AnswerInfo extends BaseBean {
     UserInfo userInfo;
 
     String answerId;//回答id;
+    String questionId; // 问题id;
     String answerContent;//回答正文;
     String answerTime;//回答时间;
-    String answerUpCount;//回答点赞数;
-    String answerUpState;//点赞状态，0：未点，1：已点;
+    int upCount;//回答点赞数;
+    int isUp;//点赞状态，0：未点，1：已点;
 
     public UserInfo getUserInfo() {
         return userInfo;
@@ -47,19 +48,27 @@ public class AnswerInfo extends BaseBean {
         this.answerTime = answerTime;
     }
 
-    public String getAnswerUpCount() {
-        return answerUpCount;
+    public String getQuestionId() {
+        return questionId;
     }
 
-    public void setAnswerUpCount(String answerUpCount) {
-        this.answerUpCount = answerUpCount;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 
-    public String getAnswerUpState() {
-        return answerUpState;
+    public int getUpCount() {
+        return upCount;
     }
 
-    public void setAnswerUpState(String answerUpState) {
-        this.answerUpState = answerUpState;
+    public void setUpCount(int upCount) {
+        this.upCount = upCount;
+    }
+
+    public int getIsUp() {
+        return isUp;
+    }
+
+    public void setIsUp(int isUp) {
+        this.isUp = isUp;
     }
 }

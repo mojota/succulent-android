@@ -13,7 +13,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.QuestionInfo;
+import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.List;
 
@@ -73,11 +75,12 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.ivPic.setVisibility(View.GONE);
         QuestionInfo questionInfo = mList.get(position);
         if (questionInfo != null) {
             holder.tvTitle.setText(questionInfo.getQuestionTitle());
             holder.tvTime.setText(questionInfo.getQuestionTime());
-            holder.tvAnswerCount.setText(questionInfo.getAnswerCount());
+            holder.tvAnswerCount.setText(String.valueOf(questionInfo.getAnswerCount()));
 
             if (!TextUtils.isEmpty(questionInfo.getQuestionPicUrl())) {
                 Glide.with(mContext).load(questionInfo.getQuestionPicUrl()).apply
@@ -86,10 +89,12 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
             } else {
                 holder.ivPic.setVisibility(View.GONE);
             }
-
-            holder.tvNickname.setText(questionInfo.getUserInfo().getNickname());
-            Glide.with(mContext).load(questionInfo.getUserInfo().getAvatarUrl()).apply(mAvatarOptions)
-                    .into(holder.ivAvatar);
+            UserInfo userInfo = questionInfo.getUserInfo();
+            if (userInfo != null) {
+                holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
+                Glide.with(mContext).load(userInfo.getAvatarUrl()).apply(mAvatarOptions).into
+                        (holder.ivAvatar);
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

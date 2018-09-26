@@ -4,7 +4,7 @@ package com.mojota.succulent.utils;
  * Created by mojota on 18-8-31.
  */
 public class UrlConstants {
-    public static final String SERVER = "http://192.168.43.99:8080/";
+    public static final String SERVER = "http://10.42.0.1:8080/";
 
     public static final String REGISTER_URL = SERVER + "succulent/user/register";
     public static final String LOGIN_URL = SERVER + "succulent/user/login";
@@ -24,4 +24,12 @@ public class UrlConstants {
     public static final String GET_NOTE_LIST_URL = SERVER + "succulent/note/getNoteList";
     public static final String GET_MOMENTS_URL = SERVER + "succulent/note/getMoments";
     public static final String GET_DIARY_DETAILS_URL = SERVER + "succulent/note/getDiaryDetails";
+
+    public static final String QA_ADD_URL = SERVER + "succulent/qa/qaAdd";
+    public static final String GET_QA_LIST_URL = SERVER + "succulent/qa/getQaList";
+    public static final String ANSWER_ADD_URL = SERVER + "succulent/qa/answerAdd";
+    public static final String GET_ANSWER_LIST_URL = SERVER + "succulent/qa/getAnswerList";
+    public static final String ANSWER_UP_URL = SERVER + "succulent/qa/answerUp";
+
+
 }

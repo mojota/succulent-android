@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class QaResponseInfo extends ResponseInfo {
 
-    private List<QuestionInfo> qaList;
+    private List<QuestionInfo> list;
 
-    public List<QuestionInfo> getQaList() {
-        return qaList;
+    public List<QuestionInfo> getList() {
+        return list;
     }
 
-    public void setQaList(List<QuestionInfo> qaList) {
-        this.qaList = qaList;
+    public void setList(List<QuestionInfo> list) {
+        this.list = list;
     }
 }

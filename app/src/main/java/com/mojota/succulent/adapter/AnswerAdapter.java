@@ -17,10 +17,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.AnswerInfo;
 import com.mojota.succulent.model.ResponseInfo;
+import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UserUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,8 +68,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         this.mActivity = context;
         this.mList = list;
         mOptions = GlobalUtil.getDefaultAvatarOptions();
-        mTotalWidth = GlobalUtil.getScreenWidth() - context.getResources()
-                .getDimensionPixelSize(R.dimen.item_qa_margin);
+        mTotalWidth = GlobalUtil.getScreenWidth() - context.getResources().getDimensionPixelSize
+                (R.dimen.item_qa_margin);
     }
 
 
@@ -84,23 +87,26 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(mActivity).inflate(R.layout
-                .item_answer, parent, false));
+        return new ViewHolder(LayoutInflater.from(mActivity).inflate(R.layout.item_answer,
+                parent, false));
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final AnswerInfo answer = mList.get(position);
         if (answer != null) {
-            String avatar = answer.getUserInfo().getAvatarUrl();
-            Glide.with(mActivity).load(avatar).apply(mOptions).into(holder.ivAvatar);
-            holder.tvNickname.setText(answer.getUserInfo().getNickname());
+            UserInfo userInfo = answer.getUserInfo();
+            if (userInfo != null) {
+                holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
+                Glide.with(mActivity).load(userInfo.getAvatarUrl()).apply(mOptions).into(holder
+                        .ivAvatar);
+            }
 
             if (!TextUtils.isEmpty(answer.getAnswerContent())) {
                 String answerContent = answer.getAnswerContent().replaceAll("\n+", "\n");
                 holder.tvAnswer.setText(answerContent);
-                if (answerContent.length() >= (int) (mTotalWidth / holder.tvAnswer
-                        .getTextSize()) * 5) {
+                if (answerContent.length() >= (int) (mTotalWidth / holder.tvAnswer.getTextSize())
+                        * 5) {
                     holder.tbAnswerAll.setVisibility(View.VISIBLE);
                 } else {
                     holder.tbAnswerAll.setVisibility(View.GONE);
@@ -109,8 +115,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
                         .OnCheckedChangeListener() {
 
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean
-                            isChecked) {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
                             holder.tvAnswer.setMaxLines(Integer.MAX_VALUE);
                         } else {
@@ -124,70 +129,32 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
 
             holder.tvTime.setText(answer.getAnswerTime());
 
-            holder.tbUp.setText(answer.getAnswerUpCount());
-            holder.tbUp.setTextOn(answer.getAnswerUpCount());
-            holder.tbUp.setTextOff(answer.getAnswerUpCount());
-            holder.tbUp.setChecked("1".equals(answer.getAnswerUpState()));
+            holder.tbUp.setText(String.valueOf(answer.getUpCount()));
+            holder.tbUp.setTextOn(String.valueOf(answer.getUpCount()));
+            holder.tbUp.setTextOff(String.valueOf(answer.getUpCount()));
+            holder.tbUp.setChecked(answer.getIsUp() == 1);
             holder.tbUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int upCount = answer.getUpCount();
+                    int isUp;
                     if (holder.tbUp.isChecked()) {
                         GlobalUtil.startAnim(mActivity, holder.ivUp);
-                        qaUp(answer.getAnswerId(), 1);
-                        try {
-                            int count = Integer.parseInt(answer.getAnswerUpCount());
-                            answer.setAnswerUpCount(String.valueOf(count + 1));
-                            answer.setAnswerUpState("1");
-                            holder.tbUp.setText(answer.getAnswerUpCount());
-                            holder.tbUp.setTextOn(answer.getAnswerUpCount());
-                            holder.tbUp.setTextOff(answer.getAnswerUpCount());
-                        } catch (Exception e) {
-                        }
+                        answer.setUpCount(upCount + 1);
+                        isUp = 1;
                     } else {
-                        qaUp(answer.getAnswerId(), 0);
-                        try {
-                            int count = Integer.parseInt(answer.getAnswerUpCount());
-                            if (count > 0) {
-                                answer.setAnswerUpCount(String.valueOf(count - 1));
-                                answer.setAnswerUpState("0");
-                                holder.tbUp.setText(answer.getAnswerUpCount());
-                                holder.tbUp.setTextOn(answer.getAnswerUpCount());
-                                holder.tbUp.setTextOff(answer.getAnswerUpCount());
-                            }
-                        } catch (Exception e) {
-                        }
+                        answer.setUpCount(upCount - 1);
+                        isUp = 0;
                     }
+                    answer.setIsUp(isUp);
+                    RequestUtils.answerUp(answer.getAnswerId(), isUp);
+                    holder.tbUp.setText(String.valueOf(answer.getUpCount()));
+                    holder.tbUp.setTextOn(String.valueOf(answer.getUpCount()));
+                    holder.tbUp.setTextOff(String.valueOf(answer.getUpCount()));
+
                 }
             });
         }
-    }
-
-
-    /**
-     * 问答顶
-     *
-     * @param answerId 回答ID， 传值时表示操作回答
-     * @param upState  点赞操作状态：0-取消点赞，1-点赞
-     */
-    public static void qaUp(String answerId, int upState) {
-        String url = "url";
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", "");
-        map.put("answerId", answerId);
-        map.put("upState", String.valueOf(upState));
-        GsonPostRequest<ResponseInfo> request = new GsonPostRequest<ResponseInfo>(url, null,
-                map, ResponseInfo.class, new Response.Listener<ResponseInfo>() {
-
-            @Override
-            public void onResponse(ResponseInfo repInfo) {
-                if (repInfo != null && "0".equals(repInfo.getCode())) {
-                }
-            }
-        }, new VolleyErrorListener());
-        VolleyUtil.execute(request);
     }
 
 }

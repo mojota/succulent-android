@@ -68,4 +68,12 @@ public class UserUtil {
     public static boolean isCurrentUser(String userId) {
         return isLogin() && getCurrentUserId().equals(userId);
     }
+
+    public static String getDisplayName(UserInfo userInfo) {
+        if (userInfo == null) {
+            return "";
+        }
+        return TextUtils.isEmpty(userInfo.getNickname()) ? userInfo.getUserName() : userInfo
+                .getNickname();
+    }
 }

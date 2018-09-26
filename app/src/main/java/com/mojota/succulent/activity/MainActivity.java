@@ -136,11 +136,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
             mLayoutUser.setVisibility(View.VISIBLE);
             mFabUserEdit.setVisibility(View.VISIBLE);
             mTvLogin.setVisibility(View.GONE);
-            if (TextUtils.isEmpty(mUserInfo.getNickname())) {
-                mTvNickname.setText(mUserInfo.getUserName());
-            } else {
-                mTvNickname.setText(mUserInfo.getNickname());
-            }
+            mTvNickname.setText(UserUtil.getDisplayName(mUserInfo));
             if (TextUtils.isEmpty(mUserInfo.getRegion())) {
                 mTvRegion.setVisibility(View.GONE);
             } else {

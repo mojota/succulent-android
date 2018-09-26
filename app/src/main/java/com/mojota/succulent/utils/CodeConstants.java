@@ -23,6 +23,9 @@ public class CodeConstants {
     public static final int REQUEST_LIKE = 1005;
     public static final int REQUEST_NOTE_DETAIL_DELETE = 1006;
     public static final int REQUEST_NOTE_DELETE = 1007;
+    public static final int REQUEST_QA_ADD = 1008;
+    public static final int REQUEST_ANSWER_ADD = 1009;
+    public static final int REQUEST_ANSWER_UP = 1010;
 
 
     public static final Map<Integer, String> REQUEST_MAP = new HashMap<>();
@@ -36,6 +39,9 @@ public class CodeConstants {
         REQUEST_MAP.put(REQUEST_LIKE, "");
         REQUEST_MAP.put(REQUEST_NOTE_DETAIL_DELETE, "");
         REQUEST_MAP.put(REQUEST_NOTE_DELETE, "");
+        REQUEST_MAP.put(REQUEST_QA_ADD, "提问");
+        REQUEST_MAP.put(REQUEST_ANSWER_ADD, "回答");
+        REQUEST_MAP.put(REQUEST_ANSWER_UP, "");
     }
 
 

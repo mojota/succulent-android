@@ -13,7 +13,7 @@ public class QuestionInfo extends BaseBean {
     String questionTitle;//问题;
     String questionPicUrl; // 问题图片;
     String questionTime;//提问时间;
-    String answerCount;//回答数;
+    int answerCount;//回答数;
 
     public UserInfo getUserInfo() {
         return userInfo;
@@ -55,11 +55,11 @@ public class QuestionInfo extends BaseBean {
         this.questionTime = questionTime;
     }
 
-    public String getAnswerCount() {
+    public int getAnswerCount() {
         return answerCount;
     }
 
-    public void setAnswerCount(String answerCount) {
+    public void setAnswerCount(int answerCount) {
         this.answerCount = answerCount;
     }
 }

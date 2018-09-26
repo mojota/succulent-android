@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class RequestUtils {
 
+
     public interface RequestListener {
 
         void onRequestSuccess(int requestCode);
@@ -127,5 +128,20 @@ public class RequestUtils {
         map.put("noteId", note.getNoteId());
         RequestUtils.commonRequest(UrlConstants.NOTE_DELETE_URL, map, CodeConstants
                 .REQUEST_NOTE_DELETE, null);
+    }
+
+
+    /**
+     * 回答顶, 不关心成功失败
+     *
+     * @param answerId 回答ID， 传值时表示操作回答
+     * @param isUp     点赞操作状态：0-取消点赞，1-点赞
+     */
+    public static void answerUp(String answerId, int isUp) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("answerId", answerId);
+        map.put("isUp", String.valueOf(isUp));
+        commonRequest(UrlConstants.ANSWER_UP_URL, map, CodeConstants.REQUEST_ANSWER_UP, null);
     }
 }
