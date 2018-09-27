@@ -30,6 +30,8 @@ public class UrlConstants {
     public static final String ANSWER_ADD_URL = SERVER + "succulent/qa/answerAdd";
     public static final String GET_ANSWER_LIST_URL = SERVER + "succulent/qa/getAnswerList";
     public static final String ANSWER_UP_URL = SERVER + "succulent/qa/answerUp";
+    public static final String QUESTION_DELETE_URL = SERVER + "succulent/qa/deleteQuestion";
+    public static final String ANSWER_DELETE_URL = SERVER + "succulent/qa/deleteAnswer";
 
 
 }

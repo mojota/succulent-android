@@ -4,6 +4,7 @@ package com.mojota.succulent.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
@@ -43,7 +45,7 @@ import java.util.Map;
  * Created by mojota on 18-8-21
  */
 public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View
-        .OnClickListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener {
+        .OnClickListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener,QaAdapter.OnItemDeleteListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,6 +96,7 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         mSwipeRefresh.setOnRefreshListener(this);
         mRvQA = view.findViewById(R.id.rv_qa);
         mQaAdapter = new QaAdapter(mList, this);
+        mQaAdapter.setOnItemDeleteListener(this);
         mWrapAdapter = new WrapRecycleAdapter(mQaAdapter);
         mRvQA.setAdapter(mWrapAdapter);
         mRvQA.setOnLoadListener(this);
@@ -211,4 +214,45 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     }
 
+    @Override
+    public void onDelete(final QuestionInfo question, final int position) {
+        mList.remove(position);
+        mWrapAdapter.notifyItemRemoved(position);
+        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
+        Snackbar.make(mRvQA, "已删除一个问题", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mList.add(position, question);
+                        mWrapAdapter.notifyItemInserted(position);
+                        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
+                    }
+                }).addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                switch (event) {
+                    case Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE:
+                    case Snackbar.Callback.DISMISS_EVENT_MANUAL:
+                    case Snackbar.Callback.DISMISS_EVENT_SWIPE:
+                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                        requestDelete(question);
+                        break;
+                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                        break;
+                }
+            }
+        }).show();
+    }
+
+    /**
+     * 请求网络删除
+     */
+    private void requestDelete(QuestionInfo question) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("questionId", question.getQuestionId());
+
+        RequestUtils.commonRequest(UrlConstants.QUESTION_DELETE_URL, map, CodeConstants
+                .REQUEST_QUESTION_DELETE, null);
+    }
 }

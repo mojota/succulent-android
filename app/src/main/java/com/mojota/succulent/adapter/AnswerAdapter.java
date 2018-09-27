@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +40,12 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
     private List<AnswerInfo> mList;
     private Activity mActivity;
     private RequestOptions mOptions;
+    private OnItemDeleteListener mOnItemDeleteListener;
+
+    public interface OnItemDeleteListener{
+
+        void onDelete(AnswerInfo answer, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -50,6 +57,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         private final ViewGroup layoutUser;
         private final ToggleButton tbUp;
         private final ImageView ivUp;
+        private final Button btDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +69,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
             tvTime = (TextView) itemView.findViewById(R.id.tv_time);
             tbUp = (ToggleButton) itemView.findViewById(R.id.tb_up);
             ivUp = (ImageView) itemView.findViewById(R.id.iv_anim_up);
+            btDelete = itemView.findViewById(R.id.bt_delete);
         }
     }
 
@@ -75,6 +84,10 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
 
     public void setList(List<AnswerInfo> list) {
         this.mList = list;
+    }
+
+    public void setOnItemDeleteListener(OnItemDeleteListener onItemDeleteListener) {
+        this.mOnItemDeleteListener = onItemDeleteListener;
     }
 
     @Override
@@ -92,14 +105,26 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final AnswerInfo answer = mList.get(position);
+        holder.btDelete.setVisibility(View.GONE);
         if (answer != null) {
             UserInfo userInfo = answer.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
                 Glide.with(mActivity).load(userInfo.getAvatarUrl()).apply(mOptions).into(holder
                         .ivAvatar);
+                if (userInfo.getUserId().equals(UserUtil.getCurrentUserId())){
+                    holder.btDelete.setVisibility(View.VISIBLE);
+                    holder.btDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnItemDeleteListener != null) {
+                                mOnItemDeleteListener.onDelete(answer, position);
+                            }
+                        }
+                    });
+                }
             }
 
             if (!TextUtils.isEmpty(answer.getAnswerContent())) {

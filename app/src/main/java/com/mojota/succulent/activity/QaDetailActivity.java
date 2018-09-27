@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -34,6 +35,7 @@ import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
@@ -50,7 +52,7 @@ import java.util.Map;
  */
 
 public class QaDetailActivity extends BaseActivity implements View.OnClickListener,
-        LoadMoreRecyclerView.OnLoadListener {
+        LoadMoreRecyclerView.OnLoadListener, AnswerAdapter.OnItemDeleteListener {
 
     private static final String TAG = "DisQaDetailActivity";
     public static final String KEY_QA = "KEY_QA";
@@ -133,6 +135,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         // 回答列表
         mRvAnswer = findViewById(R.id.rv_answer);
         mAnswerAdapter = new AnswerAdapter(mActivity, mAnswerList);
+        mAnswerAdapter.setOnItemDeleteListener(this);
         mWrapAdapter = new WrapRecycleAdapter(mAnswerAdapter);
         mRvAnswer.setAdapter(mWrapAdapter);
         mRvAnswer.setOnLoadListener(this);
@@ -195,15 +198,18 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        if (requestCode == CodeConstants.REQUEST_ANSWER_ADD){
+        if (requestCode == CodeConstants.REQUEST_ANSWER_ADD) {
             mEtAnswer.setText("");
             mQuestion.setAnswerCount(mQuestion.getAnswerCount() + 1);
             refresh();
-            Intent intent = new Intent();
-            intent.putExtra(QaDetailActivity.KEY_QA, mQuestion);
-            intent.putExtra(KEY_ITEM_POS, getIntent().getIntExtra(KEY_ITEM_POS, 0));
-            setResult(CodeConstants.RESULT_QA, intent);
+        } else if (requestCode == CodeConstants.REQUEST_ANSWER_DELETE) {
+            mQuestion.setAnswerCount(mQuestion.getAnswerCount() - 1);
+            setDataToView();
         }
+        Intent intent = new Intent();
+        intent.putExtra(QaDetailActivity.KEY_QA, mQuestion);
+        intent.putExtra(KEY_ITEM_POS, getIntent().getIntExtra(KEY_ITEM_POS, 0));
+        setResult(CodeConstants.RESULT_QA, intent);
     }
 
     public void refresh() {
@@ -288,5 +294,49 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     private void closeKeyboard() {
         mInputManager.hideSoftInputFromWindow(mEtAnswer.getWindowToken(), 0);
     }
+
+    @Override
+    public void onDelete(final AnswerInfo answer, final int position) {
+        mAnswerList.remove(position);
+        mWrapAdapter.notifyItemRemoved(position);
+        mWrapAdapter.notifyItemRangeChanged(0, mAnswerList.size());
+        Snackbar.make(mRvAnswer, "已删除一个回答", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+                new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAnswerList.add(position, answer);
+                mWrapAdapter.notifyItemInserted(position);
+                mWrapAdapter.notifyItemRangeChanged(0, mAnswerList.size());
+            }
+        }).addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                switch (event) {
+                    case Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE:
+                    case Snackbar.Callback.DISMISS_EVENT_MANUAL:
+                    case Snackbar.Callback.DISMISS_EVENT_SWIPE:
+                    case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
+                        requestDelete(answer);
+                        break;
+                    case Snackbar.Callback.DISMISS_EVENT_ACTION:
+                        break;
+                }
+            }
+        }).show();
+    }
+
+
+    /**
+     * 请求网络删除
+     */
+    private void requestDelete(AnswerInfo answer) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("answerId", answer.getAnswerId());
+        map.put("questionId", mQuestionId);
+        requestSubmit(UrlConstants.ANSWER_DELETE_URL, map, CodeConstants
+                .REQUEST_ANSWER_DELETE);
+    }
+
 
 }

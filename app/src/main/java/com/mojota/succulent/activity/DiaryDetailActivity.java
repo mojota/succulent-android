@@ -305,23 +305,18 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
     @Override
     public void onDelete(final NoteDetail diary, final int position) {
-        deleteData(position);
-    }
-
-    private void deleteData(final int position) {
-        final NoteDetail noteDetail = mList.get(position);
         mList.remove(position);
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
         Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
                 new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mList.add(position, noteDetail);
-                mWrapAdapter.notifyItemInserted(position);
-                mWrapAdapter.notifyItemRangeChanged(0, mList.size());
-            }
-        }).addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onClick(View v) {
+                        mList.add(position, diary);
+                        mWrapAdapter.notifyItemInserted(position);
+                        mWrapAdapter.notifyItemRangeChanged(0, mList.size());
+                    }
+                }).addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
                 switch (event) {
@@ -329,7 +324,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
                     case Snackbar.Callback.DISMISS_EVENT_MANUAL:
                     case Snackbar.Callback.DISMISS_EVENT_SWIPE:
                     case Snackbar.Callback.DISMISS_EVENT_TIMEOUT:
-                        requestDelete(noteDetail);
+                        requestDelete(diary);
                         break;
                     case Snackbar.Callback.DISMISS_EVENT_ACTION:
                         break;
@@ -337,6 +332,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
             }
         }).show();
     }
+
 
     /**
      * 请求网络删除

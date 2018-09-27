@@ -41,7 +41,7 @@ public class BaseActivity extends AppCompatActivity implements RequestUtils.Requ
 
 
     /**
-     * 提交请求
+     * 提交请求带loading
      */
     protected void loadingRequestSubmit(String url, Map<String, String> paramMap, final int
             requestCode) {
@@ -49,6 +49,13 @@ public class BaseActivity extends AppCompatActivity implements RequestUtils.Requ
         RequestUtils.commonRequest(url, paramMap, requestCode, this);
     }
 
+    /**
+     * 提交请求无loading
+     */
+    protected void requestSubmit(String url, Map<String, String> paramMap, final int
+            requestCode) {
+        RequestUtils.commonRequest(url, paramMap, requestCode, this);
+    }
 
     @Override
     public void onRequestSuccess(int requestCode) {

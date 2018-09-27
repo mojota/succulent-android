@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,11 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
     private Context mContext;
     private RequestOptions mAvatarOptions;
     private RequestOptions mDefaultOptions;
+    private OnItemDeleteListener mOnItemDeleteListener;
+
+    public interface OnItemDeleteListener{
+        void onDelete(QuestionInfo question, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView tvTitle;
@@ -34,6 +40,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
         public final ImageView ivPic;
         private final TextView tvNickname;
         private final ImageView ivAvatar;
+        private final Button btDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -43,6 +50,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
             ivPic = itemView.findViewById(R.id.iv_pic);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             ivAvatar = itemView.findViewById(R.id.iv_avatar);
+            btDelete = itemView.findViewById(R.id.bt_delete);
         }
     }
 
@@ -55,6 +63,10 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
 
     public void setList(List<QuestionInfo> list) {
         mList = list;
+    }
+
+    public void setOnItemDeleteListener(OnItemDeleteListener onItemDeleteListener) {
+        this.mOnItemDeleteListener = onItemDeleteListener;
     }
 
     @Override
@@ -76,7 +88,9 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.ivPic.setVisibility(View.GONE);
-        QuestionInfo questionInfo = mList.get(position);
+        holder.btDelete.setVisibility(View.GONE);
+        holder.btDelete.setOnClickListener(null);
+        final QuestionInfo questionInfo = mList.get(position);
         if (questionInfo != null) {
             holder.tvTitle.setText(questionInfo.getQuestionTitle());
             holder.tvTime.setText(questionInfo.getQuestionTime());
@@ -94,6 +108,17 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
                 Glide.with(mContext).load(userInfo.getAvatarUrl()).apply(mAvatarOptions).into
                         (holder.ivAvatar);
+                if (userInfo.getUserId().equals(UserUtil.getCurrentUserId())){
+                    holder.btDelete.setVisibility(View.VISIBLE);
+                    holder.btDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mOnItemDeleteListener != null) {
+                                mOnItemDeleteListener.onDelete(questionInfo, position);
+                            }
+                        }
+                    });
+                }
             }
         }
 
