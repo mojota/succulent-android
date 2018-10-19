@@ -6,8 +6,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="title_my_garden">我的花园</string>
-    <string name="title_encyclopedia">多肉百科</string>
     <string name="title_moments">邻家肉园</string>
+    <string name="title_crazy">多肉也疯狂</string>
     <string name="hello_blank_fragment">test</string>
     <string name="str_self">私密</string>
     <string name="str_public">公开</string>

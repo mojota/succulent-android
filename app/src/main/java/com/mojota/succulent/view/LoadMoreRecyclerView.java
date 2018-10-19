@@ -18,7 +18,7 @@ import com.mojota.succulent.R;
  * Update by wangjing on 17-11-2.
  */
 
-public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickListener {
+public class LoadMoreRecyclerView extends RecyclerView {
 
     private static final int LOAD_SUCCESS_HAVE_MORE = 0;//加载成功且还有更多
     private static final int LOAD_SUCCESS_NO_MORE = 1;//全部加载完成
@@ -53,7 +53,14 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
         wrapAdapter.addFooterView(mFooterView);
 
         mLayoutFooter = wrapAdapter.getFooterView().findViewById(R.id.layout_footer);
-        mLayoutFooter.setOnClickListener(this);
+        mLayoutFooter.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMode == LOAD_FAILED) {
+                    startLoading();
+                }
+            }
+        });
         mTvFooter = (TextView) wrapAdapter.getFooterView().findViewById(R.id.tv_footer);
         mPbLoading = (ProgressBar) wrapAdapter.getFooterView().findViewById(R.id.pb_loading);
 
@@ -81,7 +88,6 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
                 .MATCH_PARENT);
         setLayoutParams(params);
         setOverScrollMode(OVER_SCROLL_NEVER);
-        setItemAnimator(new DefaultItemAnimator());
 
         addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -166,18 +172,6 @@ public class LoadMoreRecyclerView extends RecyclerView implements View.OnClickLi
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.layout_footer:
-                if (mMode == LOAD_FAILED) {
-                    startLoading();
-                }
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
      * 获取当前状态

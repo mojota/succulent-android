@@ -122,7 +122,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
         final NoteDetail diary = mList.get(position);
         if (diary != null) {
             holder.tvContent.setText(diary.getContent());
-            holder.tvTime.setText(diary.getCreateTime());
+            holder.tvTime.setText(GlobalUtil.formatDisplayTime(diary.getCreateTime()));
 
             holder.ivPic0.setOnClickListener(null);
             holder.ivPic1.setOnClickListener(null);

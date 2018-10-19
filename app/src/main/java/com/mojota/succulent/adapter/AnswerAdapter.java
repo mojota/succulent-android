@@ -12,23 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.AnswerInfo;
-import com.mojota.succulent.model.ResponseInfo;
 import com.mojota.succulent.model.UserInfo;
-import com.mojota.succulent.network.GsonPostRequest;
-import com.mojota.succulent.network.VolleyErrorListener;
-import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UserUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mojota on 18-08-22.
@@ -152,7 +145,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
                 holder.tvAnswer.setText("");
             }
 
-            holder.tvTime.setText(answer.getAnswerTime());
+            holder.tvTime.setText(GlobalUtil.formatDisplayTime(answer.getAnswerTime()));
 
             holder.tbUp.setText(String.valueOf(answer.getUpCount()));
             holder.tbUp.setTextOn(String.valueOf(answer.getUpCount()));

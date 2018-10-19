@@ -93,7 +93,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
         final QuestionInfo questionInfo = mList.get(position);
         if (questionInfo != null) {
             holder.tvTitle.setText(questionInfo.getQuestionTitle());
-            holder.tvTime.setText(questionInfo.getQuestionTime());
+            holder.tvTime.setText(GlobalUtil.formatDisplayTime(questionInfo.getQuestionTime()));
             holder.tvAnswerCount.setText(String.valueOf(questionInfo.getAnswerCount()));
 
             if (!TextUtils.isEmpty(questionInfo.getQuestionPicUrl())) {

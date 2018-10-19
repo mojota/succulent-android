@@ -12,8 +12,8 @@
         android:title="@string/title_moments"/>
 
     <item
-        android:id="@+id/nav_encyclopedia"
+        android:id="@+id/nav_crazy"
         android:icon="@mipmap/ic_extension_white_48dp"
-        android:title="@string/title_encyclopedia"/>
+        android:title="@string/title_crazy"/>
 
 </menu>

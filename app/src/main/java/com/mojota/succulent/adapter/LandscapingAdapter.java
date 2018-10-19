@@ -11,15 +11,10 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteInfo;
-import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
-import com.mojota.succulent.utils.UrlConstants;
-import com.mojota.succulent.utils.UserUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mojota on 18-8-3.
@@ -87,7 +82,7 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
         final NoteInfo note = mList.get(position);
         if (note != null) {
             holder.tvTitle.setText(note.getNoteTitle());
-            holder.tvTime.setText(note.getUpdateTime());
+            holder.tvTime.setText(GlobalUtil.formatDisplayTime(note.getUpdateTime()));
 
             holder.tbLike.setTextOn(String.valueOf(note.getLikeyCount()));
             holder.tbLike.setTextOff(String.valueOf(note.getLikeyCount()));

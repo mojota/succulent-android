@@ -21,15 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
-import com.mojota.succulent.fragment.EncyclopediaFragment;
+import com.mojota.succulent.fragment.CrazyFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
 import com.mojota.succulent.fragment.MomentsFragment;
 import com.mojota.succulent.model.UserInfo;
-import com.mojota.succulent.model.UserInfoResponseInfo;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
@@ -157,7 +154,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mFragmentList = new ArrayList<>();
         mFragmentList.add(MyGardenFragment.newInstance("", ""));
         mFragmentList.add(MomentsFragment.newInstance("", ""));
-        mFragmentList.add(EncyclopediaFragment.newInstance("", ""));
+        mFragmentList.add(CrazyFragment.newInstance("", ""));
     }
 
     @Override
@@ -182,7 +179,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 case R.id.nav_moments:
                     mVpMain.setCurrentItem(1);
                     return true;
-                case R.id.nav_encyclopedia:
+                case R.id.nav_crazy:
                     mVpMain.setCurrentItem(2);
                     return true;
             }

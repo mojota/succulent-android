@@ -1,12 +1,10 @@
 package com.mojota.succulent.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,22 +18,17 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.AnswerAdapter;
 import com.mojota.succulent.model.AnswerInfo;
 import com.mojota.succulent.model.AnswerResponseInfo;
 import com.mojota.succulent.model.QuestionInfo;
-import com.mojota.succulent.model.ResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
-import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
-import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
@@ -244,7 +237,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             } else {
                 mTvQuestionTitle.setText("");
             }
-            mTvTime.setText(mQuestion.getQuestionTime());
+            mTvTime.setText(GlobalUtil.formatDisplayTime(mQuestion.getQuestionTime()));
             mTvAnswerCount.setText(String.valueOf(mQuestion.getAnswerCount()));
             if (!TextUtils.isEmpty(mQuestion.getQuestionPicUrl())) {
                 mPicUrls.clear();
