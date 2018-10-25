@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.Species;
 import com.mojota.succulent.utils.GlobalUtil;
 

@@ -1,9 +1,11 @@
 package com.mojota.succulent.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,13 +14,16 @@ import java.util.List;
  */
 public class FragmentViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<Fragment> mFragmentList;
+    private List<Fragment> mFragmentList;
     private final List<String> mTitleList;
 
     public FragmentViewPagerAdapter(FragmentManager fm, List<Fragment> fList, List<String> titles) {
         super(fm);
         mFragmentList = fList;
         mTitleList = titles;
+    }
+    public void setList(List<Fragment> fList) {
+        mFragmentList = fList;
     }
 
     @Override
@@ -44,5 +49,10 @@ public class FragmentViewPagerAdapter extends FragmentPagerAdapter {
             return mTitleList.get(position);
         }
         return null;
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 }

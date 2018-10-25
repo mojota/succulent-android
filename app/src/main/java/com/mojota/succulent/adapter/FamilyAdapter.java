@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.Family;
 
 import java.util.List;

@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.utils.CodeConstants;

@@ -49,6 +49,13 @@ public class UserUtil {
     }
 
     /**
+     * 获取用户封面url
+     */
+    public static String getCoverUrl() {
+        return mSp.getString(KeyConstants.KEY_COVER_URL);
+    }
+
+    /**
      * 获取当前用户id
      */
     public static String getCurrentUserId() {

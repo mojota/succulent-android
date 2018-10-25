@@ -1,4 +1,4 @@
-package com.mojota.succulent.activity;
+package com.mojota.succulent.interfaces;
 
 import android.widget.ImageView;
 

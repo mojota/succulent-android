@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.LinkAdapter;
-import com.mojota.succulent.adapter.OnItemClickListener;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.LinkInfo;
 import com.mojota.succulent.model.LinkResponseInfo;
 

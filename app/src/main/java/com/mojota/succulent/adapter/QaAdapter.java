@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.QuestionInfo;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.utils.GlobalUtil;

@@ -10,6 +10,7 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;

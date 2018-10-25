@@ -70,6 +70,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<String> mPicUrls = new ArrayList<String>();
     private WrapRecycleAdapter mWrapAdapter;
     private String mAnswerTime = "";
+    private TextView mTvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         mWrapAdapter = new WrapRecycleAdapter(mAnswerAdapter);
         mRvAnswer.setAdapter(mWrapAdapter);
         mRvAnswer.setOnLoadListener(this);
+        mTvEmpty = findViewById(R.id.tv_empty);
 
         mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -159,18 +161,19 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
                     }
                     List<AnswerInfo> list = responseInfo.getList();
                     mAnswerList.addAll(list);
-                    setDataToView();
                     mRvAnswer.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvAnswer.loadMoreFailed();
-                    GlobalUtil.makeToast(R.string.str_no_data);
+//                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
             public void onError(String error) {
                 mRvAnswer.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -251,8 +254,14 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         }
 
         // 回答列表
-        if (mAnswerList != null) {
+        if (mAnswerList != null && mAnswerList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
             mRvAnswer.setVisibility(View.VISIBLE);
+            mAnswerAdapter.setList(mAnswerList);
+            mWrapAdapter.notifyDataSetChanged();
+        } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRvAnswer.setVisibility(View.INVISIBLE);
             mAnswerAdapter.setList(mAnswerList);
             mWrapAdapter.notifyDataSetChanged();
         }

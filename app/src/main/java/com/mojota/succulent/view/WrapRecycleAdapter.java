@@ -90,7 +90,8 @@ public class WrapRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return TYPE_FOOTER;
             }
         }
-        return mAdapter.getItemViewType(position);
+        return mAdapter.getItemViewType((mHeaderView != null) ? position - 1
+                : position);
     }
 
     @Override

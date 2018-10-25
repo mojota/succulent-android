@@ -27,7 +27,18 @@ public class PhotoChooseSupportActivity extends BaseActivity {
     private Uri mUploadUri = null;
     private ImageView mUploadIbt;
     private RequestOptions mRequestOptions;
+    private OnChoosedListener mOnChoosedListener;
 
+    interface OnChoosedListener {
+
+        void onChoosed(Uri localUploadUri);
+
+        void onCanceled();
+    }
+
+    public void setOnChoosedListener(OnChoosedListener onChoosedListener) {
+        this.mOnChoosedListener = onChoosedListener;
+    }
 
     protected void showPicDialog(ImageView uploadIbt, RequestOptions requestOptions) {
         mUploadIbt = uploadIbt;
@@ -44,6 +55,13 @@ public class PhotoChooseSupportActivity extends BaseActivity {
                     takePhoto();
                 } else if (which == 1) {
                     choosePhoto();
+                }
+            }
+        }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (mOnChoosedListener != null) {
+                    mOnChoosedListener.onCanceled();
                 }
             }
         }).show();
@@ -64,6 +82,7 @@ public class PhotoChooseSupportActivity extends BaseActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUploadUri);
         startActivityForResult(intent, CodeConstants.REQUEST_TAKE_PHOTO);
+
     }
 
     /**
@@ -79,20 +98,38 @@ public class PhotoChooseSupportActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case CodeConstants.REQUEST_TAKE_PHOTO:
-                if (resultCode == RESULT_OK && mUploadUri != null && mUploadIbt != null) {
-                    Glide.with(this).load(mUploadUri).apply(mRequestOptions).into(mUploadIbt);
-                }
-                mUploadUri = null;
-                mUploadIbt = null;
-                break;
-            case CodeConstants.REQUEST_CHOOSE_PHOTO:
-                if (resultCode == RESULT_OK && mUploadIbt != null) {
-                    Glide.with(this).load(data.getData()).apply(mRequestOptions).into(mUploadIbt);
-                }
-                mUploadIbt = null;
-                break;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CodeConstants.REQUEST_TAKE_PHOTO:
+                    if (mUploadUri != null) {
+                        if (mUploadIbt != null) {
+                            Glide.with(this).load(mUploadUri).apply(mRequestOptions)
+                                    .into(mUploadIbt);
+                        }
+                        if (mOnChoosedListener != null) {
+                            mOnChoosedListener.onChoosed(mUploadUri);
+                        }
+                    }
+                    mUploadUri = null;
+                    mUploadIbt = null;
+                    break;
+                case CodeConstants.REQUEST_CHOOSE_PHOTO:
+                    if (data.getData() != null) {
+                        if (mUploadIbt != null) {
+                            Glide.with(this).load(data.getData()).apply
+                                    (mRequestOptions).into(mUploadIbt);
+                        }
+                        if (mOnChoosedListener != null) {
+                            mOnChoosedListener.onChoosed(data.getData());
+                        }
+                    }
+                    mUploadIbt = null;
+                    break;
+            }
+        } else if (resultCode == RESULT_CANCELED) {
+            if (mOnChoosedListener != null) {
+                mOnChoosedListener.onCanceled();
+            }
         }
     }
 }

@@ -1,22 +1,25 @@
 package com.mojota.succulent.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
+import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
+import com.mojota.succulent.SucculentApplication;
+import com.mojota.succulent.activity.CoverAddActivity;
 import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.MomentsAdapter;
-import com.mojota.succulent.adapter.OnItemClickListener;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
@@ -40,7 +43,8 @@ import java.util.Map;
  * Created by mojota on 18-7-23
  */
 public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
-        .OnRefreshListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener {
+        .OnRefreshListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener,
+        View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int PAGE_SIZE = 10; // 每页的条数
@@ -53,6 +57,8 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
     private String mUpdateTime = "";
     private WrapRecycleAdapter mWrapAdapter;
+    private TextView mTvEmpty;
+    private ImageView mIvCover;
 
 
     public MomentsFragment() {
@@ -88,8 +94,14 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         mRvMoments = view.findViewById(R.id.rv_moments);
         mMomentsAdapter = new MomentsAdapter(mList, this);
         mWrapAdapter = new WrapRecycleAdapter(mMomentsAdapter);
+        View headerView = LayoutInflater.from(getContext()).inflate(R.layout
+                .layout_moments_header, mRvMoments, false);
+        mIvCover = headerView.findViewById(R.id.iv_cover);
+        mIvCover.setOnClickListener(this);
+        mWrapAdapter.addHeaderView(headerView);
         mRvMoments.setAdapter(mWrapAdapter);
         mRvMoments.setOnLoadListener(this);
+        mTvEmpty = view.findViewById(R.id.tv_empty);
 
         getData(mUpdateTime);
         return view;
@@ -102,8 +114,8 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         paramMap.put("updateTime", updateTime);
         paramMap.put("size", String.valueOf(PAGE_SIZE));
 
-        GsonPostRequest request = new GsonPostRequest(url, null, paramMap, NoteResponseInfo
-                .class, new Response.Listener<NoteResponseInfo>() {
+        GsonPostRequest request = new GsonPostRequest(url, null, paramMap,
+                NoteResponseInfo.class, new Response.Listener<NoteResponseInfo>() {
 
             @Override
             public void onResponse(NoteResponseInfo responseInfo) {
@@ -114,12 +126,12 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
                     }
                     List<NoteInfo> list = responseInfo.getList();
                     mList.addAll(list);
-                    setDataToView();
                     mRvMoments.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvMoments.loadMoreFailed();
                     GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
@@ -127,6 +139,7 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
                 mSwipeRefresh.setRefreshing(false);
                 mRvMoments.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -134,8 +147,22 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
 
 
     private void setDataToView() {
-        mMomentsAdapter.setList(mList);
-        mWrapAdapter.notifyDataSetChanged();
+        if (!TextUtils.isEmpty(UserUtil.getCoverUrl())) {
+            Glide.with(SucculentApplication.getInstance()).load(UserUtil.getCoverUrl())
+                    .apply(GlobalUtil.getDefaultOptions().centerCrop()).into(mIvCover);
+        }
+
+        if (mList != null && mList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
+            mRvMoments.setVisibility(View.VISIBLE);
+            mMomentsAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRvMoments.setVisibility(View.INVISIBLE);
+            mMomentsAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -162,10 +189,38 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
             Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
             intent.putExtra(DiaryDetailActivity.KEY_DIARY, noteInfo);
             intent.putExtra(DiaryDetailActivity.KEY_ONLY_READ, true);
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                    (getActivity(), view, view.getTransitionName());
-            startActivityForResult(intent, CodeConstants.REQUEST_DETAIL,options.toBundle());
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(getActivity(), view, view
+                            .getTransitionName());
+            startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options
+                    .toBundle());
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_cover:
+                if (UserUtil.isLogin()) {
+                    Intent intent = new Intent(getActivity(), CoverAddActivity.class);
+                    startActivityForResult(intent, CodeConstants.REQUEST_COVER);
+                } else {
+                    ActivityUtil.startLoginActivity(getActivity());
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CodeConstants.REQUEST_COVER && resultCode == CodeConstants
+                .RESULT_COVER) {
+            Uri localUri = data.getParcelableExtra(CoverAddActivity.KEY_LOCAL_URI);
+            if (localUri != null) {
+                Glide.with(SucculentApplication.getInstance()).load(localUri).apply
+                        (GlobalUtil.getDefaultOptions().centerCrop()).into(mIvCover);
+            }
+        }
+    }
 }

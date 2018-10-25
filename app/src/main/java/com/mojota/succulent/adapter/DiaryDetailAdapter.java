@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
-import com.mojota.succulent.activity.OnImageClickListener;
+import com.mojota.succulent.interfaces.OnImageClickListener;
 import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.utils.GlobalUtil;
 

@@ -120,15 +120,22 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                     .WRITE_EXTERNAL_STORAGE}, 100);
         }
 
-        refreshData();
+        refreshUser();
     }
 
-    private void refreshData() {
+    private void refreshUser() {
         mUserInfo = UserUtil.getUser();
-        setDataToView();
+        setUserToView();
     }
 
-    private void setDataToView() {
+    /**
+     * 登录用户改变后刷新
+     */
+    private void refreshView() {
+        mPagerAdapter.notifyDataSetChanged();
+    }
+
+    private void setUserToView() {
         if (mUserInfo != null && !TextUtils.isEmpty(mUserInfo.getUserName())) {
             mLayoutUser.setVisibility(View.VISIBLE);
             mFabUserEdit.setVisibility(View.VISIBLE);
@@ -148,6 +155,9 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
             mLayoutUser.setVisibility(View.GONE);
             mFabUserEdit.setVisibility(View.GONE);
         }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     private void initFragment() {
@@ -162,7 +172,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CodeConstants.REQUEST_USER_CHANGE && resultCode == CodeConstants
                 .RESULT_USER_CHANGE) {
-            refreshData();
+            refreshUser();
+            refreshView();
         }
     }
 
@@ -209,8 +220,6 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
         }
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -223,7 +232,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
             case R.id.tv_logout:
                 mUserInfo = null;
                 UserUtil.clearUser();
-                setDataToView();
+                setUserToView();
+                refreshView();
                 break;
             case R.id.iv_avatar:
                 showPicDialog(mIvAvatar, GlobalUtil.getDefaultAvatarOptions());
@@ -235,4 +245,6 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.mojota.succulent.adapter;
+package com.mojota.succulent.interfaces;
 
 import android.view.View;
 

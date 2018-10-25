@@ -7,14 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Spinner;
 
 import com.google.gson.Gson;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.adapter.FamilyAdapter;
-import com.mojota.succulent.adapter.OnItemClickListener;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.Family;
 import com.mojota.succulent.model.FamilyResponseInfo;
 

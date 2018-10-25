@@ -73,6 +73,35 @@ public class GlobalUtil {
     }
 
     /**
+     * 状态栏的高度,得到的值单位px
+     */
+    public float getStatusBarHeight() {
+        float result = 0;
+        int resourceId = SucculentApplication.getInstance().getResources()
+                .getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = SucculentApplication.getInstance().getResources()
+                    .getDimension(resourceId);
+        }
+        return result;
+    }
+
+    /**
+     * 导航栏的高度,得到的值单位px
+     */
+    public float getNavigationBarHeight() {
+        float result = 0;
+        int resourceId = SucculentApplication.getInstance().getResources()
+                .getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = SucculentApplication.getInstance().getResources()
+                    .getDimension(resourceId);
+        }
+        return result;
+    }
+
+
+    /**
      * 计算采样率的大小
      */
     public static int calculateInSampleSize(BitmapFactory.Options options,

@@ -1,7 +1,6 @@
 package com.mojota.succulent.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +12,12 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
+import com.mojota.succulent.interfaces.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
-import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
-import com.mojota.succulent.utils.UrlConstants;
-import com.mojota.succulent.utils.UserUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mojota on 18-7-24.

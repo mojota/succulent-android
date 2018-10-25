@@ -6,6 +6,7 @@
     <color name="colorAccent">#e65100</color>
     <color name="colorBg">#EEEEEE</color>
     <color name="col_div">#EEEEEE</color>
+    <color name="col_15_transparent">#26000000</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -40,6 +41,8 @@
     <color name="pink">#e91e63</color>
 
     <color name="cyan">#00bcd4</color>
+
+    <color name="black_overlay">#66000000</color>
 
 
 </resources>

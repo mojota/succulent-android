@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.android.volley.Response;
 import com.mojota.succulent.R;
 import com.mojota.succulent.adapter.DiaryDetailAdapter;
+import com.mojota.succulent.interfaces.OnImageClickListener;
 import com.mojota.succulent.model.DiarysResponseInfo;
 import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.model.NoteInfo;

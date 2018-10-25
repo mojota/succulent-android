@@ -35,7 +35,7 @@ public class LoadingDialog extends Dialog {
         ll.setGravity(Gravity.CENTER_VERTICAL);
 
         int padding = getContext().getResources().getDimensionPixelSize(R.dimen.default_margin);
-        ll.setPadding(padding * 3, padding, padding * 3, padding);
+        ll.setPadding(padding, padding, padding, padding);
 
         ProgressBar pb = new ProgressBar(getContext());
         pb.setIndeterminateTintList(getContext().getResources().getColorStateList(R.color.colorAccent));
@@ -43,13 +43,12 @@ public class LoadingDialog extends Dialog {
         ViewGroup.LayoutParams pbParams = new ViewGroup.LayoutParams(width, width);
         pb.setLayoutParams(pbParams);
 
-        TextView tv = new TextView(getContext());
-        tv.setText("正在提交...");
-        tv.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
-        tv.setPadding(padding, 0, 0, 0);
+//        TextView tv = new TextView(getContext());
+//        tv.setText("正在提交...");
+//        tv.setTextColor(getContext().getResources().getColor(R.color.colorAccent));
+//        tv.setPadding(padding, 0, 0, 0);
 
         ll.addView(pb);
-        ll.addView(tv);
         setContentView(ll);
     }
 

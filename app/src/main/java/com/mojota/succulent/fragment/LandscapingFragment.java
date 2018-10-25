@@ -4,29 +4,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
-import com.mojota.succulent.activity.ImageBrowserActivity;
 import com.mojota.succulent.activity.LandscapingAddActivity;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
-import com.mojota.succulent.activity.OnImageClickListener;
 import com.mojota.succulent.adapter.LandscapingAdapter;
-import com.mojota.succulent.adapter.OnItemLongclickListener;
+import com.mojota.succulent.interfaces.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
@@ -70,6 +61,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
     private WrapRecycleAdapter mWrapAdapter;
     private String mUpdateTime = "";
+    private TextView mTvEmpty;
 
 
     public LandscapingFragment() {
@@ -103,6 +95,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvLandscaping = view.findViewById(R.id.rv_landscaping);
+        mList.clear();
         mLandscapingAdapter = new LandscapingAdapter(getActivity(), mList);
         mLandscapingAdapter.setOnItemLongClickListener(this);
         mWrapAdapter = new WrapRecycleAdapter(mLandscapingAdapter);
@@ -110,6 +103,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mRvLandscaping.setOnLoadListener(this);
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
         mFabAddLandscaping.setOnClickListener(this);
+        mTvEmpty = view.findViewById(R.id.tv_empty);
 
         onRefresh();
         return view;
@@ -135,12 +129,12 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
                     }
                     List<NoteInfo> list = responseInfo.getList();
                     mList.addAll(list);
-                    setDataToView();
                     mRvLandscaping.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvLandscaping.loadMoreFailed();
-                    GlobalUtil.makeToast(R.string.str_no_data);
+//                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
@@ -148,22 +142,36 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
                 mSwipeRefresh.setRefreshing(false);
                 mRvLandscaping.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
     }
 
     private void setDataToView() {
-        mLandscapingAdapter.setList(mList);
-        mWrapAdapter.notifyDataSetChanged();
+        if (mList != null && mList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
+            mRvLandscaping.setVisibility(View.VISIBLE);
+            mLandscapingAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRvLandscaping.setVisibility(View.INVISIBLE);
+            mLandscapingAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_add_landscaping:
-                Intent intent = new Intent(getActivity(), LandscapingAddActivity.class);
-                startActivityForResult(intent, CodeConstants.REQUEST_ADD);
+                if (UserUtil.isLogin()) {
+                    Intent intent = new Intent(getActivity(), LandscapingAddActivity.class);
+                    startActivityForResult(intent, CodeConstants.REQUEST_ADD);
+                } else {
+                    ActivityUtil.startLoginActivity(getActivity());
+                }
                 break;
         }
 

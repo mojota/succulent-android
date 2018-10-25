@@ -8,31 +8,26 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
 import com.mojota.succulent.activity.DiaryAddActivity;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.GrowthDiaryAdapter;
-import com.mojota.succulent.adapter.OnItemLongclickListener;
+import com.mojota.succulent.interfaces.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
-import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
@@ -50,7 +45,7 @@ import java.util.Map;
  * 多肉成长记
  * Created by mojota on 18-7-23
  */
-public class GrowthDiaryFragment extends Fragment implements View.OnClickListener,
+public class GrowthDiaryFragment extends BaseFragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener,
         OnItemLongclickListener, LoadMoreRecyclerView.OnLoadListener {
 
@@ -67,6 +62,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
     private List<NoteInfo> mList = new ArrayList<NoteInfo>();
     private WrapRecycleAdapter mWrapAdapter;
     private String mUpdateTime = "";
+    private TextView mTvEmpty;
 
 
     public GrowthDiaryFragment() {
@@ -108,6 +104,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
                         ? glm.getSpanCount() : 1;
             }
         });
+        mList.clear();
         mDiaryAdapter = new GrowthDiaryAdapter(getActivity(), mList);
         mDiaryAdapter.setOnItemClickListener(this);
         mDiaryAdapter.setOnItemLongcickListener(this);
@@ -116,6 +113,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
         mRvDiary.setOnLoadListener(this);
         mFabAdd = view.findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(this);
+        mTvEmpty = view.findViewById(R.id.tv_empty);
 
         onRefresh();
         return view;
@@ -140,12 +138,12 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
                     }
                     List<NoteInfo> list = responseInfo.getList();
                     mList.addAll(list);
-                    setDataToView();
                     mRvDiary.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvDiary.loadMoreFailed();
-                    GlobalUtil.makeToast(R.string.str_no_data);
+//                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
@@ -153,6 +151,7 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
                 mSwipeRefresh.setRefreshing(false);
                 mRvDiary.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -160,8 +159,17 @@ public class GrowthDiaryFragment extends Fragment implements View.OnClickListene
 
 
     private void setDataToView() {
-        mDiaryAdapter.setList(mList);
-        mWrapAdapter.notifyDataSetChanged();
+        if (mList != null && mList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
+            mRvDiary.setVisibility(View.VISIBLE);
+            mDiaryAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRvDiary.setVisibility(View.INVISIBLE);
+            mDiaryAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

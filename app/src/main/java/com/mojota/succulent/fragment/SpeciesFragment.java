@@ -10,20 +10,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.mojota.succulent.R;
 import com.mojota.succulent.TestUtil;
-import com.mojota.succulent.adapter.OnItemClickListener;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.adapter.SpeciesAdapter;
 import com.mojota.succulent.model.Family;
 import com.mojota.succulent.model.Genus;
 import com.mojota.succulent.model.Species;
 import com.mojota.succulent.model.SpeciesResponseInfo;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

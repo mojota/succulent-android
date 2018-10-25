@@ -6,27 +6,25 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.google.gson.Gson;
 import com.mojota.succulent.R;
-import com.mojota.succulent.TestUtil;
 import com.mojota.succulent.activity.QaAskActivity;
 import com.mojota.succulent.activity.QaDetailActivity;
-import com.mojota.succulent.adapter.OnItemClickListener;
 import com.mojota.succulent.adapter.QaAdapter;
+import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.QaResponseInfo;
 import com.mojota.succulent.model.QuestionInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
@@ -44,7 +42,7 @@ import java.util.Map;
  * 问答
  * Created by mojota on 18-8-21
  */
-public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View
+public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View
         .OnClickListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener,QaAdapter.OnItemDeleteListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,6 +60,7 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private List<QuestionInfo> mList = new ArrayList<QuestionInfo>();
     private String mQuestionTime = "";
     private WrapRecycleAdapter mWrapAdapter;
+    private TextView mTvEmpty;
 
 
     public QaFragment() {
@@ -102,6 +101,7 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         mRvQA.setOnLoadListener(this);
         mFabAsk = view.findViewById(R.id.fab_ask);
         mFabAsk.setOnClickListener(this);
+        mTvEmpty = view.findViewById(R.id.tv_empty);
 
         onRefresh();
 
@@ -126,12 +126,12 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                     }
                     List<QuestionInfo> list = responseInfo.getList();
                     mList.addAll(list);
-                    setDataToView();
                     mRvQA.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvQA.loadMoreFailed();
-                    GlobalUtil.makeToast(R.string.str_no_data);
+//                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
@@ -139,6 +139,7 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 mSwipeRefresh.setRefreshing(false);
                 mRvQA.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -146,8 +147,17 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
 
     private void setDataToView() {
-        mQaAdapter.setList(mList);
-        mWrapAdapter.notifyDataSetChanged();
+        if (mList != null && mList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
+            mRvQA.setVisibility(View.VISIBLE);
+            mQaAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
+            mRvQA.setVisibility(View.INVISIBLE);
+            mQaAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -196,8 +206,12 @@ public class QaFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_ask:
-                Intent intent = new Intent(getActivity(), QaAskActivity.class);
-                startActivityForResult(intent, CodeConstants.REQUEST_QA_ASK);
+                if (UserUtil.isLogin()) {
+                    Intent intent = new Intent(getActivity(), QaAskActivity.class);
+                    startActivityForResult(intent, CodeConstants.REQUEST_QA_ASK);
+                } else {
+                    ActivityUtil.startLoginActivity(getActivity());
+                }
                 break;
         }
     }

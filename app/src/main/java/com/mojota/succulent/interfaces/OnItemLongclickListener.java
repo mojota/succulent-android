@@ -1,4 +1,4 @@
-package com.mojota.succulent.adapter;
+package com.mojota.succulent.interfaces;
 
 /**
  * Created by mojota on 18-8-16.
