@@ -54,7 +54,7 @@
     <string name="str_edit_password">修改密码</string>
     <string name="str_cancel">取消</string>
 
-    <string name="prompt_feedback">对app有什么想说的?请尽情写下来吧!</string>
+    <string name="prompt_feedback">对App有什么想说的？请尽情写下来吧！</string>
 
     <string name="str_no_data">没有获取到数据</string>
     <string name="str_no_more_data">没有更多数据</string>
