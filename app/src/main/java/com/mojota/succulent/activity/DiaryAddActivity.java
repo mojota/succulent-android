@@ -1,6 +1,7 @@
 package com.mojota.succulent.activity;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
@@ -8,16 +9,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteDetail;
+import com.mojota.succulent.network.OssRequest;
+import com.mojota.succulent.network.OssUtil;
+import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +32,9 @@ import java.util.Map;
  * 添加笔记
  * Created by mojota on 18-8-2
  */
-public class DiaryAddActivity extends PhotoChooseSupportActivity implements View.OnClickListener {
+public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
+        .OnClickListener {
+    private static final String TAG = "DiaryAddActivity";
 
     public static final String KEY_MODE = "KEY_MODE"; // 1-添加笔记 2-添加笔记条目 3-编辑笔记条目
     public static final String KEY_TITLE = "KEY_TITLE";
@@ -38,12 +46,15 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
     private EditText mEtTitle;
     private TextInputLayout mTiBody;
     private EditText mEtBody;
-    private ImageButton mIbtPic1;
-    private ImageButton mIbtPic2;
+    private ImageView mIbtPic1;
+    private ImageView mIbtPic2;
     private Button mBtCommit;
     private String mNoteId;
     private String mDetailId;
     private int mMode;
+    private Uri[] mLocalPics = new Uri[2];
+    private String[] mUploadPicKeys = new String[2];
+    private OssRequest mOssRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +93,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
             List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
             if (pics != null && pics.size() > 0) {
                 for (int i = 0; i < pics.size(); i++) {
+                    mUploadPicKeys[i] = pics.get(i);
                     RequestBuilder<Drawable> rb = Glide.with(this).load(pics.get(i));
                     if (i == 0) {
                         rb.into(mIbtPic1);
@@ -90,9 +102,9 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     }
                 }
             }
-
         }
 
+        mOssRequest = new OssRequest();
     }
 
     @Override
@@ -109,23 +121,117 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                 break;
             case R.id.ibt_pic1:
                 showPicDialog(mIbtPic1, null);
+                setOnChoosedListener(new OnChoosedListener() {
+                    @Override
+                    public void onChoosed(Uri localUploadUri) {
+                        mLocalPics[0] = localUploadUri;
+                    }
+
+                    @Override
+                    public void onCanceled() {
+
+                    }
+                });
                 break;
             case R.id.ibt_pic2:
                 showPicDialog(mIbtPic2, null);
+                setOnChoosedListener(new OnChoosedListener() {
+                    @Override
+                    public void onChoosed(Uri localUploadUri) {
+                        mLocalPics[1] = localUploadUri;
+                    }
+
+                    @Override
+                    public void onCanceled() {
+
+                    }
+                });
                 break;
             case R.id.bt_commit:
-                submit();
+                commit();
                 break;
         }
     }
 
     /**
+     * 上传图片后再上传文字
+     */
+    private void commit() {
+        boolean hasPic = false;
+        List<Uri> localPics = new ArrayList<Uri>();
+        for (int i = 0; i< mLocalPics.length;i++){
+            if (mLocalPics[i] != null) {
+                localPics.add(mLocalPics[i]);
+            }
+        }
+        // 已上传过有地址的不再重复上传
+        for (int i = 0; i < localPics.size(); i++) {
+            if (localPics.get(i) != null && TextUtils.isEmpty(mUploadPicKeys[i])) {
+                hasPic = true;
+                break;
+            }
+        }
+
+        // 如果有图片，则上传图片后提交，如无图片直接提交
+        if (hasPic) {
+            uploadImg(localPics, 0);
+        } else {
+            submitData();
+        }
+    }
+
+
+    /**
+     * 顺序上传图片,最后一张结束后提交所有内容到服务器
+     * @param localPics 本地准备上传的uri列表
+     * @param index 外部调用由0开始
+     */
+    private void uploadImg(final List<Uri> localPics, final int index) {
+        showProgress(true);
+        final String objectKey = OssUtil.getImageObjectKey(UserUtil.getCurrentUserId(),
+                String.valueOf(System.currentTimeMillis()) + "-" + index);
+        mOssRequest.upload(objectKey, GlobalUtil.getByte(localPics.get(index)), new
+                OssRequest.OssOperateListener() {
+
+            @Override
+            public void onSuccess(String objectKey, String objectUrl) {
+                showProgress(false);
+                mUploadPicKeys[index] = objectKey;
+                if (index == localPics.size() - 1) {
+                    submitData();
+                } else {
+                    uploadImg(localPics, index + 1);
+                }
+            }
+
+            @Override
+            public void onFailure(String objectKey, String errMsg) {
+                showProgress(false);
+                StringBuilder tips = new StringBuilder("上传图片");
+                tips.append((index + 1) + "失败了," + errMsg);
+                GlobalUtil.makeToast(tips.toString());
+                if (index == localPics.size() - 1) {
+                    submitData();
+                } else {
+                    uploadImg(localPics, index + 1);
+                }
+            }
+        });
+    }
+
+    /**
      * 根据功能类型提交请求
      */
-    private void submit() {
+    private void submitData() {
+        AppLog.d(TAG, "submitData");
         String title = mEtTitle.getText().toString();
         String content = mEtBody.getText().toString();
-        String picUrls = "";
+        StringBuilder picKeys = new StringBuilder();
+        for (String key : mUploadPicKeys) {
+            if (!TextUtils.isEmpty(key)){
+                picKeys.append(key).append(";"); //与服务端约定使用;做为分隔符
+            }
+        }
         switch (mMode) {
             case CodeConstants.NOTE_ADD:
                 if (TextUtils.isEmpty(title)) {
@@ -138,32 +244,32 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("noteTitle", title);
                     map.put("content", content);
                     map.put("noteType", "1");
-                    map.put("picUrls", picUrls);
+                    map.put("picUrls", picKeys.toString());
                     loadingRequestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
                 }
                 break;
             case CodeConstants.NOTE_DETAIL_ADD:
-                if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picUrls)) {
+                if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picKeys)) {
                     GlobalUtil.makeToast("没有要提交的内容");
                 } else {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", UserUtil.getCurrentUserId());
                     map.put("noteId", mNoteId);
                     map.put("content", content);
-                    map.put("picUrls", picUrls);
+                    map.put("picUrls", picKeys.toString());
                     loadingRequestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map, CodeConstants
                             .REQUEST_DIARY_DETAIL_ADD);
                 }
                 break;
             case CodeConstants.NOTE_DETAIL_EDIT:
-                if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picUrls)) {
+                if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picKeys)) {
                     GlobalUtil.makeToast("没有要提交的内容");
                 } else {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", UserUtil.getCurrentUserId());
                     map.put("detailId", mDetailId);
                     map.put("content", content);
-                    map.put("picUrls", picUrls);
+                    map.put("picUrls", picKeys.toString());
                     loadingRequestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map, CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
                 }
                 break;

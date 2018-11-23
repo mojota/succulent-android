@@ -342,6 +342,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         Map<String, String> map = new HashMap<String, String>();
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("detailId", noteDetail.getDetailId());
+        map.put("noteId", mNoteInfo.getNoteId());
 
         RequestUtils.commonRequest(UrlConstants.NOTE_DETAIL_DELETE_URL, map, CodeConstants
                 .REQUEST_NOTE_DETAIL_DELETE, null);

@@ -22,7 +22,7 @@ import java.io.File;
  * 基类activity,支持打开选择图片对话框
  * Created by mojota on 18-8-6
  */
-public class PhotoChooseSupportActivity extends BaseActivity {
+public abstract class PhotoChooseSupportActivity extends BaseActivity {
 
     private Uri mUploadUri = null;
     private ImageView mUploadIbt;
@@ -43,7 +43,7 @@ public class PhotoChooseSupportActivity extends BaseActivity {
     protected void showPicDialog(ImageView uploadIbt, RequestOptions requestOptions) {
         mUploadIbt = uploadIbt;
         if (requestOptions == null) {
-            mRequestOptions = GlobalUtil.getDefaultOptions();
+            mRequestOptions = GlobalUtil.getRoundedCornersOptions();
         } else {
             mRequestOptions = requestOptions;
         }

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
@@ -24,6 +25,11 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.SucculentApplication;
 import com.mojota.succulent.view.CenterCropRoundedCorners;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -100,55 +106,95 @@ public class GlobalUtil {
         return result;
     }
 
-
     /**
-     * 计算采样率的大小
+     * bitmap 压缩后转换 byte[]
      */
-    public static int calculateInSampleSize(BitmapFactory.Options options,
-                                            int reqWidth, int reqHeight) {
-        if (reqHeight <= 0 || reqWidth <= 0) return 1;
-        final int width = options.outWidth;
-        final int height = options.outHeight;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            //计算图片高度和我们需要高度的最接近比例值
-            final int heightRatio = Math.round((float) height / (float)
-                    reqHeight);
-            //宽度比例值
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            //取比例值中的较大值作为inSampleSize
-            inSampleSize = heightRatio > widthRatio ? heightRatio : widthRatio;
+    public static byte[] getByte(Uri uri) {
+        byte[] data = null;
+        if (uri == null) {
+            return data;
         }
-        return inSampleSize;
+        Bitmap bitmap = compressBitmapBySize(uri, 1920, 1080);
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            data = baos.toByteArray();
+        }
+        return data;
     }
 
     /**
      * 读取文件生成要求大小的bitmap
      *
-     * @param reqHeight bitmap大小的宽，小于0默认1920px
-     * @param reqWidth  bitmap高 ，小于0默认720
-     * @param path      文件路径
+     * @param targetHeight 目标宽，可设置1920px(目前主流分辨率)
+     * @param targetWidth  目标高 ，可设置1080px(目前主流分辨率)
+     * @param uri      文件uri
      */
-    public static Bitmap compressBitmap(String path, int reqWidth, int
-            reqHeight) {
+    public static Bitmap compressBitmapBySize(Uri uri, int targetWidth,
+                                              int targetHeight) {
+        if (uri == null) {
+            return null;
+        }
+        if (targetHeight <= 0 || targetWidth <= 0) {
+            targetHeight = 1920;
+            targetWidth = 1080;
+        }
+        Bitmap bitmap = null;
+        InputStream is = null;
         try {
-            if (reqHeight < 0 || reqWidth < 0) return null;
+            is = SucculentApplication.getInstance().getContentResolver().openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
-            // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+            // 把options.inJustDecodeBounds 设回true,不去真的解析图片,只是获取图片的头部信息,包含宽高等;
             options.inJustDecodeBounds = true;
             options.inPreferredConfig = Bitmap.Config.RGB_565;
-            Bitmap bitmap = BitmapFactory.decodeFile(path, options);// 此时返回bm为空
-            options.inJustDecodeBounds = false;
-            options.inSampleSize = calculateInSampleSize(options, reqWidth,
-                    reqHeight);//
-            // 设置缩放比例
+            bitmap = BitmapFactory.decodeStream(is, null, options);//此时bitmap返回空
+            if (is != null){
+                is.close();
+            }
+//            Bitmap bitmap = BitmapFactory.decodeFile(pathName, options);// 此时返回bm为空
+            options.inSampleSize = calculateInSampleSize(options, targetWidth,
+                    targetHeight);
+            options.inJustDecodeBounds = false; // 这里一定要设置false
             // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-            bitmap = BitmapFactory.decodeFile(path, options);
-            return bitmap;
+            is = SucculentApplication.getInstance().getContentResolver().openInputStream(uri);
+            bitmap = BitmapFactory.decodeStream(is, null, options);
+//            bitmap = BitmapFactory.decodeFile(pathName, options);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (is != null){
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return bitmap;
+    }
+
+    /**
+     * 计算采样率的大小
+     */
+    public static int calculateInSampleSize(BitmapFactory.Options options, int
+            targetWidth, int targetHeight) {
+        if (targetHeight <= 0 || targetWidth <= 0) {
+            return 1;
+        }
+        int inSampleSize = 1;
+        final float imgWidth = options.outWidth;
+        final float imgHeight = options.outHeight;
+        if (imgHeight > targetHeight || imgWidth > targetWidth) {
+            //宽度比例值
+            final int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
+            //计算图片高度和我们需要高度的最接近比例值
+            final int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
+            //取比例值中的较大值作为inSampleSize
+            inSampleSize = heightRatio > widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
     }
 
 

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.interfaces.OnImageClickListener;
 import com.mojota.succulent.model.NoteDetail;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
     public DiaryDetailAdapter(Activity context, List<NoteDetail> list) {
         mContext = context;
         mList = list;
-        mRequestOptions = GlobalUtil.getDefaultOptions().centerCrop();
+        mRequestOptions = GlobalUtil.getRoundedCornersOptions();
     }
 
     public void setList(List<NoteDetail> list) {
@@ -131,9 +132,10 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
             if (pics != null && pics.size() > 0) {
                 holder.layoutPic.setVisibility(View.VISIBLE);
                 for (int i = 0; i < pics.size(); i++) {
-                    RequestBuilder<Drawable> rb = Glide.with(mContext).load(pics.get(i)).apply
-                            (mRequestOptions);
+                    RequestBuilder<Drawable> rb = Glide.with(mContext).load(OssUtil
+                            .getWholeImageUrl(pics.get(i))).apply(mRequestOptions);
                     if (i == 0) {
+                        holder.ivPic1.setImageResource(0);
                         rb.into(holder.ivPic0);
                         holder.ivPic0.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -158,7 +160,8 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                     }
                 }
             } else {
-                holder.layoutPic.setVisibility(View.GONE);
+                holder.ivPic0.setImageResource(0);
+                holder.ivPic1.setImageResource(0);
             }
 
             holder.btEdit.setOnClickListener(new View.OnClickListener() {

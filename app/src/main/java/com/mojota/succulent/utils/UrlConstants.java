@@ -4,8 +4,17 @@ package com.mojota.succulent.utils;
  * Created by mojota on 18-8-31.
  */
 public class UrlConstants {
-//    public static final String SERVER = "http://10.42.0.1:8080/";
-    public static final String SERVER = "http://crazysucculent.top:8099/";
+    public static final String SERVER = "http://10.42.0.1:8099/";
+//    public static final String SERVER = "http://crazysucculent.top:8099/";
+
+    private static final String HTTP = "http://";
+    private static final String ENDPOINT = "oss-cn-beijing.aliyuncs.com";
+    public static final String ENDPOINT_URL = HTTP + ENDPOINT;
+    public static final String BUCKET = "succulent-mojota";
+
+    public static final String OSS_SERVER = HTTP + BUCKET + "." + ENDPOINT+"/";
+
+    public static final String STS_SERVER = SERVER + "oss/getSts";
 
     public static final String REGISTER_URL = SERVER + "user/register";
     public static final String LOGIN_URL = SERVER + "user/login";

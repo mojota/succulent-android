@@ -54,20 +54,22 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/ibt_pic1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@mipmap/ic_add_white_48dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
+                android:background="@drawable/bg_add"
                 android:layout_margin="8dp"/>
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/ibt_pic2"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:src="@mipmap/ic_add_white_48dp"
+                android:background="@drawable/bg_add"
                 android:layout_margin="8dp"/>
         </LinearLayout>
 

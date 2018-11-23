@@ -14,8 +14,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.interfaces.OnItemLongclickListener;
 import com.mojota.succulent.model.NoteInfo;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
+import com.mojota.succulent.utils.UrlConstants;
 
 import java.util.List;
 
@@ -129,7 +131,10 @@ public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.
 
             List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
             if (pics != null && pics.size() > 0) {
-                Glide.with(mContext).load(pics.get(0)).apply(mRequestOptions).into(holder.ivPic);
+                String picUrl = OssUtil.getWholeImageUrl(pics.get(0));
+                Glide.with(mContext).load(picUrl).apply(mRequestOptions).into(holder.ivPic);
+            } else {
+                holder.ivPic.setImageResource(R.mipmap.ic_default_pic);
             }
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
