@@ -8,11 +8,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.NoteDetail;
 import com.mojota.succulent.network.OssRequest;
@@ -55,6 +55,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
     private Uri[] mLocalPics = new Uri[2];
     private String[] mUploadPicKeys = new String[2];
     private OssRequest mOssRequest;
+    private RequestOptions mRequestOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
         mIbtPic2.setOnClickListener(this);
         mBtCommit = findViewById(R.id.bt_commit);
         mBtCommit.setOnClickListener(this);
+        mRequestOptions = GlobalUtil.getRoundedCornersOptions();
 
         mMode = getIntent().getIntExtra(KEY_MODE, 0);
         mNoteId = getIntent().getStringExtra(KEY_NOTE_ID);
@@ -90,11 +92,12 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
             if (!TextUtils.isEmpty(diary.getContent())) {
                 mEtBody.setText(diary.getContent());
             }
-            List<String> pics = GlobalUtil.getStringList(diary.getPicUrls());
-            if (pics != null && pics.size() > 0) {
-                for (int i = 0; i < pics.size(); i++) {
-                    mUploadPicKeys[i] = pics.get(i);
-                    RequestBuilder<Drawable> rb = Glide.with(this).load(pics.get(i));
+            String[] pics = GlobalUtil.getStrings(diary.getPicUrls());
+            if (pics != null && pics.length > 0) {
+                for (int i = 0; i < pics.length; i++) {
+                    mUploadPicKeys[i] = pics[i];
+                    RequestBuilder<Drawable> rb = Glide.with(this).load(OssUtil
+                            .getWholeImageUrl(pics[i])).apply(mRequestOptions);
                     if (i == 0) {
                         rb.into(mIbtPic1);
                     } else {
@@ -103,7 +106,6 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                 }
             }
         }
-
         mOssRequest = new OssRequest();
     }
 
@@ -125,7 +127,8 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     @Override
                     public void onChoosed(Uri localUploadUri) {
                         mLocalPics[0] = localUploadUri;
-                    }
+                        mUploadPicKeys[0] = ""; // 一旦选过图就置key为空,上传后再写入
+                   }
 
                     @Override
                     public void onCanceled() {
@@ -139,6 +142,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     @Override
                     public void onChoosed(Uri localUploadUri) {
                         mLocalPics[1] = localUploadUri;
+                        mUploadPicKeys[1] = ""; // 一旦选过图就置key为空,上传后再写入
                     }
 
                     @Override
@@ -158,15 +162,9 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
      */
     private void commit() {
         boolean hasPic = false;
-        List<Uri> localPics = new ArrayList<Uri>();
-        for (int i = 0; i< mLocalPics.length;i++){
-            if (mLocalPics[i] != null) {
-                localPics.add(mLocalPics[i]);
-            }
-        }
         // 已上传过有地址的不再重复上传
-        for (int i = 0; i < localPics.size(); i++) {
-            if (localPics.get(i) != null && TextUtils.isEmpty(mUploadPicKeys[i])) {
+        for (int i = 0; i < mLocalPics.length; i++) {
+            if (mLocalPics[i] != null && TextUtils.isEmpty(mUploadPicKeys[i])) {
                 hasPic = true;
                 break;
             }
@@ -174,7 +172,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
 
         // 如果有图片，则上传图片后提交，如无图片直接提交
         if (hasPic) {
-            uploadImg(localPics, 0);
+            uploadImg(mLocalPics, 0);
         } else {
             submitData();
         }
@@ -186,18 +184,18 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
      * @param localPics 本地准备上传的uri列表
      * @param index 外部调用由0开始
      */
-    private void uploadImg(final List<Uri> localPics, final int index) {
+    private void uploadImg(final Uri[] localPics, final int index) {
         showProgress(true);
         final String objectKey = OssUtil.getImageObjectKey(UserUtil.getCurrentUserId(),
                 String.valueOf(System.currentTimeMillis()) + "-" + index);
-        mOssRequest.upload(objectKey, GlobalUtil.getByte(localPics.get(index)), new
+        mOssRequest.upload(objectKey, GlobalUtil.getByte(localPics[index]), new
                 OssRequest.OssOperateListener() {
 
             @Override
             public void onSuccess(String objectKey, String objectUrl) {
                 showProgress(false);
                 mUploadPicKeys[index] = objectKey;
-                if (index == localPics.size() - 1) {
+                if (index == localPics.length - 1) {
                     submitData();
                 } else {
                     uploadImg(localPics, index + 1);
@@ -207,10 +205,12 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
             @Override
             public void onFailure(String objectKey, String errMsg) {
                 showProgress(false);
-                StringBuilder tips = new StringBuilder("上传图片");
-                tips.append((index + 1) + "失败了," + errMsg);
-                GlobalUtil.makeToast(tips.toString());
-                if (index == localPics.size() - 1) {
+                if (localPics[index] != null) {
+                    StringBuilder tips = new StringBuilder("上传图片");
+                    tips.append((index + 1) + "失败了," + errMsg);
+                    GlobalUtil.makeToast(tips.toString());
+                }
+                if (index == localPics.length - 1) {
                     submitData();
                 } else {
                     uploadImg(localPics, index + 1);
@@ -267,6 +267,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                 } else {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", UserUtil.getCurrentUserId());
+                    map.put("noteId", mNoteId);
                     map.put("detailId", mDetailId);
                     map.put("content", content);
                     map.put("picUrls", picKeys.toString());

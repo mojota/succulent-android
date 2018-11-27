@@ -66,6 +66,9 @@ public class OssRequest {
         OSSAsyncTask task = null;
         if (TextUtils.isEmpty(objectKey)) {
             AppLog.d(TAG, "objectKey is empty");
+            if (ossOperateListener != null) {
+                ossOperateListener.onFailure(objectKey, "objectKey is empty");
+            }
             return task;
         }
         if (uploadData == null || uploadData.length <= 0) {

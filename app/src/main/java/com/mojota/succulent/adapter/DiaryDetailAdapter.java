@@ -162,6 +162,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
             } else {
                 holder.ivPic0.setImageResource(0);
                 holder.ivPic1.setImageResource(0);
+                holder.layoutPic.setVisibility(View.GONE);
             }
 
             holder.btEdit.setOnClickListener(new View.OnClickListener() {

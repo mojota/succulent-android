@@ -29,7 +29,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -385,13 +384,22 @@ public class GlobalUtil {
         view.startAnimation(animation);
     }
 
+    /**
+     * 以;分隔字符串，返回数组
+     */
+    public static String[] getStrings(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            return str.split(";");
+        }
+        return null;
+    }
 
     /**
-     * 以;分隔字符串
+     * 以;分隔字符串，返回list
      */
     public static List<String> getStringList(String str) {
         if (!TextUtils.isEmpty(str)) {
-            return Arrays.asList(str.split(";"));
+            return Arrays.asList(getStrings(str));
         }
         return null;
     }
