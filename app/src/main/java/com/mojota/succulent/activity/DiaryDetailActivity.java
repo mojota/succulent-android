@@ -1,6 +1,5 @@
 package com.mojota.succulent.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -68,12 +67,11 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
     private String mNewTitle = "";
     private boolean mReadOnly = true;
 
-    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_detail);
-
+        postponeEnterTransition();//暂停转场动画
         mToolBar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -127,6 +125,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
             public void onError(String error) {
                 mRvDiarys.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -134,12 +133,13 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
 
 
     private void setDataToView() {
-        if (mList != null && mList.size() > 0) {
-            postponeEnterTransition(); // 当有数据时延迟转场动画
+        if (mList == null || mList.size() == 0) {
+            startPostponedEnterTransition();// 当无数据时恢复转场动画
+        } else {
+            mDetailAdapter.setIsReadOnly(mReadOnly);
+            mDetailAdapter.setList(mList);
+            mWrapAdapter.notifyDataSetChanged();
         }
-        mDetailAdapter.setIsReadOnly(mReadOnly);
-        mDetailAdapter.setList(mList);
-        mWrapAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -286,6 +286,7 @@ public class DiaryDetailActivity extends PhotoChooseSupportActivity implements V
         switch (resultCode) {
             case CodeConstants.RESULT_REFRESH:
                 refresh();
+//                setResult(CodeConstants.RESULT_REFRESH);
         }
     }
 

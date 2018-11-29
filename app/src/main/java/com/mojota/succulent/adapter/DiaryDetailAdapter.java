@@ -2,7 +2,6 @@ package com.mojota.succulent.adapter;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +109,7 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
                 @Override
                 public boolean onPreDraw() {
                     holder.ivPic0.getViewTreeObserver().removeOnPreDrawListener(this);
-                    ActivityCompat.startPostponedEnterTransition(mContext);
+                    mContext.startPostponedEnterTransition();
                     return true;
                 }
             });

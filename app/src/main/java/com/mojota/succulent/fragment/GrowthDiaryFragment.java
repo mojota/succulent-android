@@ -1,11 +1,10 @@
 package com.mojota.succulent.fragment;
 
+import android.app.ActivityOptions;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -236,8 +235,8 @@ public class GrowthDiaryFragment extends BaseFragment implements View.OnClickLis
         Intent intent = new Intent(getActivity(), DiaryDetailActivity.class);
         intent.putExtra(DiaryDetailActivity.KEY_DIARY, diary);
         intent.putExtra(DiaryDetailActivity.KEY_ITEM_POS, position);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                (getActivity(), view, view.getTransitionName());
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                view, view.getTransitionName());
         startActivityForResult(intent, CodeConstants.REQUEST_DETAIL, options.toBundle());
     }
 

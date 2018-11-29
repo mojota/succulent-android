@@ -10,8 +10,6 @@
     <style name="AppTheme_With_Bg" parent="AppTheme_NoActionBar">
         <item name="android:windowBackground">@drawable/ic_bg</item>
         <item name="android:statusBarColor">@color/col_15_transparent</item>
-
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
     <style name="SplashTheme" parent="AppTheme_NoActionBar">
@@ -20,7 +18,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
     <style name="AppTheme_Transparent" parent="AppTheme_NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">

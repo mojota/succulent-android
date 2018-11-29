@@ -59,7 +59,8 @@
             android:theme="@style/AddDataDialog"/>
         <activity android:name=".activity.ImageBrowserActivity">
         </activity>
-        <activity android:name=".activity.DiaryDetailActivity"/>
+        <activity android:name=".activity.DiaryDetailActivity"
+            android:theme="@style/AppTheme_Transparent"/>
         <activity
             android:name=".activity.QaDetailActivity"
             android:configChanges="keyboardHidden|orientation"
