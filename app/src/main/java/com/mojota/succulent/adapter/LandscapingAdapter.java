@@ -2,6 +2,7 @@ package com.mojota.succulent.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,12 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final NoteInfo note = mList.get(position);
         if (note != null) {
-            holder.tvTitle.setText(note.getNoteTitle());
+            if (!TextUtils.isEmpty(note.getNoteTitle())) {
+                holder.tvTitle.setVisibility(View.VISIBLE);
+                holder.tvTitle.setText(note.getNoteTitle());
+            } else {
+                holder.tvTitle.setVisibility(View.GONE);
+            }
             holder.tvTime.setText(GlobalUtil.formatDisplayTime(note.getUpdateTime()));
 
             holder.tbLike.setTextOn(String.valueOf(note.getLikeyCount()));
@@ -121,9 +127,12 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
 
             // 图
             List<String> pics = GlobalUtil.getStringList(note.getPicUrls());
-            if (note.getPicUrls() != null) {
+            if (note.getPicUrls() != null && note.getPicUrls().length() > 0) {
+                holder.rvPics.setVisibility(View.VISIBLE);
                 holder.rvPics.setAdapter(new ImageAdapter(mContext, pics, note.getNoteTitle(),
                         mRoundedCornersOptions));
+            } else {
+                holder.rvPics.setVisibility(View.GONE);
             }
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

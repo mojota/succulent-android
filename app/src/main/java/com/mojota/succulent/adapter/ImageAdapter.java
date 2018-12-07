@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.ActivityUtil;
 
 import java.util.ArrayList;
@@ -63,13 +64,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ImageAdapter.ViewHolder holder, final int position) {
-        Glide.with(mContext).load(mPicUrls.get(position)).apply(mRequestOptions).into
-                (holder.ivPic);
+        String picUrl = OssUtil.getWholeImageUrl(mPicUrls.get(position));
+        Glide.with(mContext).load(picUrl).apply(mRequestOptions).into(holder.ivPic);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtil.startImageBrowserActivity((Activity) mContext, holder.ivPic,
-                        mTitle, mPicUrls, position);
+                ActivityUtil.startImageBrowserActivity((Activity) mContext, holder
+                        .ivPic, mTitle, mPicUrls, position);
             }
         });
     }

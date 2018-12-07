@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -113,7 +114,7 @@ public class GlobalUtil {
         if (uri == null) {
             return data;
         }
-        Bitmap bitmap = compressBitmapBySize(uri, 1920, 1080);
+        Bitmap bitmap = compressBitmapBySize(uri, 1920, 1080); // 压缩
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos);
@@ -123,6 +124,7 @@ public class GlobalUtil {
     }
 
     /**
+     * 压缩
      * 读取文件生成要求大小的bitmap
      *
      * @param targetHeight 目标宽，可设置1920px(目前主流分辨率)
@@ -398,9 +400,13 @@ public class GlobalUtil {
      * 以;分隔字符串，返回list
      */
     public static List<String> getStringList(String str) {
-        if (!TextUtils.isEmpty(str)) {
-            return Arrays.asList(getStrings(str));
+        List<String> list = new ArrayList<String>();
+        String[] strs = getStrings(str);
+        if (strs != null) {
+            for (String s : strs) {
+                list.add(s);
+            }
         }
-        return null;
+        return list;
     }
 }

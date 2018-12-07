@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.FileUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 
@@ -49,7 +50,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPicUrl = getArguments().getString(ARG_PIC_URL);
+            mPicUrl = OssUtil.getWholeImageUrl(getArguments().getString(ARG_PIC_URL));
             mTransitionName = getArguments().getString(ARG_TRANSITION_NAME);
             mPicsCount = getArguments().getInt(ARG_PICS_COUNT);
         }
