@@ -147,8 +147,8 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
 //            Glide.with(mContext).load(userInfo.getAvatarUrl()).apply
 //                    (mAvatarOptions).into(holder.ivAvatar);
                 final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
-                Glide.with(mContext).asBitmap().load(userInfo.getAvatarUrl()).apply
-                        (mAvatarOptions).into(new SimpleTarget<Bitmap>() {
+                Glide.with(mContext).asBitmap().load(OssUtil.getWholeImageUrl(userInfo
+                        .getAvatarUrl())).apply(mAvatarOptions).into(new SimpleTarget<Bitmap>() {
 
 
                     @Override

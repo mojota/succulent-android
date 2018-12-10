@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.AnswerInfo;
 import com.mojota.succulent.model.UserInfo;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UserUtil;
@@ -105,8 +106,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
             UserInfo userInfo = answer.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
-                Glide.with(mActivity).load(userInfo.getAvatarUrl()).apply(mOptions).into(holder
-                        .ivAvatar);
+                Glide.with(mActivity).load(OssUtil.getWholeImageUrl(userInfo
+                        .getAvatarUrl())).apply(mOptions).into(holder.ivAvatar);
                 if (userInfo.getUserId().equals(UserUtil.getCurrentUserId())){
                     holder.btDelete.setVisibility(View.VISIBLE);
                     holder.btDelete.setOnClickListener(new View.OnClickListener() {

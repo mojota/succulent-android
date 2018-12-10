@@ -109,8 +109,8 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
             UserInfo userInfo = questionInfo.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
-                Glide.with(mContext).load(userInfo.getAvatarUrl()).apply(mAvatarOptions).into
-                        (holder.ivAvatar);
+                Glide.with(mContext).load(OssUtil.getWholeImageUrl(userInfo
+                        .getAvatarUrl())).apply(mAvatarOptions).into(holder.ivAvatar);
                 if (userInfo.getUserId().equals(UserUtil.getCurrentUserId())){
                     holder.btDelete.setVisibility(View.VISIBLE);
                     holder.btDelete.setOnClickListener(new View.OnClickListener() {

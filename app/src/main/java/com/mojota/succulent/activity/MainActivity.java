@@ -3,6 +3,7 @@ package com.mojota.succulent.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -27,12 +28,17 @@ import com.mojota.succulent.fragment.CrazyFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
 import com.mojota.succulent.fragment.MomentsFragment;
 import com.mojota.succulent.model.UserInfo;
+import com.mojota.succulent.network.OssRequest;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
+import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mojota on 18-7-23
@@ -55,6 +61,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private FloatingActionButton mFabUserEdit;
     private UserInfo mUserInfo;
     private TextView mTvLogout;
+    private String mAvatarKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +154,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 mTvRegion.setVisibility(View.VISIBLE);
                 mTvRegion.setText(mUserInfo.getRegion());
             }
-            Glide.with(this).load(mUserInfo.getAvatarUrl()).apply(GlobalUtil
+            Glide.with(this).load(OssUtil.getWholeImageUrl(mUserInfo.getAvatarUrl())).apply(GlobalUtil
                     .getDefaultAvatarOptions().error(R.mipmap.ic_default_avatar_white_48dp))
                     .into(mIvAvatar);
         } else {
@@ -237,6 +244,17 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
                 break;
             case R.id.iv_avatar:
                 showPicDialog(mIvAvatar, GlobalUtil.getDefaultAvatarOptions());
+                setOnChoosedListener(new OnChoosedListener() {
+                    @Override
+                    public void onChoosed(Uri localUploadUri) {
+                        uploadImg(localUploadUri);
+                    }
+
+                    @Override
+                    public void onCanceled() {
+
+                    }
+                });
                 break;
             case R.id.fab_user_edit:
                 Intent intent = new Intent(MainActivity.this, UserEditActivity.class);
@@ -246,5 +264,52 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         }
     }
 
+    /**
+     * 上传头像
+     * 头像名为userId
+     */
+    private void uploadImg(final Uri localPic) {
+        showProgress(true);
 
+        final String objectKey = OssUtil.getImageObjectKey(UserUtil.getCurrentUserId(),
+                String.valueOf(UserUtil.getCurrentUserId() + "-" + System.currentTimeMillis()));
+
+        new OssRequest().upload(objectKey, GlobalUtil.getByte(localPic), new
+                OssRequest.OssOperateListener() {
+
+                    @Override
+                    public void onSuccess(String objectKey, String objectUrl) {
+                            showProgress(false);
+                            mAvatarKey = objectKey;
+                            editAvatarUrl(mAvatarKey);
+                    }
+
+                    @Override
+                    public void onFailure(String objectKey, String errMsg) {
+                            StringBuilder tips = new StringBuilder("上传头像失败,");
+                            tips.append(errMsg);
+                            GlobalUtil.makeToast(tips.toString());
+                    }
+                });
+    }
+
+    /**
+     * 修改服务端头像地址
+     * @param objectKey
+     */
+    private void editAvatarUrl(String objectKey) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", UserUtil.getCurrentUserId());
+        map.put("avatarUrl", objectKey);
+        requestSubmit(UrlConstants.AVATAR_EDIT_URL, map, CodeConstants
+                .REQUEST_EDIT_AVATAR);
+    }
+
+    @Override
+    public void onRequestSuccess(int requestCode) {
+        super.onRequestSuccess(requestCode);
+        if (requestCode == CodeConstants.REQUEST_EDIT_AVATAR) {
+            UserUtil.saveAvatar(mAvatarKey);
+        }
+    }
 }

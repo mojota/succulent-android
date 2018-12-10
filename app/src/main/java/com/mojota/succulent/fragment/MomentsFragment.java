@@ -23,6 +23,7 @@ import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
@@ -148,8 +149,9 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
 
     private void setDataToView() {
         if (!TextUtils.isEmpty(UserUtil.getCoverUrl())) {
-            Glide.with(SucculentApplication.getInstance()).load(UserUtil.getCoverUrl())
-                    .apply(GlobalUtil.getDefaultOptions().centerCrop()).into(mIvCover);
+            Glide.with(SucculentApplication.getInstance()).load(OssUtil
+                    .getWholeImageUrl(UserUtil.getCoverUrl())).apply(GlobalUtil
+                    .getDefaultOptions().centerCrop()).into(mIvCover);
         }
 
         if (mList != null && mList.size() > 0) {

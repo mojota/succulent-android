@@ -83,4 +83,8 @@ public class UserUtil {
         return TextUtils.isEmpty(userInfo.getNickname()) ? userInfo.getUserName() : userInfo
                 .getNickname();
     }
+
+    public static void saveAvatar(String avatarUrl) {
+        mSp.putString(KeyConstants.KEY_AVATAR_URL, avatarUrl);
+    }
 }

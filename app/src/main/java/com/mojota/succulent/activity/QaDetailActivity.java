@@ -230,7 +230,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         }
         // 问题
         if (mQuestion != null) {
-            String avatar = mQuestion.getUserInfo().getAvatarUrl();
+            String avatar = OssUtil.getWholeImageUrl(mQuestion.getUserInfo().getAvatarUrl());
             Glide.with(mActivity).load(avatar).apply(GlobalUtil.getDefaultAvatarOptions()).into
                     (mIvAvatar);
             mTvNickname.setText(UserUtil.getDisplayName(mQuestion.getUserInfo()));
