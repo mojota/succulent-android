@@ -127,7 +127,7 @@ public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.
 
             // 图
             List<String> pics = GlobalUtil.getStringList(note.getPicUrls());
-            if (note.getPicUrls() != null && note.getPicUrls().length() > 0) {
+            if (pics != null && pics.size() > 0) {
                 holder.rvPics.setVisibility(View.VISIBLE);
                 holder.rvPics.setAdapter(new ImageAdapter(mContext, pics, note.getNoteTitle(),
                         mRoundedCornersOptions));

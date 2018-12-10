@@ -48,13 +48,14 @@
             android:textColor="@color/gray"
             android:textSize="15dp"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ibt_pic"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_add"
             android:layout_margin="8dp"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@mipmap/ic_add_white_48dp"/>
 
         <Button

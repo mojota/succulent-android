@@ -24,6 +24,7 @@ import com.mojota.succulent.model.AnswerInfo;
 import com.mojota.succulent.model.AnswerResponseInfo;
 import com.mojota.succulent.model.QuestionInfo;
 import com.mojota.succulent.network.GsonPostRequest;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
@@ -70,7 +71,6 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<String> mPicUrls = new ArrayList<String>();
     private WrapRecycleAdapter mWrapAdapter;
     private String mAnswerTime = "";
-    private TextView mTvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +84,13 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             mQuestionId = getIntent().getStringExtra("questionId");
         }
         initView();
-        refresh();
         setDataToView();
+        refresh();
     }
 
     private void initView() {
         mToolBar = findViewById(R.id.toolbar);
-        mToolBar.setTitle(R.string.str_qa_detail);
+        mToolBar.setTitle("");
         setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(this);
 
@@ -133,7 +133,6 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         mWrapAdapter = new WrapRecycleAdapter(mAnswerAdapter);
         mRvAnswer.setAdapter(mWrapAdapter);
         mRvAnswer.setOnLoadListener(this);
-        mTvEmpty = findViewById(R.id.tv_empty);
 
         mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -245,7 +244,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             if (!TextUtils.isEmpty(mQuestion.getQuestionPicUrl())) {
                 mPicUrls.clear();
                 mPicUrls.add(mQuestion.getQuestionPicUrl());
-                Glide.with(mActivity).load(mQuestion.getQuestionPicUrl()).apply(GlobalUtil
+                Glide.with(mActivity).load(OssUtil.getWholeImageUrl(mQuestion.getQuestionPicUrl())).apply(GlobalUtil
                         .getDefaultOptions().centerCrop()).into(mIvPic);
                 mIvPic.setVisibility(View.VISIBLE);
             } else {
@@ -255,12 +254,10 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
 
         // 回答列表
         if (mAnswerList != null && mAnswerList.size() > 0) {
-            mTvEmpty.setVisibility(View.GONE);
             mRvAnswer.setVisibility(View.VISIBLE);
             mAnswerAdapter.setList(mAnswerList);
             mWrapAdapter.notifyDataSetChanged();
         } else {
-            mTvEmpty.setVisibility(View.VISIBLE);
             mRvAnswer.setVisibility(View.INVISIBLE);
             mAnswerAdapter.setList(mAnswerList);
             mWrapAdapter.notifyDataSetChanged();

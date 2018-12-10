@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.UserInfo;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
@@ -169,7 +171,12 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                 holder.tvRegion.setText(userInfo.getRegion());
             }
 
-            holder.tvTitle.setText(noteInfo.getNoteTitle());
+            if (!TextUtils.isEmpty(noteInfo.getNoteTitle())) {
+                holder.tvTitle.setVisibility(View.VISIBLE);
+                holder.tvTitle.setText(noteInfo.getNoteTitle());
+            } else {
+                holder.tvTitle.setVisibility(View.GONE);
+            }
             holder.tvTime.setText(GlobalUtil.formatDisplayTime(noteInfo.getUpdateTime()));
 
             holder.tbLike.setTextOn(String.valueOf(noteInfo.getLikeyCount()));
@@ -204,9 +211,12 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
 
                 // 图
                 List<String> pics = GlobalUtil.getStringList(noteInfo.getPicUrls());
-                if (pics != null) {
+                if (pics != null && pics.size() > 0) {
+                    ((LandscapeViewHolder) holder).rvPics.setVisibility(View.VISIBLE);
                     ((LandscapeViewHolder) holder).rvPics.setAdapter(new ImageAdapter(mContext,
                             pics, noteInfo.getNoteTitle(), mRoundedCornersOptions));
+                } else {
+                    ((LandscapeViewHolder) holder).rvPics.setVisibility(View.GONE);
                 }
             } else if (noteInfo.getNoteType() == 1) {
                 // 笔记类型标识
@@ -214,11 +224,14 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                         (mContext, R.color.lemon)));
                 holder.ivNoteType.setImageResource(R.mipmap.ic_type_diary);
 
-                // 封面图
+                // 笔记封面图
                 List<String> pics = GlobalUtil.getStringList(noteInfo.getPicUrls());
                 if (pics != null && pics.size() > 0) {
-                    Glide.with(mContext).load(pics.get(0)).apply(mDefaultOptions).into(holder
-                            .ivPic);
+                    String picUrl = OssUtil.getWholeImageUrl(pics.get(0));
+                    Glide.with(mContext).load(picUrl).apply(mDefaultOptions).into
+                            (holder.ivPic);
+                } else {
+                    holder.ivPic.setImageResource(R.mipmap.ic_default_pic);
                 }
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

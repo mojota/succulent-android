@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
@@ -51,8 +52,14 @@ public class OssRequest {
         //推荐使用OSSAuthCredentialsProvider,token过期可以及时更新
         OSSCredentialProvider credentialProvider = new OSSAuthCredentialsProvider
                 (UrlConstants.STS_SERVER);
+
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(5 * 1000); // 连接超时，默认15秒
+        conf.setSocketTimeout(5 * 1000); // socket超时，默认15秒
+        conf.setMaxConcurrentRequest(5); // 最大并发请求书，默认5个
+        conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
         return new OSSClient(SucculentApplication.getInstance(), endpoint,
-                credentialProvider);
+                credentialProvider, conf);
     }
 
     /**

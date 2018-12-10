@@ -19,7 +19,7 @@
         android:paddingRight="8dp"
         android:maxLines="5"
         android:textColor="#E6000000"
-        android:textSize="15dp"/>
+        android:textSize="14dp"/>
 
     <ToggleButton
         android:id="@+id/tb_answer_all"
@@ -34,7 +34,7 @@
         android:textColor="@color/colorPrimary"
         android:textOff="全文"
         android:textOn="收起"
-        android:textSize="14dp"
+        android:textSize="13dp"
         android:visibility="visible"/>
 
     <RelativeLayout

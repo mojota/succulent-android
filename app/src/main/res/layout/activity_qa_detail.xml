@@ -61,7 +61,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:textColor="@color/black"
-                        android:textSize="17dp"
+                        android:textSize="16dp"
                         android:textStyle="bold"/>
 
 
@@ -126,21 +126,22 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <TextView
+<!--    <TextView
         android:id="@+id/tv_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_answer_empty"
-        android:layout_gravity="center"
         android:padding="8dp"
+        android:layout_marginTop="24dp"
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="2"
         android:shadowColor="@color/white"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="18dp"
-        android:visibility="gone"/>
+        android:textSize="15dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
     <LinearLayout
         android:id="@+id/layout_submit"
         android:layout_width="match_parent"

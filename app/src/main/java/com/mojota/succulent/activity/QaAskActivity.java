@@ -2,6 +2,7 @@ package com.mojota.succulent.activity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -11,16 +12,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
+import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.R;
-import com.mojota.succulent.model.ResponseInfo;
-import com.mojota.succulent.network.GsonPostRequest;
-import com.mojota.succulent.network.VolleyErrorListener;
-import com.mojota.succulent.network.VolleyUtil;
-import com.mojota.succulent.utils.AppLog;
+import com.mojota.succulent.network.OssRequest;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
@@ -40,9 +38,13 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
     private InputMethodManager mInputManager;
     private TextView mTvLength;
     private Button mBtClose;
-    private ImageButton mIbtPic;
+    private ImageView mIbtPic;
     private Button mBtCommit;
     private TextInputLayout mTiQuestion;
+    private Uri[] mLocalPics = new Uri[1];
+    private String[] mUploadPicKeys = new String[1];
+    private OssRequest mOssRequest;
+    private RequestOptions mRequestOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,9 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
         mBtCommit = findViewById(R.id.bt_commit);
         mBtCommit.setOnClickListener(this);
         mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mRequestOptions = GlobalUtil.getRoundedCornersOptions();
+        mOssRequest = new OssRequest();
     }
 
     @Override
@@ -95,12 +100,107 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
         // super.onBackPressed();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_close:
+                finish();
+                break;
+            case R.id.ibt_pic:
+                showPicDialog(mIbtPic, null);
+                setOnChoosedListener(new OnChoosedListener() {
+                    @Override
+                    public void onChoosed(Uri localUploadUri) {
+                        mLocalPics[0] = localUploadUri;
+                        mUploadPicKeys[0] = ""; // 一旦选过图就置key为空,上传后再写入
+                    }
+
+                    @Override
+                    public void onCanceled() {
+
+                    }
+                });
+                break;
+            case R.id.bt_commit:
+                if (TextUtils.isEmpty(mEtQuestion.getText())) {
+                    mTiQuestion.setError("问题不可以为空");
+                } else {
+                    commit();
+                }
+                break;
+        }
+    }
+
+    /**
+     * 上传图片后再上传文字
+     */
+    private void commit() {
+        boolean hasPic = false;
+        // 已上传过有地址的不再重复上传
+        for (int i = 0; i < mLocalPics.length; i++) {
+            if (mLocalPics[i] != null && TextUtils.isEmpty(mUploadPicKeys[i])) {
+                hasPic = true;
+                break;
+            }
+        }
+
+        // 如果有图片，则上传图片后提交，如无图片直接提交
+        if (hasPic) {
+            uploadImg(mLocalPics, 0);
+        } else {
+            submitQuestion();
+        }
+    }
+
+
+    /**
+     * 顺序上传图片,最后一张结束后提交所有内容到服务器
+     *
+     * @param localPics 本地准备上传的uri列表
+     * @param index     外部调用由0开始
+     */
+    private void uploadImg(final Uri[] localPics, final int index) {
+        showProgress(true);
+        final String objectKey = OssUtil.getImageObjectKey(UserUtil.getCurrentUserId(),
+                String.valueOf(System.currentTimeMillis()) + "-" + index);
+        mOssRequest.upload(objectKey, GlobalUtil.getByte(localPics[index]), new
+                OssRequest.OssOperateListener() {
+
+            @Override
+            public void onSuccess(String objectKey, String objectUrl) {
+                mUploadPicKeys[index] = objectKey;
+                if (index == localPics.length - 1) {
+                    showProgress(false);
+                    submitQuestion();
+                } else {
+                    uploadImg(localPics, index + 1);
+                }
+            }
+
+            @Override
+            public void onFailure(String objectKey, String errMsg) {
+                if (localPics[index] != null) {
+                    StringBuilder tips = new StringBuilder("上传图片");
+                    tips.append((index + 1) + "失败了," + errMsg);
+                    GlobalUtil.makeToast(tips.toString());
+                }
+                if (index == localPics.length - 1) {
+                    showProgress(false);
+                    submitQuestion();
+                } else {
+                    uploadImg(localPics, index + 1);
+                }
+            }
+        });
+    }
 
     /**
      * 提交问题
      */
-    private void submitQuestion(String questionStr) {
-        String picUrls = "";
+    private void submitQuestion() {
+        String questionStr = mEtQuestion.getText().toString();
+        questionStr = questionStr.replaceAll("\n+", "\n"); // 多行换行最多显示一行
+        String picUrls = mUploadPicKeys[0];
         Map<String, String> map = new HashMap<String, String>();
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("questionTitle", questionStr);
@@ -123,26 +223,4 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
         mInputManager.hideSoftInputFromWindow(mEtQuestion.getWindowToken(), 0);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_close:
-                finish();
-                break;
-            case R.id.ibt_pic:
-                showPicDialog(mIbtPic, null);
-                break;
-            case R.id.bt_commit:
-                if (!TextUtils.isEmpty(mEtQuestion.getText())) {
-                    String questionStr = mEtQuestion.getText().toString();
-                    questionStr = questionStr.replaceAll("\n+", "\n"); // 多行换行最多显示一行
-                    if (!TextUtils.isEmpty(questionStr.trim())) {
-                        submitQuestion(questionStr);
-                    }
-                } else {
-                    mTiQuestion.setError("问题不可以为空");
-                }
-                break;
-        }
-    }
 }

@@ -18,19 +18,20 @@
 
         <include layout="@layout/layout_user_bar_nobg"/>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp">
 
             <ImageView
                 android:id="@+id/iv_pic"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_vertical"
-                android:background="@color/gray_very_light"
+                android:background="@drawable/bg_add"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_default_pic"
                 android:transitionName="0"/>
@@ -39,6 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:layout_weight="1">
 
                 <TextView
@@ -48,7 +51,7 @@
                     android:ellipsize="end"
                     android:lines="2"
                     android:textColor="@color/black"
-                    android:textSize="15dp"/>
+                    android:textSize="14dp"/>
 
                 <TextView
                     android:id="@+id/tv_answer_count"

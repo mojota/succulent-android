@@ -16,6 +16,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.QuestionInfo;
 import com.mojota.succulent.model.UserInfo;
+import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UserUtil;
 
@@ -58,7 +59,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
     public QaAdapter(List<QuestionInfo> list, OnItemClickListener listener) {
         mList = list;
         mListener = listener;
-        mDefaultOptions = GlobalUtil.getDefaultOptions().centerCrop();
+        mDefaultOptions = GlobalUtil.getRoundedCornersOptions();
         mAvatarOptions = GlobalUtil.getDefaultAvatarOptions();
     }
 
@@ -98,8 +99,9 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
             holder.tvAnswerCount.setText(String.valueOf(questionInfo.getAnswerCount()));
 
             if (!TextUtils.isEmpty(questionInfo.getQuestionPicUrl())) {
-                Glide.with(mContext).load(questionInfo.getQuestionPicUrl()).apply
-                        (mDefaultOptions).into(holder.ivPic);
+                String picUrl = OssUtil.getWholeImageUrl(questionInfo.getQuestionPicUrl
+                        ());
+                Glide.with(mContext).load(picUrl).apply(mDefaultOptions).into(holder.ivPic);
                 holder.ivPic.setVisibility(View.VISIBLE);
             } else {
                 holder.ivPic.setVisibility(View.GONE);
