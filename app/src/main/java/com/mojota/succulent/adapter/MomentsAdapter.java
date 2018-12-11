@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.network.OssUtil;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
@@ -141,34 +143,22 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
     public void onBindViewHolder(final BaseViewHolder holder, final int position) {
         final NoteInfo noteInfo = mList.get(position);
         if (noteInfo != null) {
-            UserInfo userInfo = noteInfo.getUserInfo();
+            final UserInfo userInfo = noteInfo.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
 //            Glide.with(mContext).load(userInfo.getAvatarUrl()).apply
 //                    (mAvatarOptions).into(holder.ivAvatar);
-                final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
-                Glide.with(mContext).asBitmap().load(OssUtil.getWholeImageUrl(userInfo
-                        .getAvatarUrl())).apply(mAvatarOptions).into(new SimpleTarget<Bitmap>() {
+                setPaletteImage(holder.ivAvatar, holder.mLayoutBar, OssUtil
+                        .getWholeImageUrl(userInfo.getAvatarUrl()), mAvatarOptions, R
+                        .mipmap.ic_default_avatar_white_18dp, R.drawable.ic_bg_user_bar);
+                holder.tvRegion.setText(userInfo.getRegion());
 
-
+                holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
-                            transition) {
-                        holder.ivAvatar.setImageBitmap(resource);
-                        Palette.Builder pb = Palette.from(resource);
-                        pb.generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(Palette palette) {
-                                colors[2] = palette.getDarkVibrantColor(0xffff9800);
-
-                                Drawable bgDrawable = new GradientDrawable(GradientDrawable
-                                        .Orientation.LEFT_RIGHT, colors);
-                                holder.mLayoutBar.setBackground(bgDrawable);
-                            }
-                        });
+                    public void onClick(View v) {
+                        ActivityUtil.startUserActivity(userInfo);
                     }
                 });
-                holder.tvRegion.setText(userInfo.getRegion());
             }
 
             if (!TextUtils.isEmpty(noteInfo.getNoteTitle())) {
@@ -243,6 +233,36 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                 });
             }
         }
+    }
+
+    private void setPaletteImage(final ImageView iv, final ViewGroup view, String
+            imgUrl, RequestOptions options, final int defaultImg, final int defaultBg) {
+        final int[] colors = {0xff8bc34a, 0xff8bc34a, 0xffff9800};
+        Glide.with(mContext).asBitmap().load(imgUrl).apply(options).into(new SimpleTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap>
+                    transition) {
+                iv.setImageBitmap(resource);
+                Palette.Builder pb = Palette.from(resource);
+                pb.generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        colors[2] = palette.getDarkVibrantColor(0xffff9800);
+
+                        Drawable bgDrawable = new GradientDrawable(GradientDrawable
+                                .Orientation.LEFT_RIGHT, colors);
+                        view.setBackground(bgDrawable);
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadFailed(Drawable errorDrawable) {
+                iv.setImageResource(defaultImg);
+                view.setBackgroundResource(defaultBg);
+            }
+        });
     }
 
 }

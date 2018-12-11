@@ -20,6 +20,7 @@ public class UrlConstants {
     public static final String LOGIN_URL = SERVER + "user/login";
     public static final String USER_EDIT_URL = SERVER + "user/edit";
     public static final String AVATAR_EDIT_URL = SERVER + "user/editAvatar";
+    public static final String COVER_EDIT_URL = SERVER + "user/editCover";
 
     public static final String DIARY_ADD_URL = SERVER + "note/diaryAdd";
     public static final String NOTE_ADD_URL = SERVER + "note/noteAdd";
@@ -33,6 +34,7 @@ public class UrlConstants {
 
     public static final String GET_NOTE_LIST_URL = SERVER + "note/getNoteList";
     public static final String GET_MOMENTS_URL = SERVER + "note/getMoments";
+    public static final String GET_USER_MOMENTS_URL = SERVER + "note/getUserMoments";
     public static final String GET_DIARY_DETAILS_URL = SERVER + "note/getDiaryDetails";
 
     public static final String QA_ADD_URL = SERVER + "qa/qaAdd";

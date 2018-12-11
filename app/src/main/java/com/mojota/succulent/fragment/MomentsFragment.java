@@ -1,7 +1,6 @@
 package com.mojota.succulent.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,24 +8,18 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
-import com.mojota.succulent.SucculentApplication;
-import com.mojota.succulent.activity.CoverAddActivity;
 import com.mojota.succulent.activity.DiaryDetailActivity;
 import com.mojota.succulent.adapter.MomentsAdapter;
 import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.NoteResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
-import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
-import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
@@ -44,8 +37,7 @@ import java.util.Map;
  * Created by mojota on 18-7-23
  */
 public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
-        .OnRefreshListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener,
-        View.OnClickListener {
+        .OnRefreshListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int PAGE_SIZE = 10; // 每页的条数
@@ -59,7 +51,6 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
     private String mUpdateTime = "";
     private WrapRecycleAdapter mWrapAdapter;
     private TextView mTvEmpty;
-    private ImageView mIvCover;
 
 
     public MomentsFragment() {
@@ -95,11 +86,6 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         mRvMoments = view.findViewById(R.id.rv_moments);
         mMomentsAdapter = new MomentsAdapter(mList, this);
         mWrapAdapter = new WrapRecycleAdapter(mMomentsAdapter);
-        View headerView = LayoutInflater.from(getContext()).inflate(R.layout
-                .layout_moments_header, mRvMoments, false);
-        mIvCover = headerView.findViewById(R.id.iv_cover);
-        mIvCover.setOnClickListener(this);
-        mWrapAdapter.addHeaderView(headerView);
         mRvMoments.setAdapter(mWrapAdapter);
         mRvMoments.setOnLoadListener(this);
         mTvEmpty = view.findViewById(R.id.tv_empty);
@@ -111,7 +97,7 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
     private void getData(final String updateTime) {
         String url = UrlConstants.GET_MOMENTS_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("userId", UserUtil.getCurrentUserId());
+        paramMap.put("loginUserId", UserUtil.getCurrentUserId());
         paramMap.put("updateTime", updateTime);
         paramMap.put("size", String.valueOf(PAGE_SIZE));
 
@@ -148,12 +134,6 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
 
 
     private void setDataToView() {
-        if (!TextUtils.isEmpty(UserUtil.getCoverUrl())) {
-            Glide.with(SucculentApplication.getInstance()).load(OssUtil
-                    .getWholeImageUrl(UserUtil.getCoverUrl())).apply(GlobalUtil
-                    .getDefaultOptions().centerCrop()).into(mIvCover);
-        }
-
         if (mList != null && mList.size() > 0) {
             mTvEmpty.setVisibility(View.GONE);
             mRvMoments.setVisibility(View.VISIBLE);
@@ -199,30 +179,4 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_cover:
-                if (UserUtil.isLogin()) {
-                    Intent intent = new Intent(getActivity(), CoverAddActivity.class);
-                    startActivityForResult(intent, CodeConstants.REQUEST_COVER);
-                } else {
-                    ActivityUtil.startLoginActivity(getActivity());
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CodeConstants.REQUEST_COVER && resultCode == CodeConstants
-                .RESULT_COVER) {
-            Uri localUri = data.getParcelableExtra(CoverAddActivity.KEY_LOCAL_URI);
-            if (localUri != null) {
-                Glide.with(SucculentApplication.getInstance()).load(localUri).apply
-                        (GlobalUtil.getDefaultOptions().centerCrop()).into(mIvCover);
-            }
-        }
-    }
 }

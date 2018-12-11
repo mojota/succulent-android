@@ -90,7 +90,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
 
     private void initView() {
         mToolBar = findViewById(R.id.toolbar);
-        mToolBar.setTitle("");
+        mToolBar.setTitle(R.string.str_qa_detail);
         setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(this);
 

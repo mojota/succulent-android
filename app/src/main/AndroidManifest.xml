@@ -54,9 +54,9 @@
         <activity
             android:name=".activity.QaAskActivity"
             android:theme="@style/AddDataDialog"/>
-        <activity
-            android:name=".activity.CoverAddActivity"
-            android:theme="@style/AddDataDialog"/>
+        <!--<activity-->
+            <!--android:name=".activity.CoverAddActivity"-->
+            <!--android:theme="@style/AddDataDialog"/>-->
         <activity android:name=".activity.ImageBrowserActivity">
         </activity>
         <activity android:name=".activity.DiaryDetailActivity"
@@ -64,9 +64,9 @@
         <activity
             android:name=".activity.QaDetailActivity"
             android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/AppTheme_no_bg"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".activity.LoginActivity">
-        </activity>
+        <activity android:name=".activity.LoginActivity"/>
         <activity
             android:name=".activity.FeedbackActivity"
             android:label="@string/str_feedback"/>
@@ -78,6 +78,9 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/str_settings">
         </activity>
+        <activity
+            android:name=".activity.UserMomentsActivity"
+            android:theme="@style/AppTheme_no_bg"/>
     </application>
 
 </manifest>

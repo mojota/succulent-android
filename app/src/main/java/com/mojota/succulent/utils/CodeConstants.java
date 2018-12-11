@@ -29,6 +29,7 @@ public class CodeConstants {
     public static final int REQUEST_QUESTION_DELETE = 1011;
     public static final int REQUEST_ANSWER_DELETE = 1012;
     public static final int REQUEST_EDIT_AVATAR = 1013;
+    public static final int REQUEST_EDIT_COVER = 1014;
 
 
     public static final Map<Integer, String> REQUEST_MAP = new HashMap<>();
@@ -48,6 +49,7 @@ public class CodeConstants {
         REQUEST_MAP.put(REQUEST_QUESTION_DELETE, "");
         REQUEST_MAP.put(REQUEST_ANSWER_DELETE, "");
         REQUEST_MAP.put(REQUEST_EDIT_AVATAR, "修改头像");
+        REQUEST_MAP.put(REQUEST_EDIT_COVER, "修改封面");
     }
 
 

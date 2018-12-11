@@ -48,11 +48,12 @@ public class UserUtil {
         mSp.clear();
     }
 
-    /**
-     * 获取用户封面url
-     */
-    public static String getCoverUrl() {
-        return mSp.getString(KeyConstants.KEY_COVER_URL);
+    public static void saveAvatar(String avatarUrl) {
+        mSp.putString(KeyConstants.KEY_AVATAR_URL, avatarUrl);
+    }
+
+    public static void saveCover(String coverUrl) {
+        mSp.putString(KeyConstants.KEY_COVER_URL, coverUrl);
     }
 
     /**
@@ -84,7 +85,4 @@ public class UserUtil {
                 .getNickname();
     }
 
-    public static void saveAvatar(String avatarUrl) {
-        mSp.putString(KeyConstants.KEY_AVATAR_URL, avatarUrl);
-    }
 }

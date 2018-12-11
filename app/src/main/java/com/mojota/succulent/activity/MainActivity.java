@@ -272,25 +272,26 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         showProgress(true);
 
         final String objectKey = OssUtil.getImageObjectKey(UserUtil.getCurrentUserId(),
-                String.valueOf(UserUtil.getCurrentUserId() + "-" + System.currentTimeMillis()));
+                String.valueOf(UserUtil.getCurrentUserId() + "-" + System
+                        .currentTimeMillis()));
 
-        new OssRequest().upload(objectKey, GlobalUtil.getByte(localPic), new
-                OssRequest.OssOperateListener() {
+        new OssRequest().upload(objectKey, GlobalUtil.getByte(localPic), new OssRequest
+                .OssOperateListener() {
 
-                    @Override
-                    public void onSuccess(String objectKey, String objectUrl) {
-                            showProgress(false);
-                            mAvatarKey = objectKey;
-                            editAvatarUrl(mAvatarKey);
-                    }
+            @Override
+            public void onSuccess(String objectKey, String objectUrl) {
+                showProgress(false);
+                mAvatarKey = objectKey;
+                editAvatarUrl(mAvatarKey);
+            }
 
-                    @Override
-                    public void onFailure(String objectKey, String errMsg) {
-                            StringBuilder tips = new StringBuilder("上传头像失败,");
-                            tips.append(errMsg);
-                            GlobalUtil.makeToast(tips.toString());
-                    }
-                });
+            @Override
+            public void onFailure(String objectKey, String errMsg) {
+                StringBuilder tips = new StringBuilder("上传头像失败,");
+                tips.append(errMsg);
+                GlobalUtil.makeToast(tips.toString());
+            }
+        });
     }
 
     /**
