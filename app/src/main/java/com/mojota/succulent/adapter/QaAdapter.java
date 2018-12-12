@@ -89,9 +89,10 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.ivPic.setVisibility(View.GONE);
         holder.btDelete.setVisibility(View.GONE);
         holder.btDelete.setOnClickListener(null);
+        holder.ivPic.setVisibility(View.GONE);
+        holder.ivPic.setImageResource(0);
         final QuestionInfo questionInfo = mList.get(position);
         if (questionInfo != null) {
             holder.tvTitle.setText(questionInfo.getQuestionTitle());
@@ -103,8 +104,6 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
                         ());
                 Glide.with(mContext).load(picUrl).apply(mDefaultOptions).into(holder.ivPic);
                 holder.ivPic.setVisibility(View.VISIBLE);
-            } else {
-                holder.ivPic.setVisibility(View.GONE);
             }
             UserInfo userInfo = questionInfo.getUserInfo();
             if (userInfo != null) {

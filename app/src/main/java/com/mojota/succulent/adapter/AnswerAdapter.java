@@ -166,7 +166,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
                         isUp = 0;
                     }
                     answer.setIsUp(isUp);
-                    RequestUtils.answerUp(answer.getAnswerId(), isUp);
+                    RequestUtils.answerUp(answer.getAnswerId(), answer.getQuestionId(),
+                            isUp);
                     holder.tbUp.setText(String.valueOf(answer.getUpCount()));
                     holder.tbUp.setTextOn(String.valueOf(answer.getUpCount()));
                     holder.tbUp.setTextOff(String.valueOf(answer.getUpCount()));

@@ -64,9 +64,11 @@
     <string name="str_is_loading">正在加载</string>
     <string name="str_load_faild">加载失败，请重新加载</string>
 
+    <string name="str_network_error_retry">网络跑丢啦,请重试</string>
+
     <string name="str_diary_empty">点击右下角记下第一颗多肉的成长吧！</string>
     <string name="str_landscaping_empty">点击右下角晒出你的造景美图吧!</string>
-    <string name="str_moments_empty">还没有主人公开花园的多肉呢！\n第一个公开试试？</string>
+    <string name="str_moments_empty">还没有主人公开花园的多肉呢！\n去我的花园公开？</string>
     <string name="str_qa_empty">还没有人提问呢！\n点击右下角做提问第一人？</string>
     <string name="str_answer_empty">还没有人回答～\n回答它？</string>
 

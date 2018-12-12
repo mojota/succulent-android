@@ -131,6 +131,7 @@ public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
                     mRvQA.loadMoreFailed();
 //                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                mTvEmpty.setText(R.string.str_qa_empty);
                 setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -139,6 +140,7 @@ public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
                 mSwipeRefresh.setRefreshing(false);
                 mRvQA.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                mTvEmpty.setText(R.string.str_network_error_retry);
                 setDataToView();
             }
         }));
@@ -206,11 +208,11 @@ public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_ask:
-                if (UserUtil.isLogin()) {
+                if (!UserUtil.isLogin()) {
+                    ActivityUtil.startLoginActivity(getActivity());
+                } else {
                     Intent intent = new Intent(getActivity(), QaAskActivity.class);
                     startActivityForResult(intent, CodeConstants.REQUEST_QA_ASK);
-                } else {
-                    ActivityUtil.startLoginActivity(getActivity());
                 }
                 break;
         }

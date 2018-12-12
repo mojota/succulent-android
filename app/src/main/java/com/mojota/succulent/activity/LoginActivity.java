@@ -1,6 +1,7 @@
 package com.mojota.succulent.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ import java.util.Map;
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
+    public static final String ACTION_LOGIN = "com.mojota.succulent.LOGIN";
     // UI references.
     private AutoCompleteTextView mEmailView;
     private PasswordView mEtPassword;
@@ -209,9 +211,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     } else if (type == 0) {
                         GlobalUtil.makeToast("登录成功");
                     }
+                    UserUtil.clearUser();
                     UserInfo userInfo = responseInfo.getData();
                     UserUtil.saveUser(userInfo);
-                    setResult(CodeConstants.RESULT_USER_CHANGE);
+                    sendBroadcast(new Intent(ACTION_LOGIN));
                     finish();
                 }
             }

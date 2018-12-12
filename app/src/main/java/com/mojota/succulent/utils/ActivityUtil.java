@@ -42,7 +42,7 @@ public class ActivityUtil {
      */
     public static void startLoginActivity(Activity activity) {
         Intent intent = new Intent(activity, LoginActivity.class);
-        activity.startActivityForResult(intent,CodeConstants.REQUEST_USER_CHANGE);
+        activity.startActivity(intent);
     }
 
     /**

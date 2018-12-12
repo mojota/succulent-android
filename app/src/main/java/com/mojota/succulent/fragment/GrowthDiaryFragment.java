@@ -142,6 +142,7 @@ public class GrowthDiaryFragment extends BaseFragment implements View.OnClickLis
                     mRvDiary.loadMoreFailed();
 //                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                mTvEmpty.setText(R.string.str_diary_empty);
                 setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -150,6 +151,7 @@ public class GrowthDiaryFragment extends BaseFragment implements View.OnClickLis
                 mSwipeRefresh.setRefreshing(false);
                 mRvDiary.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                mTvEmpty.setText(R.string.str_network_error_retry);
                 setDataToView();
             }
         }));

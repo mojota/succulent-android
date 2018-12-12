@@ -118,6 +118,7 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
                     mRvMoments.loadMoreFailed();
                     GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                mTvEmpty.setText(R.string.str_moments_empty);
                 setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -126,6 +127,7 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
                 mSwipeRefresh.setRefreshing(false);
                 mRvMoments.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                mTvEmpty.setText(R.string.str_network_error_retry);
                 setDataToView();
             }
         }));

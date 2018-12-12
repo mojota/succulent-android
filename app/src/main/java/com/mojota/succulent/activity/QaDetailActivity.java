@@ -272,14 +272,18 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
                 supportFinishAfterTransition();
                 break;
             case R.id.bt_submit:
-                if (!TextUtils.isEmpty(mEtAnswer.getText())) {
-                    String answerStr = mEtAnswer.getText().toString();
-                    answerStr = answerStr.replaceAll("\n+", "\n"); // 多行换行最多显示一行
-                    if (!TextUtils.isEmpty(answerStr.trim())) {
-                        submitAnswer(answerStr);
-                        closeKeyboard();
+                if (!UserUtil.isLogin()) {
+                    ActivityUtil.startLoginActivity(this);
+                } else {
+                    if (!TextUtils.isEmpty(mEtAnswer.getText())) {
+                        String answerStr = mEtAnswer.getText().toString();
+                        answerStr = answerStr.replaceAll("\n+", "\n"); // 多行换行最多显示一行
+                        if (!TextUtils.isEmpty(answerStr.trim())) {
+                            submitAnswer(answerStr);
+                        }
                     }
                 }
+                closeKeyboard();
                 break;
             case R.id.iv_pic:
                 ActivityUtil.startImageBrowserActivity(this, mIvPic, "", mPicUrls, 0);

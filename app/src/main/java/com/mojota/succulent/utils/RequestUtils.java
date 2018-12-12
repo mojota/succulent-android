@@ -135,12 +135,14 @@ public class RequestUtils {
      * 回答顶, 不关心成功失败
      *
      * @param answerId 回答ID， 传值时表示操作回答
+     * @param questionId 所属问题ID
      * @param isUp     点赞操作状态：0-取消点赞，1-点赞
      */
-    public static void answerUp(String answerId, int isUp) {
+    public static void answerUp(String answerId, String questionId, int isUp) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("userId", UserUtil.getCurrentUserId());
         map.put("answerId", answerId);
+        map.put("questionId", questionId);
         map.put("isUp", String.valueOf(isUp));
         commonRequest(UrlConstants.ANSWER_UP_URL, map, CodeConstants.REQUEST_ANSWER_UP, null);
     }

@@ -1,7 +1,10 @@
 package com.mojota.succulent.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -115,11 +118,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mFabUserEdit = mNavigationView.getHeaderView(0).findViewById(R.id.fab_user_edit);
         mFabUserEdit.setOnClickListener(this);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, null, R
-                .string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mDrawer = findViewById(R.id.drawer_layout);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission
                 .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -128,6 +127,15 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         }
 
         refreshUser();
+
+        // 注册登录完成广播
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                refreshUser();
+                refreshView();
+            }
+        }, new IntentFilter(LoginActivity.ACTION_LOGIN));
     }
 
     private void refreshUser() {
@@ -163,8 +171,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
             mFabUserEdit.setVisibility(View.GONE);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
     }
 
     private void initFragment() {
