@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,13 +128,21 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         refreshUser();
 
         // 注册登录完成广播
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                refreshUser();
-                refreshView();
-            }
-        }, new IntentFilter(LoginActivity.ACTION_LOGIN));
+        registerReceiver(mUserReceiver, new IntentFilter(LoginActivity.ACTION_LOGIN));
+    }
+
+    private BroadcastReceiver mUserReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshUser();
+            refreshView();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mUserReceiver);
+        super.onDestroy();
     }
 
     private void refreshUser() {
