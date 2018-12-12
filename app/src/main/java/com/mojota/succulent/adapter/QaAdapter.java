@@ -17,6 +17,7 @@ import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.QuestionInfo;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.network.OssUtil;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UserUtil;
 
@@ -43,9 +44,12 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
         private final TextView tvNickname;
         private final ImageView ivAvatar;
         private final Button btDelete;
+        private final ViewGroup mLayoutBar;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            mLayoutBar = itemView.findViewById(R.id.layout_bar);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvTime = itemView.findViewById(R.id.tv_time);
             tvAnswerCount = itemView.findViewById(R.id.tv_answer_count);
@@ -105,7 +109,7 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
                 Glide.with(mContext).load(picUrl).apply(mDefaultOptions).into(holder.ivPic);
                 holder.ivPic.setVisibility(View.VISIBLE);
             }
-            UserInfo userInfo = questionInfo.getUserInfo();
+            final UserInfo userInfo = questionInfo.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
                 Glide.with(mContext).load(OssUtil.getWholeImageUrl(userInfo
@@ -121,6 +125,12 @@ public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
                         }
                     });
                 }
+                holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ActivityUtil.startUserMomentsActivity(userInfo);
+                    }
+                });
             }
         }
 

@@ -156,7 +156,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                 holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ActivityUtil.startUserActivity(userInfo);
+                        ActivityUtil.startUserMomentsActivity(userInfo);
                     }
                 });
             }

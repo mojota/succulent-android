@@ -233,6 +233,9 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_notices:
+                startActivity(new Intent(MainActivity.this, NoticesActivity.class));
+                break;
             case R.id.nav_feedback:
                 startActivity(new Intent(MainActivity.this, FeedbackActivity.class));
                 break;

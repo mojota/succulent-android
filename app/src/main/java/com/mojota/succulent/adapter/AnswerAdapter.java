@@ -18,6 +18,7 @@ import com.mojota.succulent.R;
 import com.mojota.succulent.model.AnswerInfo;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.network.OssUtil;
+import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UserUtil;
@@ -52,9 +53,12 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         private final ToggleButton tbUp;
         private final ImageView ivUp;
         private final Button btDelete;
+        private final ViewGroup mLayoutBar;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            mLayoutBar = itemView.findViewById(R.id.layout_bar);
             ivAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             tvNickname = (TextView) itemView.findViewById(R.id.tv_nickname);
             layoutUser = (ViewGroup) itemView.findViewById(R.id.layout_user);
@@ -103,7 +107,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         final AnswerInfo answer = mList.get(position);
         holder.btDelete.setVisibility(View.GONE);
         if (answer != null) {
-            UserInfo userInfo = answer.getUserInfo();
+            final UserInfo userInfo = answer.getUserInfo();
             if (userInfo != null) {
                 holder.tvNickname.setText(UserUtil.getDisplayName(userInfo));
                 Glide.with(mActivity).load(OssUtil.getWholeImageUrl(userInfo
@@ -119,6 +123,13 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
                         }
                     });
                 }
+
+                holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ActivityUtil.startUserMomentsActivity(userInfo);
+                    }
+                });
             }
 
             if (!TextUtils.isEmpty(answer.getAnswerContent())) {

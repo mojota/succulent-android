@@ -49,7 +49,7 @@ public class ActivityUtil {
      * 进入某个人主页
      * @param userInfo
      */
-    public static void startUserActivity(UserInfo userInfo) {
+    public static void startUserMomentsActivity(UserInfo userInfo) {
         Intent intent = new Intent(SucculentApplication.getInstance(), UserMomentsActivity
                 .class);
         intent.putExtra(UserMomentsActivity.KEY_USER, userInfo);

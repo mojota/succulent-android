@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +60,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     private List<AnswerInfo> mAnswerList = new ArrayList<AnswerInfo>();
     private ImageView mIvAvatar;
     private TextView mTvNickname;
+    private ViewGroup mLayoutBar;
     private TextView mTvQuestionTitle;
     private TextView mTvTime;
     private QuestionInfo mQuestion;
@@ -118,6 +120,9 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         mBtSubmit.setOnClickListener(this);
 
         // 问题
+
+        mLayoutBar = findViewById(R.id.layout_bar);
+        mLayoutBar.setOnClickListener(this);
         mIvAvatar = (ImageView) findViewById(R.id.iv_avatar);
         mTvNickname = (TextView) findViewById(R.id.tv_nickname);
         mTvQuestionTitle = (TextView) findViewById(R.id.tv_question_title);
@@ -287,6 +292,11 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.iv_pic:
                 ActivityUtil.startImageBrowserActivity(this, mIvPic, "", mPicUrls, 0);
+                break;
+            case R.id.layout_bar:
+                if (mQuestion != null && mQuestion.getUserInfo() != null) {
+                    ActivityUtil.startUserMomentsActivity(mQuestion.getUserInfo());
+                }
                 break;
         }
     }
