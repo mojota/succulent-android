@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
@@ -24,7 +25,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.mojota.succulent.R;
-import com.mojota.succulent.SucculentApplication;
 import com.mojota.succulent.adapter.MomentsAdapter;
 import com.mojota.succulent.interfaces.OnItemClickListener;
 import com.mojota.succulent.model.NoteInfo;
@@ -68,11 +68,12 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
     private String mCoverKey = "";
     private Toolbar mToolBar;
     private ViewGroup mLayout;
+    private TextView mTvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_user_moments);
 
         mUser = (UserInfo) getIntent().getSerializableExtra(KEY_USER);
         // 如果是当前登录用户,则取本地值
@@ -81,7 +82,6 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         }
         initView();
 
-        setDataToView();
         getData(mUpdateTime);
     }
 
@@ -101,6 +101,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
                 .layout_moments_header, mRvMoments, false);
         mIvCover = headerView.findViewById(R.id.iv_cover);
         mIvCover.setOnClickListener(this);
+        mTvEmpty = findViewById(R.id.tv_empty);
         mWrapAdapter.addHeaderView(headerView);
         mRvMoments.setAdapter(mWrapAdapter);
         mRvMoments.setOnLoadListener(this);
@@ -152,6 +153,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
                     mRvMoments.loadMoreFailed();
                     GlobalUtil.makeToast(R.string.str_no_data);
                 }
+                mTvEmpty.setText(R.string.str_user_moments_empty);
                 setDataToView();
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -160,6 +162,8 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
                 mSwipeRefresh.setRefreshing(false);
                 mRvMoments.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
+                mTvEmpty.setText(R.string.str_network_error_retry);
+                setDataToView();
             }
         }));
         VolleyUtil.execute(request);
@@ -181,10 +185,12 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         }
 
         if (mList != null && mList.size() > 0) {
+            mTvEmpty.setVisibility(View.GONE);
             mRvMoments.setVisibility(View.VISIBLE);
             mMomentsAdapter.setList(mList);
             mWrapAdapter.notifyDataSetChanged();
         } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
             mRvMoments.setVisibility(View.INVISIBLE);
             mMomentsAdapter.setList(mList);
             mWrapAdapter.notifyDataSetChanged();
