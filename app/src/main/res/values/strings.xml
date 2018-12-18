@@ -70,5 +70,12 @@
     <string name="str_qa_empty">还没有人提问呢！\n点击右下角做提问第一人？</string>
     <string name="str_answer_empty">还没有人回答～\n回答它？</string>
 
+    <string name="str_setting_update">检查更新</string>
+    <string name="str_setting_about">关于</string>
+    <string name="str_version">当前版本:</string>
+    <string name="str_latest_ver">当前已经是最新版本</string>
+    <string name="str_download_complete">下载完成</string>
+    <string name="str_download_failed">下载失败</string>
+
 
 </resources>

@@ -48,6 +48,7 @@ public class GlobalUtil {
     private static final long ONE_DAY = ONE_HOUR * 24;
 
     private static String mVersioinName;
+    private static int mVersioinCode;
 
     public static String getDeviceId() {
         String ANDROID_ID = Settings.System.getString(SucculentApplication
@@ -274,12 +275,25 @@ public class GlobalUtil {
         return false;
     }
 
+
+    public static int getVersionCode() {
+        if (mVersioinCode == 0) {
+            PackageManager pm = SucculentApplication.getInstance().getPackageManager();
+            String pkgName = SucculentApplication.getInstance().getPackageName();
+            try {
+                PackageInfo pkgInfo = pm.getPackageInfo(pkgName, 0);
+                mVersioinCode = pkgInfo.versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return mVersioinCode;
+    }
+
     public static String getVersionName() {
-        if (mVersioinName == null || TextUtils.isEmpty(mVersioinName)) {
-            PackageManager pm = SucculentApplication.getInstance()
-                    .getPackageManager();
-            String pkgName = SucculentApplication.getInstance()
-                    .getPackageName();
+        if (TextUtils.isEmpty(mVersioinName)) {
+            PackageManager pm = SucculentApplication.getInstance().getPackageManager();
+            String pkgName = SucculentApplication.getInstance().getPackageName();
             try {
                 PackageInfo pkgInfo = pm.getPackageInfo(pkgName, 0);
                 mVersioinName = pkgInfo.versionName;

@@ -72,8 +72,8 @@ public abstract class PhotoChooseSupportActivity extends BaseActivity {
      */
     protected void takePhoto() {
         String fileName = GlobalUtil.formatCurrentTime() + ".jpg";
-        File file = FileUtil.createPicFile(fileName);
-        if (Build.VERSION.SDK_INT >= 24) {
+        File file = FileUtil.obtainPicFile(fileName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mUploadUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + "" +
                     ".provider", file);
         } else {

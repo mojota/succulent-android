@@ -45,5 +45,7 @@ public class UrlConstants {
     public static final String QUESTION_DELETE_URL = SERVER + "qa/deleteQuestion";
     public static final String ANSWER_DELETE_URL = SERVER + "qa/deleteAnswer";
 
+    public static final String LATEST_APP_URL = SERVER + "app/getLatestApp";
+
 
 }

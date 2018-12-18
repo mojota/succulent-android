@@ -60,7 +60,7 @@ public class DownloadRequest {
             public void run() {
                 download(urlStr, filename);
             }
-        }));
+        })).start();
     }
 
     /**
@@ -73,7 +73,7 @@ public class DownloadRequest {
         try {
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(20000);
+            conn.setConnectTimeout(5000);
             conn.setReadTimeout(20000);
             conn.setUseCaches(false);
             conn.setRequestMethod("GET");

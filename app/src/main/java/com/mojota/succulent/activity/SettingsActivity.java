@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mojota.succulent.R;
+import com.mojota.succulent.fragment.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -19,6 +20,9 @@ public class SettingsActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getFragmentManager().beginTransaction().replace(R.id.container,
+                SettingsFragment.newInstance()).commit();
     }
 
     @Override

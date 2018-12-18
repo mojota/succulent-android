@@ -51,7 +51,7 @@ public class FileUtil {
         return fileFolder;
     }
 
-    public static File createPicFile(String fileName) {
+    public static File obtainPicFile(String fileName) {
         File file = new File(getPublicPicFileFolder(), fileName);
         return file;
     }
@@ -119,4 +119,15 @@ public class FileUtil {
         scanIntent.setData(Uri.fromFile(file));
         SucculentApplication.getInstance().sendBroadcast(scanIntent);
     }
+
+
+    /**
+     * 用于保存下载的apk全路径
+     */
+    public static File obtainAppFile(String versionName) {
+        File file = new File(getFileFolder(), "succulentMU" + versionName + ".apk");
+        return file;
+    }
+
+
 }

@@ -33,6 +33,7 @@ import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.network.OssRequest;
 import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.ActivityUtil;
+import com.mojota.succulent.utils.CheckUpdateUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
@@ -129,6 +130,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
 
         // 注册登录完成广播
         registerReceiver(mUserReceiver, new IntentFilter(LoginActivity.ACTION_LOGIN));
+        // 检查升级
+        CheckUpdateUtil.checkUpdate(this);
     }
 
     private BroadcastReceiver mUserReceiver = new BroadcastReceiver() {
