@@ -131,7 +131,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         // 注册登录完成广播
         registerReceiver(mUserReceiver, new IntentFilter(LoginActivity.ACTION_LOGIN));
         // 检查升级
-        CheckUpdateUtil.checkUpdate(this);
+        CheckUpdateUtil.checkUpdate(this, false);
     }
 
     private BroadcastReceiver mUserReceiver = new BroadcastReceiver() {

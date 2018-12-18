@@ -33,7 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                CheckUpdateUtil.checkUpdate(getActivity());
+                CheckUpdateUtil.checkUpdate(getActivity(), true);
                 return true;
             }
         });

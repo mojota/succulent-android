@@ -33,7 +33,7 @@ import java.io.File;
  */
 public class CheckUpdateUtil {
 
-    public static void checkUpdate(final Activity activity) {
+    public static void checkUpdate(final Activity activity, final boolean showResult) {
         String url = UrlConstants.LATEST_APP_URL;
         GsonPostRequest request = new GsonPostRequest(url, null, null,
                 UpdateInfoResponseInfo.class, new Response
@@ -47,7 +47,9 @@ public class CheckUpdateUtil {
                         if (updateInfo.getVersionCode() > GlobalUtil.getVersionCode()) {
                             showUpdateDialog(updateInfo, activity);
                         } else {
-                            GlobalUtil.makeToast(R.string.str_latest_ver);
+                            if (showResult){
+                                GlobalUtil.makeToast(R.string.str_latest_ver);
+                            }
                         }
                     }
                 }
