@@ -344,6 +344,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         super.onRequestSuccess(requestCode);
         if (requestCode == CodeConstants.REQUEST_EDIT_COVER) {
             UserUtil.saveCover(mCoverKey);
+            mUser.setCoverUrl(mCoverKey);
         }
     }
 }
