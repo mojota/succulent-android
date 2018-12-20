@@ -42,10 +42,10 @@ import java.util.List;
  */
 public class GlobalUtil {
 
-    private static final long ONE_SECOND = 1000;
-    private static final long ONE_MINUTE = ONE_SECOND * 60;
-    private static final long ONE_HOUR = ONE_MINUTE * 60;
-    private static final long ONE_DAY = ONE_HOUR * 24;
+    public static final long ONE_SECOND = 1000;
+    public static final long ONE_MINUTE = ONE_SECOND * 60;
+    public static final long ONE_HOUR = ONE_MINUTE * 60;
+    public static final long ONE_DAY = ONE_HOUR * 24;
 
     private static String mVersioinName;
     private static int mVersioinCode;

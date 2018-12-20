@@ -3,6 +3,7 @@ package com.mojota.succulent.adapter;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,12 @@ public class DiaryDetailAdapter extends RecyclerView.Adapter<DiaryDetailAdapter.
 
         final NoteDetail diary = mList.get(position);
         if (diary != null) {
-            holder.tvContent.setText(diary.getContent());
+            if (TextUtils.isEmpty(diary.getContent())) {
+                holder.tvContent.setVisibility(View.GONE);
+            } else {
+                holder.tvContent.setVisibility(View.VISIBLE);
+                holder.tvContent.setText(diary.getContent());
+            }
             holder.tvTime.setText(GlobalUtil.formatDisplayTime(diary.getCreateTime()));
 
             holder.ivPic0.setOnClickListener(null);

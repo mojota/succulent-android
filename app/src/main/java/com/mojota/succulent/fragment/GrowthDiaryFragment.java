@@ -206,10 +206,9 @@ public class GrowthDiaryFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CodeConstants.REQUEST_ADD:
-                if (resultCode == CodeConstants.RESULT_REFRESH) {
+                if (resultCode == CodeConstants.RESULT_ADD_REFRESH) {
                     onRefresh();
                     mRvDiary.smoothScrollToPosition(0);
                 }
@@ -226,10 +225,12 @@ public class GrowthDiaryFragment extends BaseFragment implements View.OnClickLis
                         mWrapAdapter.notifyItemChanged(pos);
                         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
                     }
+                } else if (resultCode == CodeConstants.RESULT_ADD_REFRESH) {
+                    onRefresh();
                 }
                 break;
-
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

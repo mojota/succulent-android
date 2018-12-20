@@ -282,12 +282,13 @@ public class DiaryDetailActivity extends BaseActivity implements View
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case CodeConstants.RESULT_REFRESH:
+            case CodeConstants.RESULT_ADD_REFRESH:
                 refresh();
-//                setResult(CodeConstants.RESULT_REFRESH);
+                // 返回以后刷新
+                setResult(CodeConstants.RESULT_ADD_REFRESH);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

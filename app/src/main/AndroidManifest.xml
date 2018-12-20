@@ -85,6 +85,8 @@
             android:theme="@style/AppTheme_no_bg"/>
         <activity android:name=".activity.NoticesActivity">
         </activity>
+        <activity android:name=".activity.FindPwdActivity">
+        </activity>
     </application>
 
 </manifest>

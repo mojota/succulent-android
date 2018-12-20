@@ -11,6 +11,7 @@ public class UserUtil {
 
 
     private static SpManager mSp = new SpManager("user");
+    private static SpManager mSpLast = new SpManager("last_user");
 
     /**
      * 保存登录信息到sp
@@ -25,8 +26,18 @@ public class UserUtil {
         mSp.putString(KeyConstants.KEY_EMAIL, userInfo.getEmail());
         mSp.putString(KeyConstants.KEY_PHONE, userInfo.getPhone());
         mSp.putString(KeyConstants.KEY_COVER_URL, userInfo.getCoverUrl());
+
+        // 保存最后登录的用户
+        mSpLast.clear();
+        mSpLast.putString(KeyConstants.KEY_USER_NAME, userInfo.getUserName());
     }
 
+    /**
+     * 获取最后登录的用户名
+     */
+    public static String getLastUserName() {
+        return mSpLast.getString(KeyConstants.KEY_USER_NAME);
+    }
 
     public static UserInfo getUser() {
         UserInfo userInfo = new UserInfo();
@@ -81,8 +92,23 @@ public class UserUtil {
         if (userInfo == null) {
             return "";
         }
-        return TextUtils.isEmpty(userInfo.getNickname()) ? userInfo.getUserName() : userInfo
-                .getNickname();
+        return TextUtils.isEmpty(userInfo.getNickname()) ? userInfo.getUserName() :
+                userInfo.getNickname();
+    }
+
+
+    /**
+     * 校验email
+     */
+    public static boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
+    /**
+     * 校验密码
+     */
+    public static boolean isPasswordValid(String password) {
+        return password.length() >= 6;
     }
 
 }

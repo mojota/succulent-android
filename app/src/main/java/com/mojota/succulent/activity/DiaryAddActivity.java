@@ -278,7 +278,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        setResult(CodeConstants.RESULT_REFRESH);
+        setResult(CodeConstants.RESULT_ADD_REFRESH);
         finish();
     }
 }

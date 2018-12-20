@@ -33,7 +33,7 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     private Toolbar mToolbar;
     private EditText mEtNickname;
     private EditText mEtRegion;
-    private PasswordView mEtPassword;
+//    private PasswordView mEtPassword;
     private Button mBtSubmit;
     private UserInfo mUser;
     private InputMethodManager mInputManager;
@@ -49,8 +49,8 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
 
         mEtNickname = findViewById(R.id.et_nickname);
         mEtRegion = findViewById(R.id.et_region);
-        mEtPassword = findViewById(R.id.et_password);
-        mEtPassword.setHint(R.string.str_edit_password);
+//        mEtPassword = findViewById(R.id.et_password);
+//        mEtPassword.setHint(R.string.str_edit_password);
         mBtSubmit = findViewById(R.id.bt_submit);
         mBtSubmit.setOnClickListener(this);
 
@@ -98,9 +98,9 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
         map.put("userId", mUser.getUserId());
         map.put("nickname", mEtNickname.getText().toString());
         map.put("region", mEtRegion.getText().toString());
-        if (!TextUtils.isEmpty(mEtPassword.getText())) {
-            map.put("password", mEtPassword.getText());
-        }
+//        if (!TextUtils.isEmpty(mEtPassword.getText())) {
+//            map.put("password", mEtPassword.getText());
+//        }
         GsonPostRequest request = new GsonPostRequest(url, null, map, UserInfoResponseInfo
                 .class, new Response.Listener<UserInfoResponseInfo>() {
 
@@ -138,6 +138,6 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
     private void closeKeyboard() {
         mInputManager.hideSoftInputFromWindow(mEtNickname.getWindowToken(), 0);
         mInputManager.hideSoftInputFromWindow(mEtRegion.getWindowToken(), 0);
-        mInputManager.hideSoftInputFromWindow(mEtPassword.getWindowToken(), 0);
+//        mInputManager.hideSoftInputFromWindow(mEtPassword.getWindowToken(), 0);
     }
 }

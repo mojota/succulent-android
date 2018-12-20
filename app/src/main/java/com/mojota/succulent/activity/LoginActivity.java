@@ -3,7 +3,6 @@ package com.mojota.succulent.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -21,20 +20,16 @@ import com.mojota.succulent.model.UserInfoResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
-import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
-import com.mojota.succulent.utils.KeyConstants;
-import com.mojota.succulent.utils.SpManager;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
-import com.mojota.succulent.view.LoadingDialog;
 import com.mojota.succulent.view.PasswordView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录
+ * 登录和注册
  * Created by mojota on 18-8-27
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
@@ -61,9 +56,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         mInputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.tv_email);
         mEtPassword = findViewById(R.id.et_password);
         mEtPasswordAgain = findViewById(R.id.et_password_again);
+        mEtPasswordAgain.setHint(R.string.prompt_password_again);
         mEtPasswordAgain.setVisibility(View.GONE);
 
         mBtLogin = findViewById(R.id.bt_login);
@@ -71,6 +67,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         mBtRegister = findViewById(R.id.bt_register);
         mBtRegister.setOnClickListener(this);
+
+        mEmailView.setText(UserUtil.getLastUserName());
 
     }
 
@@ -104,6 +102,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
                 break;
             case R.id.action_forget_pw:
+                Intent intent = new Intent(LoginActivity.this, FindPwdActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         mEtPasswordAgain.setError(null);
 
         String email = mEmailView.getText().toString();
-        String password = mEtPassword.getText().toString();
+        String password = mEtPassword.getText();
         String passwordAgain = mEtPasswordAgain.getText();
 
         boolean cancel = false;
@@ -131,14 +131,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!UserUtil.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password)){
+            mEtPassword.setError(getString(R.string.prompt_password));
+            focusView = mEtPassword;
+            cancel = true;
+        }
+        if (!TextUtils.isEmpty(password) && !UserUtil.isPasswordValid(password)) {
             mEtPassword.setError(getString(R.string.error_invalid_password));
             focusView = mEtPassword;
             cancel = true;
@@ -156,14 +160,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         } else {
             requestLoginOrRegister(type, email, password);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 6;
     }
 
     /**
