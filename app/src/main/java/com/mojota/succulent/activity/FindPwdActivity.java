@@ -1,7 +1,6 @@
 package com.mojota.succulent.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.TextInputEditText;
@@ -12,15 +11,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.android.volley.Response;
 import com.mojota.succulent.R;
-import com.mojota.succulent.model.UserInfo;
-import com.mojota.succulent.model.UserInfoResponseInfo;
-import com.mojota.succulent.network.GsonPostRequest;
-import com.mojota.succulent.network.VolleyErrorListener;
-import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
@@ -108,6 +100,7 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
                     return;
                 }
                 mBtSendcode.setEnabled(false);
+                requestSendCode(email);
                 new CountDownTimer(GlobalUtil.ONE_MINUTE, GlobalUtil.ONE_SECOND) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -177,6 +170,15 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
     }
 
     /**
+     * 请求发送验证码
+     */
+    private void requestSendCode(String email) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userName", email);
+        requestSubmit(UrlConstants.SEND_CODE_URL, map, CodeConstants.REQUEST_SEND_CODE);
+    }
+
+    /**
      * 请求重置密码
      */
     private void requestModifyPwd(String tempCode, String email, String password) {
@@ -192,7 +194,15 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onRequestSuccess(int requestCode) {
         super.onRequestSuccess(requestCode);
-        GlobalUtil.makeToast("重置密码成功");
-        finish();
+        switch (requestCode) {
+            case CodeConstants.REQUEST_SEND_CODE:
+                GlobalUtil.makeToast(CodeConstants.REQUEST_MAP.get(CodeConstants
+                        .REQUEST_SEND_CODE));
+                break;
+            case CodeConstants.REQUEST_RESET_PWD:
+                GlobalUtil.makeToast("重置密码成功");
+                finish();
+                break;
+        }
     }
 }
