@@ -99,20 +99,8 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
                     mEtEmail.requestFocus();
                     return;
                 }
-                mBtSendcode.setEnabled(false);
                 requestSendCode(email);
-                new CountDownTimer(GlobalUtil.ONE_MINUTE, GlobalUtil.ONE_SECOND) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        mBtSendcode.setText(millisUntilFinished / 1000 + "秒");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        mBtSendcode.setText(R.string.str_send_code);
-                        mBtSendcode.setEnabled(true);
-                    }
-                }.start();
+                mBtSendcode.setEnabled(false);
                 break;
             case R.id.bt_commit:
                 attemptModifyPwd();
@@ -196,12 +184,36 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
         super.onRequestSuccess(requestCode);
         switch (requestCode) {
             case CodeConstants.REQUEST_SEND_CODE:
+                // 发送验证码成功修改按钮显示
+                mBtSendcode.setEnabled(false);
+                new CountDownTimer(GlobalUtil.ONE_MINUTE, GlobalUtil.ONE_SECOND) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        mBtSendcode.setText(millisUntilFinished / 1000 + "秒");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mBtSendcode.setText(R.string.str_send_code);
+                        mBtSendcode.setEnabled(true);
+                    }
+                }.start();
                 GlobalUtil.makeToast(CodeConstants.REQUEST_MAP.get(CodeConstants
                         .REQUEST_SEND_CODE));
                 break;
             case CodeConstants.REQUEST_RESET_PWD:
                 GlobalUtil.makeToast("重置密码成功");
                 finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestFailure(int requestCode) {
+        super.onRequestFailure(requestCode);
+        switch (requestCode) {
+            case CodeConstants.REQUEST_SEND_CODE:
+                mBtSendcode.setEnabled(true);
                 break;
         }
     }
