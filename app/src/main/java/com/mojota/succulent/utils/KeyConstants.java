@@ -13,4 +13,6 @@ public class KeyConstants {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PHONE = "phone";
     public static final String KEY_COVER_URL = "cover_url";
+
+    public static final String KEY_LATEST_NOTICE_TIME = "latest_notice_time";
 }

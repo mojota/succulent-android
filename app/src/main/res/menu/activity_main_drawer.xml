@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
 
+    <item
+        android:id="@+id/nav_notices"
+        android:icon="@mipmap/ic_notifications_black_36dp"
+        android:title="@string/str_notices"
+        app:actionLayout="@layout/layout_new"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@mipmap/ic_settings_black_36dp"
+        android:title="@string/str_settings"/>
+
     <group android:id="@+id/g1">
         <item
-            android:id="@+id/nav_notices"
-            android:icon="@mipmap/ic_notifications_black_36dp"
-            android:title="@string/str_notices"/>
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@mipmap/ic_settings_black_36dp"
-            android:title="@string/str_settings"/>
+            android:id="@+id/nav_feedback"
+            android:icon="@mipmap/ic_feedback_black_36dp"
+            android:title="@string/str_feedback"/>
     </group>
-    <item
-        android:id="@+id/nav_feedback"
-        android:icon="@mipmap/ic_feedback_black_36dp"
-        android:title="@string/str_feedback"/>
-
 </menu>

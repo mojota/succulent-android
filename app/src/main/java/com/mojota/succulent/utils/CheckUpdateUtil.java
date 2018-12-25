@@ -18,8 +18,8 @@ import com.android.volley.Response;
 import com.mojota.succulent.BuildConfig;
 import com.mojota.succulent.R;
 import com.mojota.succulent.SucculentApplication;
-import com.mojota.succulent.model.UpdateInfo;
-import com.mojota.succulent.model.UpdateInfoResponseInfo;
+import com.mojota.succulent.model.AppInfo;
+import com.mojota.succulent.model.AppInfoResponseInfo;
 import com.mojota.succulent.network.DownloadRequest;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
@@ -36,16 +36,16 @@ public class CheckUpdateUtil {
     public static void checkUpdate(final Activity activity, final boolean showResult) {
         String url = UrlConstants.LATEST_APP_URL;
         GsonPostRequest request = new GsonPostRequest(url, null, null,
-                UpdateInfoResponseInfo.class, new Response
-                .Listener<UpdateInfoResponseInfo>() {
+                AppInfoResponseInfo.class, new Response
+                .Listener<AppInfoResponseInfo>() {
 
             @Override
-            public void onResponse(UpdateInfoResponseInfo responseInfo) {
+            public void onResponse(AppInfoResponseInfo responseInfo) {
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
-                    UpdateInfo updateInfo = responseInfo.getData();
-                    if (updateInfo != null) {
-                        if (updateInfo.getVersionCode() > GlobalUtil.getVersionCode()) {
-                            showUpdateDialog(updateInfo, activity);
+                    AppInfo appInfo = responseInfo.getData();
+                    if (appInfo != null) {
+                        if (appInfo.getVersionCode() > GlobalUtil.getVersionCode()) {
+                            showUpdateDialog(appInfo, activity);
                         } else {
                             if (showResult){
                                 GlobalUtil.makeToast(R.string.str_latest_ver);
@@ -61,19 +61,19 @@ public class CheckUpdateUtil {
     /**
      * 显示升级对话框
      */
-    private static void showUpdateDialog(final UpdateInfo updateInfo, final Activity
+    private static void showUpdateDialog(final AppInfo appInfo, final Activity
             activity) {
         AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("发现新版本:" +
-                updateInfo.getVersionName()).setMessage(updateInfo.getVersionDesc())
+                appInfo.getVersionName()).setMessage(appInfo.getVersionDesc())
                 .setPositiveButton("现在升级", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                File file = FileUtil.obtainAppFile(updateInfo.getVersionName());
-                if (fileExists(file, updateInfo.getVersionCode())) {
+                File file = FileUtil.obtainAppFile(appInfo.getVersionName());
+                if (fileExists(file, appInfo.getVersionCode())) {
                     installApk(file, activity);
                 } else {
-                    downloadApp(updateInfo.getDownloadUrl(), file, activity);
+                    downloadApp(appInfo.getDownloadUrl(), file, activity);
                 }
             }
         }).setNegativeButton("取消", null).create();

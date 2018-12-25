@@ -23,24 +23,32 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.mojota.succulent.R;
 import com.mojota.succulent.adapter.FragmentViewPagerAdapter;
 import com.mojota.succulent.fragment.CrazyFragment;
 import com.mojota.succulent.fragment.MyGardenFragment;
 import com.mojota.succulent.fragment.MomentsFragment;
+import com.mojota.succulent.model.NoticeInfo;
+import com.mojota.succulent.model.NoticeResponseInfo;
 import com.mojota.succulent.model.UserInfo;
+import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.OssRequest;
 import com.mojota.succulent.network.OssUtil;
+import com.mojota.succulent.network.VolleyErrorListener;
+import com.mojota.succulent.network.VolleyUtil;
 import com.mojota.succulent.utils.ActivityUtil;
 import com.mojota.succulent.utils.CheckUpdateUtil;
 import com.mojota.succulent.utils.CodeConstants;
+import com.mojota.succulent.utils.CommonUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +73,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private UserInfo mUserInfo;
     private TextView mTvLogout;
     private String mAvatarKey = "";
+    private TextView mNewNotices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +126,9 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mTvLogin.setOnClickListener(this);
         mFabUserEdit = mNavigationView.getHeaderView(0).findViewById(R.id.fab_user_edit);
         mFabUserEdit.setOnClickListener(this);
+        mNewNotices = mNavigationView.getMenu().findItem(R.id.nav_notices)
+                .getActionView().findViewById(R.id.tv_new);
+        mNewNotices.setVisibility(View.GONE);
 
         mDrawer = findViewById(R.id.drawer_layout);
 
@@ -130,8 +142,41 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
 
         // 注册登录完成广播
         registerReceiver(mUserReceiver, new IntentFilter(LoginActivity.ACTION_LOGIN));
+
+        checkNewNotice();
         // 检查升级
         CheckUpdateUtil.checkUpdate(this, false);
+    }
+
+    /**
+     * 检查通知显示小红点
+     */
+    private void checkNewNotice() {
+        String url = UrlConstants.GET_NOTICE_LIST_URL;
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userId", UserUtil.getCurrentUserId());
+        paramMap.put("size", String.valueOf(2));
+
+        GsonPostRequest request = new GsonPostRequest(url, null, paramMap,
+                NoticeResponseInfo.class, new Response.Listener<NoticeResponseInfo>() {
+
+            @Override
+            public void onResponse(NoticeResponseInfo responseInfo) {
+
+                if (responseInfo != null && "0".equals(responseInfo.getCode())) {
+                    List<NoticeInfo> list = responseInfo.getList();
+                    if (list.get(0) != null) {
+                        String newTime = list.get(0).getNoticeTime();
+                        if (!TextUtils.isEmpty(newTime) && !newTime.equals(CommonUtil
+                                .getLatestNoticeTime())) {
+                            mNewNotices.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } else {
+                }
+            }
+        }, new VolleyErrorListener());
+        VolleyUtil.execute(request);
     }
 
     private BroadcastReceiver mUserReceiver = new BroadcastReceiver() {
@@ -237,6 +282,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_notices:
+                mNewNotices.setVisibility(View.GONE);
                 startActivity(new Intent(MainActivity.this, NoticesActivity.class));
                 break;
             case R.id.nav_feedback:

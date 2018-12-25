@@ -32,6 +32,7 @@ public class CodeConstants {
     public static final int REQUEST_EDIT_COVER = 1014;
     public static final int REQUEST_RESET_PWD = 1015;
     public static final int REQUEST_SEND_CODE = 1016;
+    public static final int REQUEST_ADD_FEEDBACK = 1017;
 
 
     public static final Map<Integer, String> REQUEST_MAP = new HashMap<>();
@@ -54,6 +55,7 @@ public class CodeConstants {
         REQUEST_MAP.put(REQUEST_EDIT_COVER, "修改封面");
         REQUEST_MAP.put(REQUEST_RESET_PWD, "重置密码");
         REQUEST_MAP.put(REQUEST_SEND_CODE, "验证码已发送");
+        REQUEST_MAP.put(REQUEST_ADD_FEEDBACK, "提交反馈");
     }
 
 

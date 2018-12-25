@@ -4,7 +4,7 @@ package com.mojota.succulent.model;
  * 升级信息
  * Created by wangjing on 18-12-14.
  */
-public class UpdateInfo extends BaseBean {
+public class AppInfo extends BaseBean {
     private static final long serialVersionUID = 1L;
 
     int versionCode;
