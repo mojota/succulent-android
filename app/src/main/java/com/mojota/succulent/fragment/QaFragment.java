@@ -224,10 +224,12 @@ public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
         QuestionInfo questionInfo = mList.get(position);
         intent.putExtra(QaDetailActivity.KEY_QA, questionInfo);
         intent.putExtra(QaDetailActivity.KEY_ITEM_POS, position);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                (getActivity(), view, view.getTransitionName());
-        startActivityForResult(intent, CodeConstants.REQUEST_QA_DETAIL, options.toBundle());
-
+        Bundle bundle = null;
+        if (!TextUtils.isEmpty(questionInfo.getQuestionPicUrl())) {
+            bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                    view, view.getTransitionName()).toBundle();
+        }
+        startActivityForResult(intent, CodeConstants.REQUEST_QA_DETAIL, bundle);
     }
 
     @Override

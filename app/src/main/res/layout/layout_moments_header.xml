@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="@color/gray_very_light"
-        android:src="@mipmap/ic_add_white_48dp"
+        android:src="@mipmap/ic_default_pic"
         android:scaleType="center"/>
 
 </FrameLayout>

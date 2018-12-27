@@ -73,6 +73,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<String> mPicUrls = new ArrayList<String>();
     private WrapRecycleAdapter mWrapAdapter;
     private String mAnswerTime = "";
+    private ViewGroup.LayoutParams mIvPicParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         mTvNickname = (TextView) findViewById(R.id.tv_nickname);
         mTvQuestionTitle = (TextView) findViewById(R.id.tv_question_title);
         mIvPic = findViewById(R.id.iv_pic);
+        mIvPicParams = mIvPic.getLayoutParams();
         mIvPic.setOnClickListener(this);
         mTvTime = (TextView) findViewById(R.id.tv_time);
         mTvAnswerCount = (TextView) findViewById(R.id.tv_answer_count);
@@ -230,7 +232,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
 
 
     private void setDataToView() {
-        if (mActivity == null || mActivity.isDestroyed()) {
+        if (ActivityUtil.isDead(mActivity)){
             return;
         }
         // 问题
@@ -246,14 +248,19 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             }
             mTvTime.setText(GlobalUtil.formatDisplayTime(mQuestion.getQuestionTime()));
             mTvAnswerCount.setText(String.valueOf(mQuestion.getAnswerCount()));
+
             if (!TextUtils.isEmpty(mQuestion.getQuestionPicUrl())) {
                 mPicUrls.clear();
                 mPicUrls.add(mQuestion.getQuestionPicUrl());
                 Glide.with(mActivity).load(OssUtil.getWholeImageUrl(mQuestion.getQuestionPicUrl())).apply(GlobalUtil
                         .getDefaultOptions().centerCrop()).into(mIvPic);
-                mIvPic.setVisibility(View.VISIBLE);
+                mIvPicParams.height = getResources().getDimensionPixelSize(R.dimen
+                        .di_header_max);
+                mIvPic.setLayoutParams(mIvPicParams);
             } else {
-                mIvPic.setVisibility(View.GONE);
+                mIvPicParams.height = getResources().getDimensionPixelSize(R.dimen
+                        .di_header_default);
+                mIvPic.setLayoutParams(mIvPicParams);
             }
         }
 

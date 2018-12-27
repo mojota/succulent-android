@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:fitsSystemWindows="false"
+    android:background="@color/colorBg"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
@@ -34,15 +35,11 @@
                     android:layout_height="wrap_content"
                     android:minHeight="72dp">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="?attr/colorPrimary"/>
-
                     <ImageView
                         android:id="@+id/iv_pic"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:layout_height="@dimen/di_header_default"
+                        android:background="?attr/colorPrimary"
                         android:transitionName="0"/>
                 </FrameLayout>
 
@@ -124,6 +121,7 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         android:paddingBottom="56dp"
+        android:background="@color/colorBg_deep"
         android:scrollbars="none"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

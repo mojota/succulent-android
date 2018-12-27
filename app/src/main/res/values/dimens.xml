@@ -13,4 +13,6 @@
     <dimen name="item_qa_margin">24dp</dimen>
     <dimen name="di_corner">4dp</dimen>
     <dimen name="di_pb_width">28dp</dimen>
+    <dimen name="di_header_default">48dp</dimen>
+    <dimen name="di_header_max">180dp</dimen>
 </resources>

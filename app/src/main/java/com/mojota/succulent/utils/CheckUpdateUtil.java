@@ -135,7 +135,7 @@ public class CheckUpdateUtil {
      * 安装app
      */
     private static void installApk(File file, Activity activity) {
-        if (activity == null || activity.isDestroyed()) {
+        if (ActivityUtil.isDead(activity)){
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);

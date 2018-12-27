@@ -19,6 +19,7 @@ import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.LoadingView;
 import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
     private NoticeAdapter mNoticeAdapter;
     private WrapRecycleAdapter mWrapAdapter;
     private String mNoticeTime = "";
+    private LoadingView mLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mLoading = findViewById(R.id.loading);
 
         mRvNotices = findViewById(R.id.rv_notices);
         mNoticeAdapter = new NoticeAdapter(mList);
@@ -70,7 +73,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
 
     private void getData(final String noticeTime) {
         if (mList == null || mList.size() <= 0) {
-            showProgress(true);
+            mLoading.show(true);
         }
         String url = UrlConstants.GET_NOTICE_LIST_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
@@ -83,7 +86,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
 
             @Override
             public void onResponse(NoticeResponseInfo responseInfo) {
-                showProgress(false);
+                mLoading.show(false);
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
                     if (TextUtils.isEmpty(noticeTime)) {
                         mList.clear();
@@ -101,7 +104,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
             public void onError(String error) {
-                showProgress(false);
+                mLoading.show(false);
                 mRvNotices.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
                 setDataToView();

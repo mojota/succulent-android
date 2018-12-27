@@ -20,6 +20,18 @@ import java.util.List;
  */
 public class ActivityUtil {
 
+
+    /**
+     * 判断activity是否已不存在
+     */
+    public static boolean isDead(Activity activity) {
+        if (activity == null || activity.isDestroyed()) {
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * 进入图片详情页
      */
@@ -53,6 +65,7 @@ public class ActivityUtil {
         Intent intent = new Intent(SucculentApplication.getInstance(), UserMomentsActivity
                 .class);
         intent.putExtra(UserMomentsActivity.KEY_USER, userInfo);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         SucculentApplication.getInstance().startActivity(intent);
     }
 }

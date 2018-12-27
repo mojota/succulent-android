@@ -41,6 +41,7 @@ import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.LoadingView;
 import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
     private Toolbar mToolBar;
     private ViewGroup mLayout;
     private TextView mTvEmpty;
+    private LoadingView mLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         mToolBar.setTitle("");
         setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(this);
+        mLoading = findViewById(R.id.loading);
         mSwipeRefresh = findViewById(R.id.swipe_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
@@ -100,6 +103,9 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         View headerView = LayoutInflater.from(this).inflate(R.layout
                 .layout_moments_header, mRvMoments, false);
         mIvCover = headerView.findViewById(R.id.iv_cover);
+        if (UserUtil.isCurrentUser(mUser.getUserId())) {
+            mIvCover.setImageResource(R.mipmap.ic_add_white_48dp);
+        }
         mIvCover.setOnClickListener(this);
         mTvEmpty = findViewById(R.id.tv_empty);
         mWrapAdapter.addHeaderView(headerView);
@@ -129,6 +135,10 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
 
 
     private void getData(final String updateTime) {
+        if (mList == null || mList.size() <= 0) {
+            mLoading.show(true);
+        }
+
         String url = UrlConstants.GET_USER_MOMENTS_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("loginUserId", UserUtil.getCurrentUserId());
@@ -141,6 +151,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
 
             @Override
             public void onResponse(NoteResponseInfo responseInfo) {
+                mLoading.show(false);
                 mSwipeRefresh.setRefreshing(false);
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
                     if (TextUtils.isEmpty(updateTime)) {
@@ -159,6 +170,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
             public void onError(String error) {
+                mLoading.show(false);
                 mSwipeRefresh.setRefreshing(false);
                 mRvMoments.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);
@@ -170,6 +182,9 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
     }
 
     private void setDataToView() {
+        if (ActivityUtil.isDead(this)){
+            return;
+        }
         if (!TextUtils.isEmpty(mUser.getCoverUrl())){
             mIvCover.setScaleType(ImageView.ScaleType.CENTER_CROP);
             setPaletteImage(mIvCover, mLayout, OssUtil.getWholeImageUrl(mUser
