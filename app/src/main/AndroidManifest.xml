@@ -28,6 +28,8 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -65,9 +67,8 @@
             android:theme="@style/AppTheme_Transparent"/>
         <activity
             android:name=".activity.QaDetailActivity"
-            android:configChanges="keyboardHidden|orientation"
             android:theme="@style/AppTheme_no_bg"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity
             android:name=".activity.FeedbackActivity"
@@ -86,6 +87,8 @@
         <activity android:name=".activity.NoticesActivity">
         </activity>
         <activity android:name=".activity.FindPwdActivity">
+        </activity>
+        <activity android:name=".activity.AboutActivity">
         </activity>
     </application>
 

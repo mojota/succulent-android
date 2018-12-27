@@ -67,6 +67,10 @@ public class UserUtil {
         mSp.putString(KeyConstants.KEY_COVER_URL, coverUrl);
     }
 
+    public static String getCover(){
+        return mSp.getString(KeyConstants.KEY_COVER_URL);
+    }
+
     /**
      * 获取当前用户id
      */

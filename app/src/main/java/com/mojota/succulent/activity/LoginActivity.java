@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.mojota.succulent.R;
@@ -44,6 +45,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private Button mBtRegister;
     private MenuItem mActionRegister;
     private InputMethodManager mInputManager;
+    private TextView mTvTips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         mBtRegister = findViewById(R.id.bt_register);
         mBtRegister.setOnClickListener(this);
 
+        mTvTips = findViewById(R.id.tv_tips);
+
         mEmailView.setText(UserUtil.getLastUserName());
 
     }
@@ -89,12 +93,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 if (getString(R.string.str_register).equals(mActionRegister.getTitle())) {
                     mEtPasswordAgain.setVisibility(View.VISIBLE);
                     mBtRegister.setVisibility(View.VISIBLE);
+                    mTvTips.setVisibility(View.VISIBLE);
                     mBtLogin.setVisibility(View.GONE);
                     mActionRegister.setTitle(R.string.str_login);
                     getSupportActionBar().setTitle(R.string.str_register);
                 } else if (getString(R.string.str_login).equals(mActionRegister.getTitle())) {
                     mEtPasswordAgain.setVisibility(View.GONE);
                     mBtRegister.setVisibility(View.GONE);
+                    mTvTips.setVisibility(View.GONE);
                     mBtLogin.setVisibility(View.VISIBLE);
                     mActionRegister.setTitle(R.string.str_register);
                     getSupportActionBar().setTitle(R.string.str_login);
