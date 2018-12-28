@@ -26,7 +26,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:srcCompat="@mipmap/ic_mode_edit_white_48dp"/>
 
-
     <TextView
         android:id="@+id/tv_empty"
         android:layout_width="match_parent"
@@ -41,5 +40,12 @@
         android:shadowColor="@color/gray_deep"
         android:textColor="@color/white"
         android:textSize="18dp"
+        android:visibility="gone"/>
+
+    <com.mojota.succulent.view.LoadingView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone"/>
 </FrameLayout>

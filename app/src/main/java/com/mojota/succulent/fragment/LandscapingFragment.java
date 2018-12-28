@@ -30,6 +30,7 @@ import com.mojota.succulent.utils.RequestUtils;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.LoadMoreRecyclerView;
+import com.mojota.succulent.view.LoadingView;
 import com.mojota.succulent.view.WrapRecycleAdapter;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     private WrapRecycleAdapter mWrapAdapter;
     private String mUpdateTime = "";
     private TextView mTvEmpty;
+    private LoadingView mLoading;
 
 
     public LandscapingFragment() {
@@ -104,12 +106,16 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         mFabAddLandscaping = view.findViewById(R.id.fab_add_landscaping);
         mFabAddLandscaping.setOnClickListener(this);
         mTvEmpty = view.findViewById(R.id.tv_empty);
+        mLoading = view.findViewById(R.id.loading);
 
         onRefresh();
         return view;
     }
 
     private void getData(final String updateTime) {
+        if (mList == null || mList.size() <= 0) {
+            mLoading.show(true);
+        }
         String url = UrlConstants.GET_NOTE_LIST_URL;
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userId", UserUtil.getCurrentUserId());
@@ -122,6 +128,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onResponse(NoteResponseInfo responseInfo) {
+                mLoading.show(false);
                 mSwipeRefresh.setRefreshing(false);
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
                     if (TextUtils.isEmpty(updateTime)) {
@@ -140,6 +147,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
             @Override
             public void onError(String error) {
+                mLoading.show(false);
                 mSwipeRefresh.setRefreshing(false);
                 mRvLandscaping.loadMoreFailed();
                 GlobalUtil.makeToast(R.string.str_network_error);

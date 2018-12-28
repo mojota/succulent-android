@@ -165,7 +165,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
 
                 if (responseInfo != null && "0".equals(responseInfo.getCode())) {
                     List<NoticeInfo> list = responseInfo.getList();
-                    if (list.get(0) != null) {
+                    if (list.size() > 0 && list.get(0) != null) {
                         String newTime = list.get(0).getNoticeTime();
                         if (!TextUtils.isEmpty(newTime) && !newTime.equals(CommonUtil
                                 .getLatestNoticeTime())) {

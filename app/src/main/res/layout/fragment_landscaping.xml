@@ -44,4 +44,11 @@
         android:textColor="@color/white"
         android:textSize="18dp"
         android:visibility="gone"/>
+
+    <com.mojota.succulent.view.LoadingView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 </android.support.design.widget.CoordinatorLayout>
