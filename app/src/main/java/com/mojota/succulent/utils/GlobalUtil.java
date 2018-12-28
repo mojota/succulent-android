@@ -358,8 +358,8 @@ public class GlobalUtil {
 
 
     public static RequestOptions getDefaultOptions() {
-        return new RequestOptions().error(R.mipmap.ic_default_pic)
-                .dontAnimate();
+        return new RequestOptions().placeholder(R.mipmap.ic_default_pic).error(R.mipmap
+                .ic_default_pic).dontAnimate();
     }
 
     public static RequestOptions getDefaultAvatarOptions() {
@@ -368,10 +368,10 @@ public class GlobalUtil {
     }
 
     public static RequestOptions getRoundedCornersOptions() {
-        return new RequestOptions().error(R.mipmap.ic_default_pic)
-                .dontAnimate().transform(new CenterCropRoundedCorners
-                        (SucculentApplication.getInstance().getResources()
-                                .getDimensionPixelSize(R.dimen.di_corner)));
+        return new RequestOptions().placeholder(R.mipmap.ic_default_pic).error(R.mipmap
+                .ic_default_pic).dontAnimate().transform(new CenterCropRoundedCorners
+                (SucculentApplication.getInstance().getResources()
+                        .getDimensionPixelSize(R.dimen.di_corner)));
     }
 
 
