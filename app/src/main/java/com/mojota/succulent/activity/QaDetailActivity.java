@@ -43,7 +43,7 @@ import java.util.Map;
 
 /**
  * 问答详情页
- * Created by mojota on 18-08-22.
+ * Created by 王静 on 18-08-22.
  */
 
 public class QaDetailActivity extends BaseActivity implements View.OnClickListener,

@@ -19,7 +19,7 @@ import com.mojota.succulent.utils.RequestUtils;
 import java.util.List;
 
 /**
- * Created by mojota on 18-8-3.
+ * Created by 王静 on 18-8-3.
  */
 public class LandscapingAdapter extends RecyclerView.Adapter<LandscapingAdapter.ViewHolder> {
 

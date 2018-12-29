@@ -16,7 +16,7 @@ import com.mojota.succulent.utils.UserUtil;
 
 /**
  * 启动页
- * Created by mojota on 18-10-2
+ * Created by 王静 on 18-10-2
  **/
 public class SplashActivity extends AppCompatActivity {
 

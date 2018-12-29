@@ -35,7 +35,7 @@ import com.mojota.succulent.utils.UserUtil;
 import java.util.List;
 
 /**
- * Created by mojota on 18-8-23.
+ * Created by 王静 on 18-8-23.
  */
 public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseViewHolder> {
 

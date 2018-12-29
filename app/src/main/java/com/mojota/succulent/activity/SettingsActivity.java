@@ -9,6 +9,10 @@ import android.view.MenuItem;
 import com.mojota.succulent.R;
 import com.mojota.succulent.fragment.SettingsFragment;
 
+/**
+ * 设置
+ * Created by 王静 on 18-12-29
+*/
 public class SettingsActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;

@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * 添加造景后花园
- * created by mojota on 18-8-3
+ * created by 王静 on 18-8-3
  */
 public class LandscapingAddActivity extends PhotoChooseSupportActivity implements View
         .OnClickListener {

@@ -7,7 +7,7 @@ import com.mojota.succulent.network.VolleyUtil;
 
 /**
  *
- * Created by mojota on 18-8-3
+ * Created by 王静 on 18-8-3
 */
 public class SucculentApplication extends Application {
 

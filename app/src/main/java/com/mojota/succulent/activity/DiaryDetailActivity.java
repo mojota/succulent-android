@@ -41,7 +41,7 @@ import java.util.Map;
 
 /**
  * 笔记详情
- * Created by mojota on 18-8-14
+ * Created by 王静 on 18-8-14
  */
 public class DiaryDetailActivity extends BaseActivity implements View
         .OnClickListener, OnImageClickListener, DiaryDetailAdapter.OnItemOperateListener,

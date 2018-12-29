@@ -22,7 +22,7 @@ import com.mojota.succulent.utils.UrlConstants;
 import java.util.List;
 
 /**
- * Created by mojota on 18-7-24.
+ * Created by 王静 on 18-7-24.
  */
 public class GrowthDiaryAdapter extends RecyclerView.Adapter<GrowthDiaryAdapter.ViewHolder> {
 

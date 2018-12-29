@@ -23,6 +23,10 @@ import com.mojota.succulent.utils.UserUtil;
 
 import java.util.List;
 
+/**
+ *
+ * Created by 王静 on 18-12-29
+*/
 public class QaAdapter extends RecyclerView.Adapter<QaAdapter.ViewHolder> {
 
     private List<QuestionInfo> mList;

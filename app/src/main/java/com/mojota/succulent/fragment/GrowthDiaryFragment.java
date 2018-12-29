@@ -43,7 +43,7 @@ import java.util.Map;
 
 /**
  * 多肉成长记
- * Created by mojota on 18-7-23
+ * Created by 王静 on 18-7-23
  */
 public class GrowthDiaryFragment extends BaseFragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, GrowthDiaryAdapter.OnItemClickListener,

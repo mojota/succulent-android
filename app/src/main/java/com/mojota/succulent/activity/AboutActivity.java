@@ -6,6 +6,11 @@ import android.view.MenuItem;
 
 import com.mojota.succulent.R;
 
+/**
+ *
+ * 关于
+ * Created by 王静 on 18-12-29
+*/
 public class AboutActivity extends BaseActivity {
 
     private Toolbar mToolbar;

@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * 添加笔记
- * Created by mojota on 18-8-2
+ * Created by 王静 on 18-8-2
  */
 public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
         .OnClickListener {

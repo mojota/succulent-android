@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wangjing on 18-12-11.
+ * Created by 王静 on 18-12-11.
  */
 public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener, LoadMoreRecyclerView

@@ -41,7 +41,7 @@ import java.util.Map;
 
 /**
  * 问答
- * Created by mojota on 18-8-21
+ * Created by 王静 on 18-8-21
  */
 public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View
         .OnClickListener, OnItemClickListener, LoadMoreRecyclerView.OnLoadListener,QaAdapter.OnItemDeleteListener {

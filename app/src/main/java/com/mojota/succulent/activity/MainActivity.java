@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by mojota on 18-7-23
+ * Created by 王静 on 18-7-23
  */
 public class MainActivity extends PhotoChooseSupportActivity implements NavigationView
         .OnNavigationItemSelectedListener, View.OnClickListener {
