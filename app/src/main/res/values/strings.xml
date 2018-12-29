@@ -86,6 +86,7 @@
     <string name="str_download_failed">下载失败</string>
     <string name="str_content_empty">提交内容不可以为空</string>
     <string name="str_about_tips">如果你对App有什么建议，欢迎在『帮助App改善』中反馈</string>
+    <string name="str_notice_empty">还没有任何通知</string>
 
 
 </resources>

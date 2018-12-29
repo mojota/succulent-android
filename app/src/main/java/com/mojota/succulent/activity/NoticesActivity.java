@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.mojota.succulent.R;
@@ -42,6 +43,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
     private WrapRecycleAdapter mWrapAdapter;
     private String mNoticeTime = "";
     private LoadingView mLoading;
+    private TextView mTvEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mLoading = findViewById(R.id.loading);
+        mTvEmpty = findViewById(R.id.tv_empty);
 
         mRvNotices = findViewById(R.id.rv_notices);
         mNoticeAdapter = new NoticeAdapter(mList);
@@ -96,7 +99,7 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
                     mRvNotices.loadMoreSuccess(list == null ? 0 : list.size(), PAGE_SIZE);
                 } else {
                     mRvNotices.loadMoreFailed();
-                    GlobalUtil.makeToast(R.string.str_no_data);
+//                    GlobalUtil.makeToast(R.string.str_no_data);
                 }
                 setDataToView();
 
@@ -117,10 +120,12 @@ public class NoticesActivity extends BaseActivity implements LoadMoreRecyclerVie
         if (mList != null && mList.size() > 0) {
             // 保存最新通知时间
             CommonUtil.setLatestNoticeTime(mList.get(0).getNoticeTime());
+            mTvEmpty.setVisibility(View.GONE);
             mRvNotices.setVisibility(View.VISIBLE);
             mNoticeAdapter.setList(mList);
             mWrapAdapter.notifyDataSetChanged();
         } else {
+            mTvEmpty.setVisibility(View.VISIBLE);
             mRvNotices.setVisibility(View.INVISIBLE);
             mNoticeAdapter.setList(mList);
             mWrapAdapter.notifyDataSetChanged();
