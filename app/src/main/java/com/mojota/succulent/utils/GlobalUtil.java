@@ -209,6 +209,15 @@ public class GlobalUtil {
         Toast.makeText(SucculentApplication.getInstance(), tipsId, Toast
                 .LENGTH_LONG).show();
     }
+    public static void makeToastShort(String tips) {
+        Toast.makeText(SucculentApplication.getInstance(), tips, Toast
+                .LENGTH_SHORT).show();
+    }
+
+    public static void makeToastShort(int tipsId) {
+        Toast.makeText(SucculentApplication.getInstance(), tipsId, Toast
+                .LENGTH_SHORT).show();
+    }
 
     /**
      * snackbar提示框

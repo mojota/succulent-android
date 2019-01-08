@@ -29,7 +29,7 @@ import java.io.File;
 
 /**
  * 检测升级
- * Created by mojota on 18-12-18
+ * Created by 王静 on 18-12-18
  */
 public class CheckUpdateUtil {
 

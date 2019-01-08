@@ -74,6 +74,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private TextView mTvLogout;
     private String mAvatarKey = "";
     private TextView mNewNotices;
+    private long mLastBackTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,7 +275,12 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (System.currentTimeMillis() - mLastBackTime > GlobalUtil.ONE_SECOND * 2) {
+                mLastBackTime = System.currentTimeMillis();
+                GlobalUtil.makeToastShort(R.string.str_back_again);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

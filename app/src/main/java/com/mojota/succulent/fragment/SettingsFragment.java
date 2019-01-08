@@ -10,6 +10,10 @@ import com.mojota.succulent.activity.AboutActivity;
 import com.mojota.succulent.utils.CheckUpdateUtil;
 import com.mojota.succulent.utils.GlobalUtil;
 
+/**
+ *
+ * Created by 王静 on 19-1-3
+*/
 public class SettingsFragment extends PreferenceFragment {
 
     private Preference mSettingUpdate;

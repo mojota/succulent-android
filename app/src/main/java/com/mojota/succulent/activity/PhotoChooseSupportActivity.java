@@ -28,6 +28,7 @@ public abstract class PhotoChooseSupportActivity extends BaseActivity {
     private ImageView mUploadIbt;
     private RequestOptions mRequestOptions;
     private OnChoosedListener mOnChoosedListener;
+    private File mPhotofile;
 
     interface OnChoosedListener {
 
@@ -72,17 +73,16 @@ public abstract class PhotoChooseSupportActivity extends BaseActivity {
      */
     protected void takePhoto() {
         String fileName = GlobalUtil.formatCurrentTime() + ".jpg";
-        File file = FileUtil.obtainPicFile(fileName);
+        mPhotofile = new File(FileUtil.getPhotoFileFolder(), fileName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mUploadUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + "" +
-                    ".provider", file);
+                    ".provider", mPhotofile);
         } else {
-            mUploadUri = Uri.fromFile(file);
+            mUploadUri = Uri.fromFile(mPhotofile);
         }
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUploadUri);
         startActivityForResult(intent, CodeConstants.REQUEST_TAKE_PHOTO);
-
     }
 
     /**
@@ -102,6 +102,8 @@ public abstract class PhotoChooseSupportActivity extends BaseActivity {
             switch (requestCode) {
                 case CodeConstants.REQUEST_TAKE_PHOTO:
                     if (mUploadUri != null) {
+                        FileUtil.scanPhoto(mPhotofile);
+                        mPhotofile = null;
                         if (mUploadIbt != null) {
                             Glide.with(this).load(mUploadUri).apply(mRequestOptions)
                                     .into(mUploadIbt);

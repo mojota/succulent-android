@@ -51,9 +51,15 @@ public class FileUtil {
         return fileFolder;
     }
 
-    public static File obtainPicFile(String fileName) {
-        File file = new File(getPublicPicFileFolder(), fileName);
-        return file;
+    /**
+     * 拍照图片的文件夹
+     */
+    public static File getPhotoFileFolder() {
+        File fileFolder = new File(getPublicPicFileFolder(), "photo");
+        if (!fileFolder.exists()) {
+            fileFolder.mkdirs();
+        }
+        return fileFolder;
     }
 
     /**
@@ -114,12 +120,18 @@ public class FileUtil {
     /**
      * 扫描相册以便更新
      */
-    private static void scanPhoto(File file) {
-        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        scanIntent.setData(Uri.fromFile(file));
-        SucculentApplication.getInstance().sendBroadcast(scanIntent);
+    public static void scanPhoto(File file) {
+        scanPhoto(Uri.fromFile(file));
     }
 
+    /**
+     * 扫描相册以便更新
+     */
+    private static void scanPhoto(Uri uri) {
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(uri);
+        SucculentApplication.getInstance().sendBroadcast(scanIntent);
+    }
 
     /**
      * 用于保存下载的apk全路径
