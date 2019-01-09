@@ -21,6 +21,7 @@
     <color name="green_very_light">#aed581</color>
     <color name="green_40">#668bc34a</color>
     <color name="green_80">#cc8bc34a</color>
+    <color name="green_light">#9CCC65</color>
 
     <color name="lemon">#B3CC42</color>
 
@@ -38,6 +39,7 @@
     <color name="orange">#ff9800</color>
     <color name="deep_orange">#ef6c00</color>
     <color name="light_orange">#F6C214</color>
+    <color name="orange_light">#FFA726</color>
 
     <color name="pink">#e91e63</color>
 
