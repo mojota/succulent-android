@@ -1,153 +1,150 @@
 <resources>
-    <!--<string name="app_name">Succulents meet U</string>-->
-
     <!--menu-->
-    <string name="app_name">多肉遇见你</string>
-    <string name="app_summary">小而美的多肉主题App，帮你记录多肉成长的每一刻！</string>
-    <string name="title_my_garden">我的花园</string>
-    <string name="title_moments">邻家肉园</string>
-    <string name="title_crazy">多肉也疯狂</string>
+    <string name="app_name">Succulents meet U</string>
+    <string name="splash_app_name">多肉遇见你</string>
+    <string name="app_summary">"Small and beautiful succulents app, help you record every moment of succulents growth! "</string>
+    <string name="title_my_garden">"My Garden"</string>
+    <string name="title_moments">"Neighbour's Garden"</string>
+    <string name="title_crazy">"Crazy Succulents"</string>
     <string-array name="str_my_gardens">
-        <item>多肉成长记</item>
-        <item>造景后花园</item>
+        <item>Succulents note</item>
+        <item>Landscaping garden</item>
     </string-array>
     <string-array name="str_crazys">
-        <item>问答</item>
+        <item>QA</item>
     </string-array>
-    <string name="str_login">登录</string>
-    <string name="str_notices">通知</string>
-    <string name="str_settings">设置</string>
-    <string name="str_feedback">帮助App改善</string>
-    <string name="str_finish_feedback">感谢您的反馈</string>
-
-    <!--通用-->
-    <string name="str_null"/>
-    <string name="str_commit">提交</string>
-    <string name="str_cancel">取消</string>
-    <string name="str_close">关闭</string>
-    <string name="str_delete">删除</string>
-    <string name="str_undo">撤消</string>
-    <string name="str_network_error">网络跑丢啦</string>
-    <string name="str_save_success">保存成功</string>
-    <string name="str_save_failed">保存失败</string>
-    <string name="str_qa_submit_successful">发布成功</string>
-    <string name="str_qa_submit_failed">发布失败</string>
-    <string name="str_no_data">没有获取到数据</string>
-    <string name="str_no_more_data">没有更多数据</string>
-    <string name="str_all_show">到底啦~</string>
-    <string name="str_is_loading">正在加载</string>
-    <string name="str_load_faild">加载失败，请重新加载</string>
-    <string name="str_network_error_retry">网络不给力,请下拉重试</string>
-    <string name="str_delete_confirm">确认删除</string>
-    <string name="str_content_empty">提交内容不可以为空</string>
-    <string name="str_commit_empty">没有要提交的内容</string>
-    <string name="str_second_ago">刚刚</string>
-    <string name="str_minute_ago">分钟前</string>
-    <string name="str_hour_ago">小时前</string>
-    <string name="str_yesterday">昨天</string>
-    <string name="str_day_ago">天前</string>
-    <string name="str_failed">失败</string>
-    <string name="str_successful">成功</string>
-    <string name="str_upload_over_length">超过上传大小限制</string>
-    <string name="str_upload_empty">上传内容是空的</string>
-    <string name="str_upload_failed">上传失败</string>
-    <string name="str_upload_pic">上传图片</string>
-    <string name="str_upload_pic_failed">失败了,</string>
+    <string name="str_login">Login</string>
+    <string name="str_notices">Notifications</string>
+    <string name="str_settings">Settings </string>
+    <string name="str_feedback">Help App Improvement</string>
+    <string name="str_finish_feedback">Thank you for your feedback</string>
+    <!--General -->
+    <string name="str_null"></string>
+    <string name="str_commit">Submit</string>
+    <string name="str_cancel">Cancel</string>
+    <string name="str_close">Close</string>
+    <string name="str_delete">Delete</string>
+    <string name="str_undo">Undo</string>
+    <string name="str_network_error">The network is running away</string>
+    <string name="str_save_success">Save successfully</string>
+    <string name="str_save_failed">Save failed</string>
+    <string name="str_qa_submit_successful">Submit successful</string>
+    <string name="str_qa_submit_failed">Submit failed</string>
+    <string name="str_no_data">No data obtained</string>
+    <string name="str_no_more_data">No more data</string>
+    <string name="str_all_show">In the end~</string>
+    <string name="str_is_loading">Loading</string>
+    <string name="str_load_faild">Load failed, please reload</string>
+    <string name="str_network_error_retry">The network is not strong, please pull down and try again</string>
+    <string name="str_delete_confirm">Confirm delete</string>
+    <string name="str_content_empty">No content to submit</string>
+    <string name="str_commit_empty">No content to submit</string>
+    <string name="str_second_ago">Just</string>
+    <string name="str_minute_ago"> minutes ago</string>
+    <string name="str_hour_ago"> hours ago</string>
+    <string name="str_yesterday">Yesterday</string>
+    <string name="str_day_ago"> days ago</string>
+    <string name="str_failed"> failed</string>
+    <string name="str_successful"> successful</string>
+    <string name="str_upload_over_length">Upload size exceeds limit</string>
+    <string name="str_upload_empty">Upload content is empty</string>
+    <string name="str_upload_failed">Upload failed</string>
+    <string name="str_upload_pic">Upload image</string>
+    <string name="str_upload_pic_failed"> failed,</string>
     <string-array name="str_photochoose">
-        <item>拍照</item>
-        <item>从相册选择</item>
+        <item>Photograph</item>
+        <item>Select from album</item>
     </string-array>
     <string-array name="str_image_options">
-        <item>保存图片</item>
+        <item>Save Image</item>
     </string-array>
-
     <!-- login -->
-    <string name="prompt_email">请输入Email</string>
-    <string name="prompt_password">请输入密码</string>
-    <string name="prompt_password_again">请再输入一遍密码</string>
-    <string name="action_sign_in">登入</string>
-    <string name="str_register">注册</string>
-    <string name="str_register_tips">注：请使用真实Email注册，以便于找回密码</string>
-    <string name="str_logout">登出</string>
-    <string name="str_forget_pw">忘记密码</string>
-    <string name="str_send_code">发送验证码</string>
-    <string name="str_input_code">请输入收到的验证码</string>
-    <string name="prompt_new_password">请输入新密码</string>
-    <string name="prompt_new_password_again">请再输入一遍新密码</string>
-    <string name="str_set_new_pwd">重置密码</string>
-    <string name="str_set_new_pwd_successful">重置密码成功</string>
-    <string name="error_code_empty">验证码不可以为空</string>
+    <string name="prompt_email">Please enter Email</string>
+    <string name="prompt_password">Please enter the password</string>
+    <string name="prompt_password_again">Please enter the password again</string>
+    <string name="action_sign_in">Login</string>
+    <string name="str_register">Register</string>
+    <string name="str_register_tips">Tips: Please use real email to register, in order to retrieve the password</string>
+    <string name="str_logout">Logout</string>
+    <string name="str_forget_pw">Forgot password</string>
+    <string name="str_send_code">send verification code</string>
+    <string name="str_input_code">Please enter the verification code received</string>
+    <string name="prompt_new_password">Please enter a new password</string>
+    <string name="prompt_new_password_again">Please enter the new password again</string>
+    <string name="str_set_new_pwd">Reset password</string>
+    <string name="str_set_new_pwd_successful">Reset password successfully</string>
+    <string name="error_code_empty">Verification code can not be empty</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">Email格式不正确</string>
-    <string name="error_invalid_password">密码至少输入6位</string>
-    <string name="error_password_not_same">两次输入的密码不一致</string>
-    <string name="error_incorrect_password">密码不正确</string>
-    <string name="error_field_required">Email不可以为空</string>
-    <string name="str_user_edit">修改个人信息</string>
-    <string name="prompt_nickname">你的昵称</string>
-    <string name="prompt_region">你的地区</string>
-    <string name="str_edit_submit">提交修改</string>
-    <string name="str_edit_password">修改密码</string>
-    <string name="str_code_sended">验证码已发送</string>
-    <string name="str_second">秒</string>
-    <string name="str_register_failed">注册失败</string>
-    <string name="str_login_failed">登录失败</string>
-    <string name="str_register_successful">注册成功</string>
-    <string name="str_login_successful">登录成功</string>
-    <string name="str_user_edit_successful">修改个人信息成功</string>
-    <string name="str_user_edit_failed">修改个人信息失败</string>
-    <string name="str_edit_avatar">修改头像</string>
-    <string name="str_upload_avatar_failed">上传头像失败,</string>
+    <string name="error_invalid_email">Email format is incorrect</string>
+    <string name="error_invalid_password">Password enter at least 6 digits</string>
+    <string name="error_password_not_same">Inconsistent passwords entered twice</string>
+    <string name="error_incorrect_password">The password is incorrect</string>
+    <string name="error_field_required">Email can not be empty</string>
+    <string name="str_user_edit">Modify personal information</string>
+    <string name="prompt_nickname">Your Nickname</string>
+    <string name="prompt_region">Your Area</string>
+    <string name="str_edit_submit">submit modification</string>
+    <string name="str_edit_password"> modify password</string>
+    <string name="str_code_sended">Verification code sent</string>
+    <string name="str_second"> s</string>
+    <string name="str_register_failed">Registration failed</string>
+    <string name="str_login_failed">Login failed</string>
+    <string name="str_register_successful">Registration successful</string>
+    <string name="str_login_successful">Login successful</string>
+    <string name="str_user_edit_successful">Modify personal information successfully</string>
+    <string name="str_user_edit_failed">Failed to modify personal information</string>
+    <string name="str_edit_avatar">Modify avatar</string>
+    <string name="str_upload_avatar_failed">Failed to upload avatar,</string>
+    <!--Notes-->
+    <string name="str_self">Private</string>
+    <string name="str_public">Public</string>
+    <string name="str_edit_title">Modify the title</string>
+    <string name="str_hint_edit_title">Edit the title here (no more than 15 words)</string>
+    <string name="str_hint_title">Write down the title of the note here</string>
+    <string name="str_hint_body">Write a growth note here</string>
+    <string name="str_hint_pic_title">Say something</string>
+    <string name="str_user_moments_empty">The owner has not yet make the garden public!</string>
+    <string name="str_diary_empty">Click on the bottom right corner to record the first succulent!</string>
+    <string name="str_landscaping_empty">Click on the bottom right corner to add your
+        landscaping picture!</string>
+    <string name="str_moments_empty">There is no owner to make the garden public! \n Go to
+         make my garden public?</string>
+    <string name="str_note_deleted">A note has been deleted</string>
+    <string name="str_title_empty">Title cannot be empty</string>
+    <string name="str_add_note">Add notes</string>
+    <string name="str_add_note_item">Add a note entry</string>
+    <string name="str_edit_note_item">Edit note entry</string>
+    <string name="str_change_permission">modify the visible range</string>
+    <string name="str_upload_cover_failed">Failed to upload cover</string>
+    <string name="str_edit_cover">Modify cover</string>
 
-    <!--笔记-->
-    <string name="str_self">私密</string>
-    <string name="str_public">公开</string>
-    <string name="str_edit_title">修改标题</string>
-    <string name="str_hint_edit_title">在此编辑标题(不超过15个字)</string>
-    <string name="str_hint_title">在此写下笔记标题</string>
-    <string name="str_hint_body">在此写下成长笔记</string>
-    <string name="str_hint_pic_title">说点什么</string>
-    <string name="str_user_moments_empty">主人还没有公开花园的多肉呢！</string>
-    <string name="str_diary_empty">点击右下角记录第一颗多肉的成长吧！</string>
-    <string name="str_landscaping_empty">点击右下角晒出你的造景美图吧!</string>
-    <string name="str_moments_empty">还没有主人公开花园的多肉呢！\n去我的花园公开？</string>
-    <string name="str_note_deleted">已删除一个笔记</string>
-    <string name="str_title_empty">标题不可以为空</string>
-    <string name="str_add_note">添加笔记</string>
-    <string name="str_add_note_item">添加笔记条目</string>
-    <string name="str_edit_note_item">编辑笔记条目</string>
-    <string name="str_change_permission">修改可见范围</string>
-    <string name="str_upload_cover_failed">上传封面失败</string>
-    <string name="str_edit_cover">修改封面</string>
+    <!--Q&A-->
+    <string name="str_ask">Question</string>
+    <string name="str_answer">answer</string>
+    <string name="str_hint_ask">Write your question here</string>
+    <string name="str_qa_detail">QA details</string>
+    <string name="str_expand">Full</string>
+    <string name="fold">Fold</string>
+    <string name="str_answer_length_tip">Enter up to 3000 words, the long part has been ignored</string>
+    <string name="str_answer_deleted">An answer has been deleted</string>
+    <string name="str_question_deleted">A question has been deleted</string>
+    <string name="str_qa_empty">No one has asked questions yet! \nClick on the bottom right corner to ask the first person?</string>
+    <string name="str_answer_empty">No one has answered yet~\n answer it?</string>
+    <string name="str_question_empty">The problem cannot be empty</string>
 
-    <!--问答-->
-    <string name="str_ask">提问</string>
-    <string name="str_answer">回答</string>
-    <string name="str_hint_ask">在此写下您的问题</string>
-    <string name="str_qa_detail">问答详情</string>
-    <string name="str_expand">全文</string>
-    <string name="fold">收起</string>
-    <string name="str_answer_length_tip">最多输入3000个字,超长的部分已被忽略</string>
-    <string name="str_answer_deleted">已删除一个回答</string>
-    <string name="str_question_deleted">已删除一个问题</string>
-    <string name="str_qa_empty">还没有人提问呢！\n点击右下角做提问第一人？</string>
-    <string name="str_answer_empty">还没有人回答～\n回答它？</string>
-    <string name="str_question_empty">问题不可以为空</string>
-
-    <!--其它-->
-    <string name="str_setting_update">检查更新</string>
-    <string name="str_setting_about">关于</string>
-    <string name="str_version">当前版本:</string>
-    <string name="str_latest_ver">当前已经是最新版本</string>
-    <string name="str_new_version">发现新版本:</string>
-    <string name="str_update_now">现在升级</string>
-    <string name="str_downloading">正在下载</string>
-    <string name="str_download_complete">下载完成</string>
-    <string name="str_download_failed">下载失败</string>
-    <string name="str_add_feedback">提交反馈</string>
-    <string name="prompt_feedback">对App有什么想说的？(300字以内)</string>
-    <string name="str_about_tips">如果你对App有什么建议，欢迎在『帮助App改善』中反馈</string>
-    <string name="str_notice_empty">还没有任何通知</string>
-    <string name="str_back_again">再按一次退出应用</string>
-
+    <!--Other-->
+    <string name="str_setting_update">Check for updates</string>
+    <string name="str_setting_about">About</string>
+    <string name="str_version">current version: </string>
+    <string name="str_latest_ver">Currently is the latest version</string>
+    <string name="str_new_version">Found a new version: </string>
+    <string name="str_update_now">Upgrade now</string>
+    <string name="str_downloading">Downloading</string>
+    <string name="str_download_complete">Download completed</string>
+    <string name="str_download_failed">Download failed</string>
+    <string name="str_add_feedback">Submit feedback</string>
+    <string name="prompt_feedback">What do you want to say about the app? (within 300 words)</string>
+    <string name="str_about_tips">If you have any suggestions for the app, welcome to feedback in "Help App Improvement"</string>
+    <string name="str_notice_empty">No notifications yet</string>
+    <string name="str_back_again">Press again to exit the application</string>
 </resources>
