@@ -335,7 +335,8 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
 
             @Override
             public void onFailure(String objectKey, String errMsg) {
-                StringBuilder tips = new StringBuilder("上传封面失败,");
+                StringBuilder tips = new StringBuilder(getString(R.string
+                        .str_upload_cover_failed) + ",");
                 tips.append(errMsg);
                 GlobalUtil.makeToast(tips.toString());
             }

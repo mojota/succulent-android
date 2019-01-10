@@ -94,7 +94,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public boolean onLongClick(View v) {
-        String[] items = {"保存图片"};
+        String[] items = getResources().getStringArray(R.array.str_image_options);
         new AlertDialog.Builder(getContext()).setItems(items, new
                 DialogInterface.OnClickListener() {
             @Override

@@ -23,7 +23,7 @@ public class CrazyFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 //    private static final String[] TITLES = {"图鉴", "攻略","问答"};
-    private static final String[] TITLES = {"问答"};
+    private static String[] TITLES = {"问答"};
 
     private String mParam1;
     private String mParam2;
@@ -53,6 +53,7 @@ public class CrazyFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        TITLES = getResources().getStringArray(R.array.str_crazys);
     }
 
     @Override

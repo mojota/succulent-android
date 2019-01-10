@@ -245,7 +245,7 @@ public class QaFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
         mList.remove(position);
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
-        Snackbar.make(mRvQA, "已删除一个问题", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+        Snackbar.make(mRvQA, R.string.str_question_deleted, Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

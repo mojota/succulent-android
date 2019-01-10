@@ -330,18 +330,23 @@ public class GlobalUtil {
             Long yesterdayZero = getYesterdayZero();
             Long timeOffset = currentTime - timestamp;
             if (timeOffset < ONE_MINUTE && timeOffset > 0) {
-                return "刚刚";
+                return SucculentApplication.getInstance().getString(R.string
+                        .str_second_ago);
             } else if (timeOffset > ONE_MINUTE && timeOffset <= ONE_HOUR) {
-                return String.valueOf(timeOffset / ONE_MINUTE) + "分钟前";
+                return String.valueOf(timeOffset / ONE_MINUTE) + SucculentApplication
+                        .getInstance().getString(R.string.str_minute_ago);
             } else if (timeOffset > ONE_HOUR && timeOffset <= ONE_DAY) {
-                return String.valueOf(timeOffset / ONE_HOUR) + "小时前";
+                return String.valueOf(timeOffset / ONE_HOUR) + SucculentApplication
+                        .getInstance().getString(R.string.str_hour_ago);
             } if (timeOffset > ONE_DAY && timeOffset <= ONE_DAY * 3) {
                 String time = formatTime(timestamp, "HH:mm");
                 if (timestamp > yesterdayZero) {
-                    return "昨天" + time;
+                    return SucculentApplication.getInstance().getString(R.string
+                            .str_yesterday) + time;
                 } else {
-                    return String.valueOf((int) Math.ceil(((float) timeOffset
-                            / ONE_DAY))) + "天前 " + time;
+                    return String.valueOf((int) Math.ceil(((float) timeOffset /
+                            ONE_DAY))) + SucculentApplication.getInstance().getString(R
+                            .string.str_day_ago) + time;
                 }
             } else {
                 return formatTime(timestamp, "yyyy-MM-dd HH:mm");

@@ -5,6 +5,7 @@ import android.widget.ToggleButton;
 
 import com.android.volley.Response;
 import com.mojota.succulent.R;
+import com.mojota.succulent.SucculentApplication;
 import com.mojota.succulent.model.NoteInfo;
 import com.mojota.succulent.model.ResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
@@ -38,7 +39,8 @@ public class RequestUtils {
      */
     public static void commonRequest(String url, Map<String, String> paramMap, final int
             requestCode, final RequestListener requestListener) {
-        final String requestName = CodeConstants.REQUEST_MAP.get(requestCode);
+        final int requestNameResId = CodeConstants.REQUEST_MAP.get(requestCode);
+        final String requestName = SucculentApplication.getInstance().getString(requestNameResId);
         final GsonPostRequest request = new GsonPostRequest(url, null, paramMap, ResponseInfo
                 .class, new Response.Listener<ResponseInfo>() {
 
@@ -50,10 +52,14 @@ public class RequestUtils {
                         requestListener.onRequestFailure(requestCode);
                     }
                     if (!TextUtils.isEmpty(requestName)) {
-                        if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg())) {
-                            GlobalUtil.makeToast(requestName + "失败:" + responseInfo.getMsg());
+                        if (responseInfo != null && !TextUtils.isEmpty(responseInfo
+                                .getMsg())) {
+                            GlobalUtil.makeToast(requestName + SucculentApplication
+                                    .getInstance().getString(R.string.str_failed) + ":"
+                                    + responseInfo.getMsg());
                         } else {
-                            GlobalUtil.makeToast(requestName + "失败");
+                            GlobalUtil.makeToast(requestName + SucculentApplication
+                                    .getInstance().getString(R.string.str_failed));
                         }
                     }
                 } else {
@@ -61,7 +67,8 @@ public class RequestUtils {
                         requestListener.onRequestSuccess(requestCode);
                     }
 //                    if (!TextUtils.isEmpty(requestName)){
-//                        GlobalUtil.makeToast(requestName + "成功");
+//                        GlobalUtil.makeToast(requestName + SucculentApplication
+//                                    .getInstance().getString(R.string.str_successful));
 //                    }
                 }
             }

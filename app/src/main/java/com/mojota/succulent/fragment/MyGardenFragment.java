@@ -23,7 +23,7 @@ public class MyGardenFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String[] TITLES = {"多肉成长记", "造景后花园"};
+    private static String[] TITLES = {"多肉成长记", "造景后花园"};
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -56,6 +56,7 @@ public class MyGardenFragment extends BaseFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        TITLES = getResources().getStringArray(R.array.str_my_gardens);
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mojota.succulent.BuildConfig;
+import com.mojota.succulent.R;
 import com.mojota.succulent.utils.CodeConstants;
 import com.mojota.succulent.utils.FileUtil;
 import com.mojota.succulent.utils.GlobalUtil;
@@ -48,7 +49,7 @@ public abstract class PhotoChooseSupportActivity extends BaseActivity {
         } else {
             mRequestOptions = requestOptions;
         }
-        String[] items = {"拍照", "从相册选择"};
+        String[] items = getResources().getStringArray(R.array.str_photochoose);
         new AlertDialog.Builder(this).setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

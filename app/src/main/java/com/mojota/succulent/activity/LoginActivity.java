@@ -195,23 +195,25 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     if (type == 1) {
                         if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg()
                         )) {
-                            GlobalUtil.makeToast("注册失败:" + responseInfo.getMsg());
+                            GlobalUtil.makeToast(getString(R.string
+                                    .str_register_failed) + ":" + responseInfo.getMsg());
                         } else {
-                            GlobalUtil.makeToast("注册失败");
+                            GlobalUtil.makeToast(R.string.str_register_failed);
                         }
                     } else if (type == 0) {
                         if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg()
                         )) {
-                            GlobalUtil.makeToast("登录失败:" + responseInfo.getMsg());
+                            GlobalUtil.makeToast(getString(R.string.str_login_failed) +
+                                    ":" + responseInfo.getMsg());
                         } else {
-                            GlobalUtil.makeToast("登录失败");
+                            GlobalUtil.makeToast(R.string.str_login_failed);
                         }
                     }
                 } else {
                     if (type == 1) {
-                        GlobalUtil.makeToast("注册成功");
+                        GlobalUtil.makeToast(R.string.str_register_successful);
                     } else if (type == 0) {
-                        GlobalUtil.makeToast("登录成功");
+                        GlobalUtil.makeToast(R.string.str_login_successful);
                     }
                     UserUtil.clearUser();
                     UserInfo userInfo = responseInfo.getData();

@@ -108,7 +108,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 3000) {
-                    GlobalUtil.makeToast("最多输入3000个字,超长的部分已被忽略");
+                    GlobalUtil.makeToast(R.string.str_answer_length_tip);
                 }
             }
 
@@ -320,7 +320,7 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
         mAnswerList.remove(position);
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mAnswerList.size());
-        Snackbar.make(mRvAnswer, "已删除一个回答", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+        Snackbar.make(mRvAnswer, R.string.str_answer_deleted, Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
                 new View.OnClickListener() {
             @Override
             public void onClick(View v) {

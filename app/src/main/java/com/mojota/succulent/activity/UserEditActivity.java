@@ -109,13 +109,15 @@ public class UserEditActivity extends BaseActivity implements View.OnClickListen
                 showProgress(false);
                 if (responseInfo == null || !"0".equals(responseInfo.getCode()) ||
                         responseInfo.getData() == null) {
-                    if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg())) {
-                        GlobalUtil.makeToast("修改个人信息失败:" + responseInfo.getMsg());
+                    if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg
+                            ())) {
+                        GlobalUtil.makeToast(getString(R.string.str_user_edit_failed) +
+                                ":" + responseInfo.getMsg());
                     } else {
-                        GlobalUtil.makeToast("修改个人信息失败");
+                        GlobalUtil.makeToast(R.string.str_user_edit_failed);
                     }
                 } else {
-                    GlobalUtil.makeToast("修改个人信息成功");
+                    GlobalUtil.makeToast(R.string.str_user_edit_successful);
                     UserInfo userInfo = responseInfo.getData();
                     UserUtil.saveUser(userInfo);
                     setResult(CodeConstants.RESULT_USER_CHANGE);

@@ -359,7 +359,7 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
 
             @Override
             public void onFailure(String objectKey, String errMsg) {
-                StringBuilder tips = new StringBuilder("上传头像失败,");
+                StringBuilder tips = new StringBuilder(getString(R.string.str_upload_avatar_failed));
                 tips.append(errMsg);
                 GlobalUtil.makeToast(tips.toString());
             }

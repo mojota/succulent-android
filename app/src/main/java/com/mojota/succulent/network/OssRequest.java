@@ -17,6 +17,7 @@ import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvide
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.mojota.succulent.R;
 import com.mojota.succulent.SucculentApplication;
 import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.UrlConstants;
@@ -81,14 +82,16 @@ public class OssRequest {
         if (uploadData == null || uploadData.length <= 0) {
             AppLog.d(TAG, "uploadData is empty");
             if (ossOperateListener != null) {
-                ossOperateListener.onFailure(objectKey, "上传内容是空的");
+                ossOperateListener.onFailure(objectKey, SucculentApplication
+                        .getInstance().getString(R.string.str_upload_empty));
             }
             return task;
         }
         if (uploadData.length > 1024000) { // 上传不允许超过1M
             AppLog.d(TAG, "uploadData is large");
             if (ossOperateListener != null) {
-                ossOperateListener.onFailure(objectKey, "超过上传大小限制");
+                ossOperateListener.onFailure(objectKey, SucculentApplication
+                        .getInstance().getString(R.string.str_upload_over_length));
             }
             return task;
         }
@@ -155,7 +158,9 @@ public class OssRequest {
                     @Override
                     public void run() {
                         if (ossOperateListener != null) {
-                            ossOperateListener.onFailure(objectKey, "上传失败");
+                            ossOperateListener.onFailure(objectKey,
+                                    SucculentApplication.getInstance().getString(R
+                                            .string.str_upload_failed));
                         }
                     }
                 });

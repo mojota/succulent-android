@@ -189,7 +189,8 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
                 new CountDownTimer(GlobalUtil.ONE_MINUTE, GlobalUtil.ONE_SECOND) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        mBtSendcode.setText(millisUntilFinished / 1000 + "秒");
+                        mBtSendcode.setText(millisUntilFinished / 1000 + getString(R
+                                .string.str_second));
                     }
 
                     @Override
@@ -202,7 +203,7 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
                         .REQUEST_SEND_CODE));
                 break;
             case CodeConstants.REQUEST_RESET_PWD:
-                GlobalUtil.makeToast("重置密码成功");
+                GlobalUtil.makeToast(R.string.str_set_new_pwd_successful);
                 finish();
                 break;
         }

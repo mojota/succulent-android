@@ -1,5 +1,7 @@
 package com.mojota.succulent.utils;
 
+import com.mojota.succulent.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,27 +37,27 @@ public class CodeConstants {
     public static final int REQUEST_ADD_FEEDBACK = 1017;
 
 
-    public static final Map<Integer, String> REQUEST_MAP = new HashMap<>();
+    public static final Map<Integer, Integer> REQUEST_MAP = new HashMap<>();
 
     static {
-        REQUEST_MAP.put(REQUEST_NOTE_ADD, "添加笔记");
-        REQUEST_MAP.put(REQUEST_DIARY_DETAIL_ADD, "添加笔记条目");
-        REQUEST_MAP.put(REQUEST_DIARY_DETAIL_EDIT, "编辑笔记条目");
-        REQUEST_MAP.put(REQUEST_NOTE_TITLE_EDIT, "修改标题");
-        REQUEST_MAP.put(REQUEST_PERMISSION_CHANGE, "修改可见范围");
-        REQUEST_MAP.put(REQUEST_LIKE, "");
-        REQUEST_MAP.put(REQUEST_NOTE_DETAIL_DELETE, "");
-        REQUEST_MAP.put(REQUEST_NOTE_DELETE, "");
-        REQUEST_MAP.put(REQUEST_QA_ADD, "提问");
-        REQUEST_MAP.put(REQUEST_ANSWER_ADD, "回答");
-        REQUEST_MAP.put(REQUEST_ANSWER_UP, "");
-        REQUEST_MAP.put(REQUEST_QUESTION_DELETE, "");
-        REQUEST_MAP.put(REQUEST_ANSWER_DELETE, "");
-        REQUEST_MAP.put(REQUEST_EDIT_AVATAR, "修改头像");
-        REQUEST_MAP.put(REQUEST_EDIT_COVER, "修改封面");
-        REQUEST_MAP.put(REQUEST_RESET_PWD, "重置密码");
-        REQUEST_MAP.put(REQUEST_SEND_CODE, "验证码已发送");
-        REQUEST_MAP.put(REQUEST_ADD_FEEDBACK, "提交反馈");
+        REQUEST_MAP.put(REQUEST_NOTE_ADD, R.string.str_add_note);
+        REQUEST_MAP.put(REQUEST_DIARY_DETAIL_ADD, R.string.str_add_note_item);
+        REQUEST_MAP.put(REQUEST_DIARY_DETAIL_EDIT, R.string.str_edit_note_item);
+        REQUEST_MAP.put(REQUEST_NOTE_TITLE_EDIT, R.string.str_edit_title);
+        REQUEST_MAP.put(REQUEST_PERMISSION_CHANGE, R.string.str_change_permission);
+        REQUEST_MAP.put(REQUEST_LIKE, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_NOTE_DETAIL_DELETE, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_NOTE_DELETE, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_QA_ADD, R.string.str_ask);
+        REQUEST_MAP.put(REQUEST_ANSWER_ADD, R.string.str_answer);
+        REQUEST_MAP.put(REQUEST_ANSWER_UP, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_QUESTION_DELETE, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_ANSWER_DELETE, R.string.str_null);
+        REQUEST_MAP.put(REQUEST_EDIT_AVATAR, R.string.str_edit_avatar);
+        REQUEST_MAP.put(REQUEST_EDIT_COVER, R.string.str_edit_cover);
+        REQUEST_MAP.put(REQUEST_RESET_PWD, R.string.str_set_new_pwd);
+        REQUEST_MAP.put(REQUEST_SEND_CODE, R.string.str_code_sended);
+        REQUEST_MAP.put(REQUEST_ADD_FEEDBACK, R.string.str_add_feedback);
     }
 
 

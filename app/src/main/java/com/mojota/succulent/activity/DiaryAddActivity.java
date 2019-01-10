@@ -126,7 +126,7 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     public void onChoosed(Uri localUploadUri) {
                         mLocalPics[0] = localUploadUri;
                         mUploadPicKeys[0] = ""; // 一旦选过图就置key为空,上传后再写入
-                   }
+                    }
 
                     @Override
                     public void onCanceled() {
@@ -179,8 +179,9 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
 
     /**
      * 顺序上传图片,最后一张结束后提交所有内容到服务器
+     *
      * @param localPics 本地准备上传的uri列表
-     * @param index 外部调用由0开始
+     * @param index     外部调用由0开始
      */
     private void uploadImg(final Uri[] localPics, final int index) {
         showProgress(true);
@@ -204,8 +205,8 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
             public void onFailure(String objectKey, String errMsg) {
                 showProgress(false);
                 if (localPics[index] != null) {
-                    StringBuilder tips = new StringBuilder("上传图片");
-                    tips.append((index + 1) + "失败了," + errMsg);
+                    StringBuilder tips = new StringBuilder(getString(R.string.str_upload_pic));
+                    tips.append((index + 1) + getString(R.string.str_upload_pic_failed) + errMsg);
                     GlobalUtil.makeToast(tips.toString());
                 }
                 if (index == localPics.length - 1) {
@@ -226,14 +227,14 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
         String content = mEtBody.getText().toString();
         StringBuilder picKeys = new StringBuilder();
         for (String key : mUploadPicKeys) {
-            if (!TextUtils.isEmpty(key)){
+            if (!TextUtils.isEmpty(key)) {
                 picKeys.append(key).append(";"); //与服务端约定使用;做为分隔符
             }
         }
         switch (mMode) {
             case CodeConstants.NOTE_ADD:
                 if (TextUtils.isEmpty(title)) {
-                    mTiTitle.setError("标题不可以为空");
+                    mTiTitle.setError(getString(R.string.str_title_empty));
                     mTiTitle.setErrorEnabled(true);
                 } else {
                     mTiTitle.setErrorEnabled(false);
@@ -243,25 +244,26 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("content", content);
                     map.put("noteType", "1");
                     map.put("picUrls", picKeys.toString());
-                    loadingRequestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants.REQUEST_NOTE_ADD);
+                    loadingRequestSubmit(UrlConstants.DIARY_ADD_URL, map, CodeConstants
+                            .REQUEST_NOTE_ADD);
                 }
                 break;
             case CodeConstants.NOTE_DETAIL_ADD:
                 if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picKeys)) {
-                    GlobalUtil.makeToast("没有要提交的内容");
+                    GlobalUtil.makeToast(R.string.str_commit_empty);
                 } else {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", UserUtil.getCurrentUserId());
                     map.put("noteId", mNoteId);
                     map.put("content", content);
                     map.put("picUrls", picKeys.toString());
-                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map, CodeConstants
-                            .REQUEST_DIARY_DETAIL_ADD);
+                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_ADD_URL, map,
+                            CodeConstants.REQUEST_DIARY_DETAIL_ADD);
                 }
                 break;
             case CodeConstants.NOTE_DETAIL_EDIT:
                 if (TextUtils.isEmpty(content) && TextUtils.isEmpty(picKeys)) {
-                    GlobalUtil.makeToast("没有要提交的内容");
+                    GlobalUtil.makeToast(R.string.str_commit_empty);
                 } else {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", UserUtil.getCurrentUserId());
@@ -269,7 +271,8 @@ public class DiaryAddActivity extends PhotoChooseSupportActivity implements View
                     map.put("detailId", mDetailId);
                     map.put("content", content);
                     map.put("picUrls", picKeys.toString());
-                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map, CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
+                    loadingRequestSubmit(UrlConstants.DIARY_DETAIL_EDIT_URL, map,
+                            CodeConstants.REQUEST_DIARY_DETAIL_EDIT);
                 }
                 break;
         }

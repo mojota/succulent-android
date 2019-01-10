@@ -203,7 +203,7 @@ public class DiaryDetailActivity extends BaseActivity implements View
                     submitTitle(etTitle.getText().toString());
                     dialog.dismiss();
                 } else {
-                    etTitle.setError("标题不可以为空");
+                    etTitle.setError(getString(R.string.str_title_empty));
                 }
             }
         });
@@ -311,7 +311,7 @@ public class DiaryDetailActivity extends BaseActivity implements View
         mList.remove(position);
         mWrapAdapter.notifyItemRemoved(position);
         mWrapAdapter.notifyItemRangeChanged(0, mList.size());
-        Snackbar.make(mRvDiarys, "已删除一个笔记", Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
+        Snackbar.make(mRvDiarys, R.string.str_note_deleted, Snackbar.LENGTH_LONG).setAction(R.string.str_undo,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

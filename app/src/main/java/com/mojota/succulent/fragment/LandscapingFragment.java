@@ -218,7 +218,7 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onItemLongclick(final int position) {
-        String[] items = {"删除"};
+        String[] items = {getString(R.string.str_delete)};
         new AlertDialog.Builder(getContext()).setItems(items, new DialogInterface.OnClickListener
                 () {
             @Override
@@ -232,14 +232,15 @@ public class LandscapingFragment extends Fragment implements View.OnClickListene
     }
 
     private void deleteItem(final int position, String title) {
-        new AlertDialog.Builder(getContext()).setTitle("确认删除?").setPositiveButton("删除", new
+        new AlertDialog.Builder(getContext()).setTitle(getString(R.string
+                .str_delete_confirm) + "?").setPositiveButton(R.string.str_delete, new
                 DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deleteData(position);
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.str_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

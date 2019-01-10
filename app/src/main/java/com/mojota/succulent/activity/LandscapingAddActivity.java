@@ -196,8 +196,8 @@ public class LandscapingAddActivity extends PhotoChooseSupportActivity implement
             @Override
             public void onFailure(String objectKey, String errMsg) {
                 if (localPics[index] != null) {
-                    StringBuilder tips = new StringBuilder("上传图片");
-                    tips.append((index + 1) + "失败了," + errMsg);
+                    StringBuilder tips = new StringBuilder(getString(R.string.str_upload_pic));
+                    tips.append((index + 1) + getString(R.string.str_upload_pic_failed) + errMsg);
                     GlobalUtil.makeToast(tips.toString());
                 }
                 if (index == localPics.length - 1) {
@@ -227,7 +227,7 @@ public class LandscapingAddActivity extends PhotoChooseSupportActivity implement
         }
 
         if (TextUtils.isEmpty(title) && TextUtils.isEmpty(picKeys)) {
-            GlobalUtil.makeToast("没有要提交的内容");
+            GlobalUtil.makeToast(R.string.str_commit_empty);
         } else {
             Map<String, String> map = new HashMap<String, String>();
             map.put("userId", UserUtil.getCurrentUserId());

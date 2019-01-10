@@ -63,9 +63,10 @@ public class CheckUpdateUtil {
      */
     private static void showUpdateDialog(final AppInfo appInfo, final Activity
             activity) {
-        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle("发现新版本:" +
-                appInfo.getVersionName()).setMessage(appInfo.getVersionDesc())
-                .setPositiveButton("现在升级", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = new AlertDialog.Builder(activity).setTitle
+                (SucculentApplication.getInstance().getString(R.string.str_new_version)
+                        + appInfo.getVersionName()).setMessage(appInfo.getVersionDesc()
+        ).setPositiveButton(R.string.str_update_now, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -76,7 +77,7 @@ public class CheckUpdateUtil {
                     downloadApp(appInfo.getDownloadUrl(), file, activity);
                 }
             }
-        }).setNegativeButton("取消", null).create();
+        }).setNegativeButton(R.string.str_cancel, null).create();
         dialog.show();
     }
 
@@ -102,7 +103,8 @@ public class CheckUpdateUtil {
             activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_progress, null);
         final AlertDialog progressDialog = new AlertDialog.Builder(activity).setTitle
-                ("正在下载").setView(view).setNegativeButton("关闭", null).create();
+                (R.string.str_downloading).setView(view).setNegativeButton(SucculentApplication.getInstance()
+                .getString(R.string.str_close), null).create();
         final ProgressBar progressBar = view.findViewById(R.id.pb_progress);
         final TextView tvComplete = view.findViewById(R.id.tv_complete);
         final TextView tvProgress = view.findViewById(R.id.tv_progress);

@@ -123,7 +123,7 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
                 break;
             case R.id.bt_commit:
                 if (TextUtils.isEmpty(mEtQuestion.getText())) {
-                    mTiQuestion.setError("问题不可以为空");
+                    mTiQuestion.setError(getString(R.string.str_question_empty));
                 } else {
                     commit();
                 }
@@ -180,8 +180,8 @@ public class QaAskActivity extends PhotoChooseSupportActivity implements View.On
             @Override
             public void onFailure(String objectKey, String errMsg) {
                 if (localPics[index] != null) {
-                    StringBuilder tips = new StringBuilder("上传图片");
-                    tips.append((index + 1) + "失败了," + errMsg);
+                    StringBuilder tips = new StringBuilder(getString(R.string.str_upload_pic));
+                    tips.append((index + 1) + getString(R.string.str_upload_pic_failed) + errMsg);
                     GlobalUtil.makeToast(tips.toString());
                 }
                 if (index == localPics.length - 1) {
