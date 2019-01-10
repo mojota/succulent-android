@@ -1,6 +1,7 @@
 package com.mojota.succulent.fragment;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.mojota.succulent.R;
 import com.mojota.succulent.network.OssUtil;
 import com.mojota.succulent.utils.FileUtil;
@@ -67,8 +70,23 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
         mIvImage.setOnClickListener(this);
         mIvImage.setOnLongClickListener(this);
 
-        Glide.with(getContext()).load(mPicUrl).apply(GlobalUtil
-                .getDefaultOptions().fitCenter()).into(mIvImage);
+//        Glide.with(getContext()).load(mPicUrl).apply(GlobalUtil
+//                .getDefaultOptions()).into(mIvImage);
+
+        Glide.with(getContext()).load(mPicUrl).apply(GlobalUtil.getDefaultOptions())
+                .into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, Transition<? super Drawable>
+                    transition) {
+                getActivity().startPostponedEnterTransition();
+                mIvImage.setImageDrawable(resource);
+            }
+
+            @Override
+            public void onLoadFailed(Drawable errorDrawable) {
+                getActivity().startPostponedEnterTransition();
+            }
+        });
 
         return rootView;
     }
@@ -76,7 +94,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().startPostponedEnterTransition();
+//        getActivity().startPostponedEnterTransition();
     }
 
     @Override

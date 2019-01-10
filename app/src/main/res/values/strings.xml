@@ -34,7 +34,7 @@
     <string name="str_no_more_data">No more data</string>
     <string name="str_all_show">In the end~</string>
     <string name="str_is_loading">Loading</string>
-    <string name="str_load_faild">Load failed, please reload</string>
+    <string name="str_load_faild">Load failed, please click to reload</string>
     <string name="str_network_error_retry">The network is not strong, please pull down and try again</string>
     <string name="str_delete_confirm">Confirm delete</string>
     <string name="str_content_empty">No content to submit</string>
