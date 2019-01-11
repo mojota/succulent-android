@@ -20,7 +20,8 @@
     <color name="green_deep">#7cb342</color>
     <color name="green_very_light">#aed581</color>
     <color name="green_40">#668bc34a</color>
-    <color name="green_80">#cc8bc34a</color>
+    <color name="green_80">#cc7cb342</color>
+    <color name="green_90">#e67cb342</color>
     <color name="green_light">#9CCC65</color>
 
     <color name="lemon">#B3CC42</color>

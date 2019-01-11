@@ -40,6 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/di_header_default"
                         android:background="?attr/colorPrimary"
+                        android:scaleType="centerCrop"
                         android:transitionName="0"/>
                 </FrameLayout>
 

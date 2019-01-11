@@ -250,13 +250,13 @@ public class QaDetailActivity extends BaseActivity implements View.OnClickListen
             mTvAnswerCount.setText(String.valueOf(mQuestion.getAnswerCount()));
 
             if (!TextUtils.isEmpty(mQuestion.getQuestionPicUrl())) {
-                mPicUrls.clear();
-                mPicUrls.add(mQuestion.getQuestionPicUrl());
-                Glide.with(mActivity).load(OssUtil.getWholeImageUrl(mQuestion.getQuestionPicUrl())).apply(GlobalUtil
-                        .getDefaultOptions().centerCrop()).into(mIvPic);
                 mIvPicParams.height = getResources().getDimensionPixelSize(R.dimen
                         .di_header_max);
                 mIvPic.setLayoutParams(mIvPicParams);
+                mPicUrls.clear();
+                mPicUrls.add(mQuestion.getQuestionPicUrl());
+                Glide.with(mActivity).load(OssUtil.getWholeImageUrl(mQuestion.getQuestionPicUrl())).apply(GlobalUtil
+                        .getDefaultOptions()).into(mIvPic);
             } else {
                 mIvPicParams.height = getResources().getDimensionPixelSize(R.dimen
                         .di_header_default);

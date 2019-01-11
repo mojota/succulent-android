@@ -40,17 +40,17 @@
     <string name="str_content_empty">No content to submit</string>
     <string name="str_commit_empty">No content to submit</string>
     <string name="str_second_ago">Just</string>
-    <string name="str_minute_ago"> minutes ago</string>
-    <string name="str_hour_ago"> hours ago</string>
+    <string name="str_minute_ago">" minutes ago"</string>
+    <string name="str_hour_ago">" hours ago"</string>
     <string name="str_yesterday">Yesterday</string>
-    <string name="str_day_ago"> days ago</string>
-    <string name="str_failed"> failed</string>
-    <string name="str_successful"> successful</string>
+    <string name="str_day_ago">" days ago"</string>
+    <string name="str_failed">" failed"</string>
+    <string name="str_successful">" successful"</string>
     <string name="str_upload_over_length">Upload size exceeds limit</string>
     <string name="str_upload_empty">Upload content is empty</string>
     <string name="str_upload_failed">Upload failed</string>
     <string name="str_upload_pic">Upload image</string>
-    <string name="str_upload_pic_failed"> failed,</string>
+    <string name="str_upload_pic_failed">" failed,"</string>
     <string-array name="str_photochoose">
         <item>Photograph</item>
         <item>Select from album</item>
