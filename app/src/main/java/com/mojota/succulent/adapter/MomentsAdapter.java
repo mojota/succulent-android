@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +40,7 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
 
     private final RequestOptions mAvatarOptions;
     private final RequestOptions mDefaultOptions;
+    private boolean mIsShowUser = true; // 是否显示用户名
     private RequestOptions mRoundedCornersOptions;
 
     private Context mContext;
@@ -96,8 +96,10 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
         }
     }
 
-    public MomentsAdapter(List<NoteInfo> list, OnItemClickListener listener) {
+    public MomentsAdapter(List<NoteInfo> list, boolean isShowUser, OnItemClickListener
+            listener) {
         mList = list;
+        mIsShowUser = isShowUser;
         mOnItemClickListener = listener;
         mAvatarOptions = GlobalUtil.getDefaultAvatarOptions();
         mDefaultOptions = GlobalUtil.getDefaultOptions().centerCrop();
@@ -151,14 +153,19 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.BaseView
                 setPaletteImage(holder.ivAvatar, holder.mLayoutBar, OssUtil
                         .getWholeImageUrl(userInfo.getAvatarUrl()), mAvatarOptions, R
                         .mipmap.ic_default_avatar_white_18dp, R.drawable.ic_bg_user_bar);
+
                 holder.tvRegion.setText(userInfo.getRegion());
 
-                holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ActivityUtil.startUserMomentsActivity(userInfo);
-                    }
-                });
+                if (mIsShowUser) {
+                    holder.mLayoutBar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ActivityUtil.startUserMomentsActivity(userInfo);
+                        }
+                    });
+                } else {
+                    holder.mLayoutBar.setOnClickListener(null);
+                }
             }
 
             if (!TextUtils.isEmpty(noteInfo.getNoteTitle())) {

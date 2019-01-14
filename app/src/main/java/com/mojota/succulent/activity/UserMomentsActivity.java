@@ -98,7 +98,7 @@ public class UserMomentsActivity extends PhotoChooseSupportActivity implements
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvMoments = findViewById(R.id.rv_user_moments);
-        mMomentsAdapter = new MomentsAdapter(mList, this);
+        mMomentsAdapter = new MomentsAdapter(mList, false, this);
         mWrapAdapter = new WrapRecycleAdapter(mMomentsAdapter);
         View headerView = LayoutInflater.from(this).inflate(R.layout
                 .layout_moments_header, mRvMoments, false);

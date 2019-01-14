@@ -3,7 +3,7 @@
     <!--menu-->
     <string name="app_name">多肉遇见你</string>
     <string name="splash_app_name">多肉遇见你</string>
-    <string name="app_summary">小而美的多肉主题App，帮你记录多肉成长的每一刻！</string>
+    <string name="app_summary">小而美的多肉主题App\n－－你的云上花园！</string>
     <string name="title_my_garden">我的花园</string>
     <string name="title_moments">邻家肉园</string>
     <string name="title_crazy">多肉也疯狂</string>
@@ -44,8 +44,8 @@
     <string name="str_second_ago">刚刚</string>
     <string name="str_minute_ago">分钟前</string>
     <string name="str_hour_ago">小时前</string>
-    <string name="str_yesterday">昨天</string>
-    <string name="str_day_ago">天前</string>
+    <string name="str_yesterday">昨天 </string>
+    <string name="str_day_ago">天前 </string>
     <string name="str_failed">失败</string>
     <string name="str_successful">成功</string>
     <string name="str_upload_over_length">超过上传大小限制</string>

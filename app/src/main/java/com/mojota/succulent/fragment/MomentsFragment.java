@@ -86,7 +86,7 @@ public class MomentsFragment extends BaseFragment implements SwipeRefreshLayout
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefresh.setOnRefreshListener(this);
         mRvMoments = view.findViewById(R.id.rv_moments);
-        mMomentsAdapter = new MomentsAdapter(mList, this);
+        mMomentsAdapter = new MomentsAdapter(mList, true, this);
         mWrapAdapter = new WrapRecycleAdapter(mMomentsAdapter);
         mRvMoments.setAdapter(mWrapAdapter);
         mRvMoments.setOnLoadListener(this);

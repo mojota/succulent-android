@@ -2,13 +2,13 @@
     <!--menu-->
     <string name="app_name">Succulents meet U</string>
     <string name="splash_app_name">多肉遇见你</string>
-    <string name="app_summary">"Small and beautiful succulents app, help you record every moment of succulents growth! "</string>
+    <string name="app_summary">"Your Garden on the Cloud!"</string>
     <string name="title_my_garden">"My Garden"</string>
-    <string name="title_moments">"Neighbour's Garden"</string>
+    <string name="title_moments">"Moments"</string>
     <string name="title_crazy">"Crazy Succulents"</string>
     <string-array name="str_my_gardens">
-        <item>Succulents note</item>
-        <item>Landscaping garden</item>
+        <item>Notes</item>
+        <item>Miniascape</item>
     </string-array>
     <string-array name="str_crazys">
         <item>QA</item>
@@ -42,8 +42,8 @@
     <string name="str_second_ago">Just</string>
     <string name="str_minute_ago">" minutes ago"</string>
     <string name="str_hour_ago">" hours ago"</string>
-    <string name="str_yesterday">Yesterday</string>
-    <string name="str_day_ago">" days ago"</string>
+    <string name="str_yesterday">"Yesterday "</string>
+    <string name="str_day_ago">" days ago "</string>
     <string name="str_failed">" failed"</string>
     <string name="str_successful">" successful"</string>
     <string name="str_upload_over_length">Upload size exceeds limit</string>
@@ -98,7 +98,7 @@
     <!--Notes-->
     <string name="str_self">Private</string>
     <string name="str_public">Public</string>
-    <string name="str_edit_title">Modify the title</string>
+    <string name="str_edit_title">Modify title</string>
     <string name="str_hint_edit_title">Edit the title here (no more than 15 words)</string>
     <string name="str_hint_title">Write down the title of the note here</string>
     <string name="str_hint_body">Write a growth note here</string>
@@ -144,7 +144,8 @@
     <string name="str_download_failed">Download failed</string>
     <string name="str_add_feedback">Submit feedback</string>
     <string name="prompt_feedback">What do you want to say about the app? (within 300 words)</string>
-    <string name="str_about_tips">If you have any suggestions for the app, welcome to feedback in "Help App Improvement"</string>
+    <string name="str_about_tips">If you have any suggestions for the app, welcome to
+        feedback in \"Help App Improvement\"</string>
     <string name="str_notice_empty">No notifications yet</string>
     <string name="str_back_again">Press again to exit the application</string>
 </resources>
