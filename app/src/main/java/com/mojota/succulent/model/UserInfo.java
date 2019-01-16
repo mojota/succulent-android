@@ -15,7 +15,7 @@ public class UserInfo extends BaseBean {
     String region; //地区
     String email;
     String phone;
-    String coverUrl; // 邻家肉园封面图
+    String coverUrl; // 多肉时光封面图
 
     public String getUserId() {
         return userId;
