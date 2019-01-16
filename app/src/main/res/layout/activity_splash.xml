@@ -24,6 +24,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8"/>
 
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/gray_deep"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:text="@string/splash_app_desc"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintRight_toRightOf="@+id/cv_img"/>
+
     <android.support.v7.widget.CardView
         android:id="@+id/cv_img"
         android:layout_width="0dp"

@@ -3,6 +3,7 @@
     <string name="app_name">Succulents meet U</string>
     <string name="splash_app_name">多肉遇见你</string>
     <string name="app_summary">"Your Garden on the Cloud!"</string>
+    <string name="splash_app_desc">"- Your Garden on the Cloud"</string>
     <string name="title_my_garden">"My Garden"</string>
     <string name="title_moments">"Moments"</string>
     <string name="title_crazy">"Discover"</string>
