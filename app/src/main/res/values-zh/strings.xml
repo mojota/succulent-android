@@ -45,8 +45,8 @@
     <string name="str_second_ago">刚刚</string>
     <string name="str_minute_ago">分钟前</string>
     <string name="str_hour_ago">小时前</string>
-    <string name="str_yesterday">昨天 </string>
-    <string name="str_day_ago">天前 </string>
+    <string name="str_yesterday">"昨天 "</string>
+    <string name="str_day_ago">"天前 "</string>
     <string name="str_failed">失败</string>
     <string name="str_successful">成功</string>
     <string name="str_upload_over_length">超过上传大小限制</string>
