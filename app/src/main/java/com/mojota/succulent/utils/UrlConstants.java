@@ -19,6 +19,7 @@ public class UrlConstants {
 
     public static final String REGISTER_URL = SERVER + "user/register";
     public static final String LOGIN_URL = SERVER + "user/login";
+    public static final String QQ_LOGIN_URL = SERVER + "user/qqLogin";
     public static final String SEND_CODE_URL = SERVER + "user/sendCode";
     public static final String RESET_PWD_URL = SERVER + "user/resetPwd";
     public static final String USER_EDIT_URL = SERVER + "user/edit";

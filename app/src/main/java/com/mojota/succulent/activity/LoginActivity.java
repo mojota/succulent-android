@@ -12,19 +12,28 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.mojota.succulent.R;
 import com.mojota.succulent.model.UserInfo;
 import com.mojota.succulent.model.UserInfoResponseInfo;
 import com.mojota.succulent.network.GsonPostRequest;
 import com.mojota.succulent.network.VolleyErrorListener;
 import com.mojota.succulent.network.VolleyUtil;
+import com.mojota.succulent.utils.AppLog;
 import com.mojota.succulent.utils.GlobalUtil;
 import com.mojota.succulent.utils.UrlConstants;
 import com.mojota.succulent.utils.UserUtil;
 import com.mojota.succulent.view.PasswordView;
+import com.tencent.connect.common.Constants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +44,9 @@ import java.util.Map;
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
 
+    private static final String TAG = "LoginActivity";
     public static final String ACTION_LOGIN = "com.mojota.succulent.LOGIN";
+    private static final String QQ_APP_ID = "101551502";
     // UI references.
     private AutoCompleteTextView mEmailView;
     private PasswordView mEtPassword;
@@ -46,6 +57,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private MenuItem mActionRegister;
     private InputMethodManager mInputManager;
     private TextView mTvTips;
+    private ImageButton mBtQQLogin;
+    private Tencent mTencent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +80,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         mBtLogin = findViewById(R.id.bt_login);
         mBtLogin.setOnClickListener(this);
 
+        mBtQQLogin = findViewById(R.id.bt_qq_login);
+        mBtQQLogin.setOnClickListener(this);
+
         mBtRegister = findViewById(R.id.bt_register);
         mBtRegister.setOnClickListener(this);
 
         mTvTips = findViewById(R.id.tv_tips);
 
-        mEmailView.setText(UserUtil.getLastUserName());
+        mEmailView.setText(UserUtil.getLastEmail());
 
     }
 
@@ -215,11 +231,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     } else if (type == 0) {
                         GlobalUtil.makeToast(R.string.str_login_successful);
                     }
-                    UserUtil.clearUser();
-                    UserInfo userInfo = responseInfo.getData();
-                    UserUtil.saveUser(userInfo);
-                    sendBroadcast(new Intent(ACTION_LOGIN));
-                    finish();
+                    loginSuccessful(responseInfo.getData());
                 }
             }
         }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
@@ -245,6 +257,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.bt_qq_login:
+                qqLogin();
+                break;
             case R.id.bt_login:
                 attemptRegisterOrLogin(0);
                 break;
@@ -253,5 +268,128 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+            if (mTencent != null) {
+                mTencent.onActivityResultData(requestCode, resultCode, data, null);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void qqLogin() {
+        mTencent = Tencent.createInstance(QQ_APP_ID, this.getApplicationContext());
+        if (mTencent != null) {
+            mTencent.login(this, "get_user_info", mLoginListener);
+        }
+    }
+
+    IUiListener mLoginListener = new IUiListener() {
+        @Override
+        public void onComplete(Object response) {
+            JSONObject jsonResponse = (JSONObject) response;
+            if (null == jsonResponse || jsonResponse.length() == 0) {
+                AppLog.d(TAG, "返回为空,qq登录失败");
+                return;
+            }
+            String openId = jsonResponse.optString("openid");
+            String accessToken = jsonResponse.optString("access_token");
+            AppLog.d(TAG, "qq登录成功" + ",openId:" + openId + ",accessToken:" + accessToken);
+            // 登录后获取用户信息
+            getQQUserInfo(openId, accessToken);
+        }
+        @Override
+        public void onError(UiError uiError) {
+            AppLog.d(TAG,
+                    "onError:" + "code:" + uiError.errorCode + ", msg:" + uiError.errorMessage + ", detail:" + uiError.errorDetail);
+            GlobalUtil.makeToastShort(R.string.str_qq_login_failed);
+        }
+        @Override
+        public void onCancel() {
+            AppLog.d(TAG, "onCancel");
+        }
+    };
+
+    /**
+     * 获取qq用户信息
+     * sdk中的方法不好用，故用url获取
+     */
+    private void getQQUserInfo(final String openId, String accessToken) {
+        String url =
+                "https://graph.qq.com/user/get_user_info?access_token=" + accessToken + "&oauth_consumer_key=" + QQ_APP_ID + "&openid=" + openId;
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject responseInfo) {
+                String nickname = "";
+                String avatarUrl = "";
+                if (responseInfo != null) {
+                    nickname = responseInfo.optString("nickname");
+                    avatarUrl = responseInfo.optString("figureurl_qq_2");
+                }
+                // 请求使用qq登录
+                requestQQLogin(openId, nickname, avatarUrl);
+            }
+        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
+            @Override
+            public void onError(String error) {
+                // 请求使用qq登录
+                requestQQLogin(openId, "", "");
+                GlobalUtil.makeToast(R.string.str_network_error);
+            }
+        }));
+        VolleyUtil.execute(request);
+    }
+
+
+    /**
+     * 使用qq登录
+     */
+    private void requestQQLogin(String userName, String nickname, String avatarUrl) {
+        String url = UrlConstants.QQ_LOGIN_URL;
+        showProgress(true);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userName", userName);
+        map.put("password", "qq");//使用qq登录无需密码，统一置为qq。
+        map.put("nickname", nickname);
+        map.put("avatarUrl", avatarUrl);
+        GsonPostRequest request = new GsonPostRequest(url, null, map, UserInfoResponseInfo
+                .class, new Response.Listener<UserInfoResponseInfo>() {
+
+            @Override
+            public void onResponse(UserInfoResponseInfo responseInfo) {
+                showProgress(false);
+                if (responseInfo == null || !"0".equals(responseInfo.getCode()) || responseInfo.getData() == null) {
+                    if (responseInfo != null && !TextUtils.isEmpty(responseInfo.getMsg())) {
+                        GlobalUtil.makeToast(getString(R.string.str_login_failed) + ":" + responseInfo.getMsg());
+                    } else {
+                        GlobalUtil.makeToast(R.string.str_login_failed);
+                    }
+                } else {
+                    GlobalUtil.makeToast(R.string.str_login_successful);
+                    loginSuccessful(responseInfo.getData());
+                }
+            }
+        }, new VolleyErrorListener(new VolleyErrorListener.RequestErrorListener() {
+            @Override
+            public void onError(String error) {
+                showProgress(false);
+                GlobalUtil.makeToast(R.string.str_network_error);
+            }
+        }));
+        VolleyUtil.execute(request);
+    }
+
+    private void loginSuccessful(UserInfo userInfo) {
+        UserUtil.clearUser();
+        UserUtil.saveUser(userInfo);
+        sendBroadcast(new Intent(ACTION_LOGIN));
+        finish();
+    }
+
+
 }
 

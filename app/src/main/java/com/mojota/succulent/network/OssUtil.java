@@ -1,5 +1,7 @@
 package com.mojota.succulent.network;
 
+import android.text.TextUtils;
+
 import com.mojota.succulent.utils.UrlConstants;
 
 /**
@@ -18,6 +20,10 @@ public class OssUtil {
      * 拼接下载图片的url
      */
     public static String getWholeImageUrl(String imageUrl) {
-        return UrlConstants.OSS_SERVER + imageUrl;
+        if (!TextUtils.isEmpty(imageUrl) && (imageUrl.contains("http://") || imageUrl.contains("https://"))) {
+            return imageUrl;
+        } else {
+            return UrlConstants.OSS_SERVER + imageUrl;
+        }
     }
 }

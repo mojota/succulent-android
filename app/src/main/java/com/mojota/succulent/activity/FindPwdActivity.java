@@ -62,7 +62,7 @@ public class FindPwdActivity extends BaseActivity implements View.OnClickListene
         mBtCommit = findViewById(R.id.bt_commit);
         mBtCommit.setOnClickListener(this);
 
-        mEtEmail.setText(UserUtil.getLastUserName());
+        mEtEmail.setText(UserUtil.getLastEmail());
     }
 
     @Override

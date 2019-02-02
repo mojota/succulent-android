@@ -96,6 +96,8 @@
     <string name="str_user_edit_failed">Failed to modify personal information</string>
     <string name="str_edit_avatar">Modify avatar</string>
     <string name="str_upload_avatar_failed">Failed to upload avatar,</string>
+    <string name="str_quick_login">Quick Login</string>
+    <string name="str_qq_login_failed">QQ Login failed</string>
     <!--Notes-->
     <string name="str_self">Private</string>
     <string name="str_public">Public</string>

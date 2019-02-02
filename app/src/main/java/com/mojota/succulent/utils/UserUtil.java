@@ -27,16 +27,16 @@ public class UserUtil {
         mSp.putString(KeyConstants.KEY_PHONE, userInfo.getPhone());
         mSp.putString(KeyConstants.KEY_COVER_URL, userInfo.getCoverUrl());
 
-        // 保存最后登录的用户
+        // 保存最后登录的用户email
         mSpLast.clear();
-        mSpLast.putString(KeyConstants.KEY_USER_NAME, userInfo.getUserName());
+        mSpLast.putString(KeyConstants.KEY_EMAIL, userInfo.getEmail());
     }
 
     /**
-     * 获取最后登录的用户名
+     * 获取最后登录的email
      */
-    public static String getLastUserName() {
-        return mSpLast.getString(KeyConstants.KEY_USER_NAME);
+    public static String getLastEmail() {
+        return mSpLast.getString(KeyConstants.KEY_EMAIL);
     }
 
     public static UserInfo getUser() {
