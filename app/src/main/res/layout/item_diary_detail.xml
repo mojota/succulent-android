@@ -21,6 +21,7 @@
             android:layout_weight="1"
             android:background="@color/colorBg"
             android:maxLines="1"
+            android:textStyle="bold"
             android:padding="4dp"
             android:textColor="@color/deep_orange"
             android:textSize="13dp"/>
@@ -62,15 +63,15 @@
 
         <ImageView
             android:id="@+id/iv_pic0"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:scaleType="centerInside"/>
 
         <ImageView
             android:id="@+id/iv_pic1"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="16dp"
             android:scaleType="centerInside"/>
     </LinearLayout>
 </LinearLayout>

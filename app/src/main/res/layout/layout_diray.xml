@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="110dp">
+                android:layout_height="120dp">
 
     <ImageView
         android:id="@+id/iv_pic"
         android:layout_width="120dp"
-        android:layout_height="match_parent"
+        android:layout_height="120dp"
         android:layout_alignParentRight="true"
         android:background="@color/gray_very_light"
         android:scaleType="centerInside"
@@ -22,22 +22,23 @@
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:lines="2"
             android:textColor="@color/black"
-            android:textSize="16dp"/>
+            android:textSize="15dp"/>
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_marginTop="8dp"
             android:layout_alignLeft="@id/tv_title"
             android:layout_alignRight="@id/tv_title"
-            android:layout_below="@id/tv_title"
             android:textSize="12dp"/>
 
 

@@ -2,53 +2,53 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_width="40dp"
+    android:layout_height="match_parent"
     android:layout_alignParentBottom="true">
 
     <View
         android:id="@+id/view_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
         android:background="@drawable/ic_veti_line"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <ToggleButton
         android:id="@+id/tb_like"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_like_selector"
-        android:drawablePadding="4dp"
+        android:drawableTop="@drawable/ic_like_selector"
+        android:drawablePadding="2dp"
         android:drawableTint="@color/colorAccent"
-        android:gravity="left|center_vertical"
+        android:gravity="center_horizontal"
         android:maxLines="1"
         android:textColor="@color/gray"
         android:textOff=""
         android:textOn=""
         android:textSize="13dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/tb_permission"
-        app:layout_constraintTop_toBottomOf="@+id/view_line"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/tb_permission"
+        app:layout_constraintLeft_toRightOf="@+id/view_line"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ToggleButton
         android:id="@+id/tb_permission"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:checked="false"
-        android:gravity="right|center_vertical"
+        android:gravity="center_horizontal|bottom"
         android:textColor="@color/col_permission_selector"
         android:textOff="@string/str_self"
         android:textOn="@string/str_public"
         android:textSize="13dp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/tb_like"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/view_line"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_line"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/tb_like"/>
 
 </android.support.constraint.ConstraintLayout>
