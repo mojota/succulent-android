@@ -16,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +77,8 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
     private String mAvatarKey = "";
     private TextView mNewNotices;
     private long mLastBackTime;
+    private Toolbar mToolbar;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,12 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mNewNotices.setVisibility(View.GONE);
 
         mDrawer = findViewById(R.id.drawer_layout);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToggle = new ActionBarDrawerToggle(this,mDrawer,mToolbar, 0,0);
+        mToggle.syncState();
+        mDrawer.addDrawerListener(mToggle);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission
                 .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
