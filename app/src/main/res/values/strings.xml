@@ -151,4 +151,5 @@
         feedback in \"Help App Improvement\"</string>
     <string name="str_notice_empty">No notifications yet</string>
     <string name="str_back_again">Press again to exit the application</string>
+    <string name="str_search">Search</string>
 </resources>

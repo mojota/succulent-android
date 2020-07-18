@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 王静 on 18-7-23
+ * Created by jamie on 18-7-23
  */
 public class MainActivity extends PhotoChooseSupportActivity implements NavigationView
         .OnNavigationItemSelectedListener, View.OnClickListener {
@@ -141,6 +141,19 @@ public class MainActivity extends PhotoChooseSupportActivity implements Navigati
         mToggle = new ActionBarDrawerToggle(this,mDrawer,mToolbar, 0,0);
         mToggle.syncState();
         mDrawer.addDrawerListener(mToggle);
+
+        mToolbar.inflateMenu(R.menu.main_menu_bar);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.action_search:
+
+                        return true;
+                }
+                return true;
+            }
+        });
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission
